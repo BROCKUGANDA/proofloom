@@ -44,10 +44,13 @@ export async function DELETE(req: NextRequest, ctx: { params: Promise<{ attestat
     if (att.status === 'REVOKED') throw err('INVALID_TRANSITION', { from: 'REVOKED' })
     const reason = new URL(req.url).searchParams.get('reason') ?? 'revoked via PROOFLOOM'
 
-    const updated = await db.attestation.update({
-      where: { id: att.id },
+    // CAS: only the first concurrent revoke wins; the loser sees 409.
+    const cas = await db.attestation.updateMany({
+      where: { id: att.id, status: att.status },
       data: { status: 'REVOKED', revokedAt: new Date(), revokedReason: reason.slice(0, 400) },
     })
+    if (cas.count === 0) throw err('INVALID_TRANSITION', { reason: 'attestation state changed concurrently; refresh and retry' })
+    const updated = await db.attestation.findUniqueOrThrow({ where: { id: att.id } })
     await audit({
       organizationId: att.organizationId, projectId: att.projectId,
       actorUserId: user.id, actorAddress: att.issuerAddress, action: 'attestation.revoke',

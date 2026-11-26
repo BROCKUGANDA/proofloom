@@ -288,7 +288,7 @@ function Header({ route, go, session, authed, theme, toggleTheme, activeOrg, org
   const showOrgSwitcher = authed && route.view !== 'landing' && route.view !== 'auth'
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[color-mix(in_oklab,var(--background)_86%,transparent)] backdrop-blur-md">
-      <div className="mx-auto max-w-[1400px] px-4 lg:px-6 h-[var(--header-h)] flex items-center gap-4">
+      <div className="mx-auto max-w-[1400px] px-3 sm:px-4 lg:px-6 h-[var(--header-h)] flex items-center gap-2 sm:gap-3 lg:gap-4 min-w-0">
         <button className="lg:hidden p-1 -ml-1 text-muted-foreground hover:text-foreground" onClick={() => setSidebarOpen(!sidebarOpen)} aria-label="Toggle navigation" aria-expanded={sidebarOpen}>
           <Menu size={22} />
         </button>
@@ -375,11 +375,11 @@ function Header({ route, go, session, authed, theme, toggleTheme, activeOrg, org
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={() => go({ view: 'auth' })} className="btn-press">
-              <LogIn size={14} className="mr-1" /> Sign in
+          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+            <Button variant="ghost" size="sm" onClick={() => go({ view: 'auth' })} className="btn-press px-2 sm:px-3">
+              <LogIn size={14} className="sm:mr-1" /><span className="hidden sm:inline">Sign in</span>
             </Button>
-            <Button size="sm" onClick={() => go({ view: 'auth' })} className="btn-press">Get started</Button>
+            <Button size="sm" onClick={() => go({ view: 'auth' })} className="btn-press px-2.5 sm:px-3 whitespace-nowrap">Get started</Button>
           </div>
         )}
       </div>

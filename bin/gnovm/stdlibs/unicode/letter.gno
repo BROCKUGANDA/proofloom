@@ -189,6 +189,34 @@ func IsUpper(r rune) bool {
 	return isExcludingLatin(Upper, r)
 }
 
+func SimpleFold(r rune) rune {
+	if r < 0 || r > MaxRune {
+		return r
+	}
+
+	if int(r) < len(asciiFold) {
+		return rune(asciiFold[r])
+	}
+
+	// Consult caseOrbit table for special cases.
+	lo := 0
+	hi := len(caseOrbit)
+	for lo < hi {
+		m := lo + (hi-lo)/2
+		if rune(caseOrbit[m].From) < r {
+			lo = m + 1
+		} else {
+			hi = m
+		}
+	}
+	if lo < len(caseOrbit) && rune(caseOrbit[lo].From) == r {
+		return rune(caseOrbit[lo].To)
+	}
+
+	// No folding specified: this is a one-way fold.
+	return r
+}
+
 // IsLower reports whether the rune is a lower case letter.
 func IsLower(r rune) bool {
 	// See comment in IsGraphic.
@@ -327,45 +355,6 @@ type foldPair struct {
 //
 // For example:
 //
-//	SimpleFold('A') = 'a'
-//	SimpleFold('a') = 'A'
 //
-//	SimpleFold('K') = 'k'
-//	SimpleFold('k') = '\u212A' (Kelvin symbol, K)
-//	SimpleFold('\u212A') = 'K'
 //
-//	SimpleFold('1') = '1'
 //
-//	SimpleFold(-2) = -2
-func SimpleFold(r rune) rune {
-	if r < 0 || r > MaxRune {
-		return r
-	}
-
-	if int(r) < len(asciiFold) {
-		return rune(asciiFold[r])
-	}
-
-	// Consult caseOrbit table for special cases.
-	lo := 0
-	hi := len(caseOrbit)
-	for lo < hi {
-		m := lo + (hi-lo)/2
-		if rune(caseOrbit[m].From) < r {
-			lo = m + 1
-		} else {
-			hi = m
-		}
-	}
-	if lo < len(caseOrbit) && rune(caseOrbit[lo].From) == r {
-		return rune(caseOrbit[lo].To)
-	}
-
-	// No folding specified. This is a one- or two-element
-	// equivalence class containing rune and ToLower(rune)
-	// and ToUpper(rune) if they are different from rune.
-	if l := ToLower(r); l != r {
-		return l
-	}
-	return ToUpper(r)
-}

@@ -173,14 +173,15 @@ export function DocsView({ route }: { route: Route; go: (r: Route) => void; sess
         {/* Pricing */}
         <section id="doc-pricing">
           <p className="eyebrow mb-3">Pricing</p>
-          <h2 className="atelier-display" style={{ fontSize: 'var(--text-xl)' }}>Verification is free. Scale is paid.</h2>
-          <div className="mt-4 grid md:grid-cols-3 gap-3">
+          <h2 className="atelier-display" style={{ fontSize: 'var(--text-xl)' }}>Verification is free. Scale is priced like infrastructure.</h2>
+          <div className="mt-4 grid md:grid-cols-4 gap-3">
             {[
-              { name: 'Public & OSS', price: '$0', items: ['Unlimited public verification', 'Public project registry', 'Community policy templates', 'Public JSON API'] },
-              { name: 'Team', price: '$49/mo', items: ['Private projects & registries', 'Policy enforcement & simulation', 'Agent registry & approvals', 'Audit export, API credentials'] },
-              { name: 'Enterprise', price: 'Custom', items: ['Self-hosted deployment', 'SSO & org SSO policy packs', 'Compliance evidence workflows', 'SLA-backed verification API'] },
+              { name: 'Free', price: '$0', items: ['2 projects', '3 releases / month', '10 attestations / month', 'Public explorers + verify API'] },
+              { name: 'Trial', price: '14 days', items: ['Everything in Pro', 'One per workspace', 'No card required', 'Auto-downgrade at day 14'] },
+              { name: 'Pro', price: '$49/mo', items: ['25 projects, 100 releases / month', 'Agent Command + policy engine', 'API keys & evidence exports', '90-day audit retention'] },
+              { name: 'Enterprise', price: '$499/mo', items: ['Unlimited projects & members', '50 agents, priority on-chain lane', '365-day audit retention', 'Governance reviews & SLA'] },
             ].map(tier => (
-              <div key={tier.name} className={`p-5 ${tier.name === 'Team' ? 'loom-panel-raised border-[color:var(--accent)]' : 'loom-panel'}`}>
+              <div key={tier.name} className={`p-5 ${tier.name === 'Pro' ? 'loom-panel-raised border-[color:var(--accent)]' : 'loom-panel'}`}>
                 <p className="text-sm font-semibold">{tier.name}</p>
                 <p className="atelier-display text-3xl mt-2">{tier.price}</p>
                 <ul className="mt-4 space-y-1.5 text-sm text-muted-foreground">
@@ -191,6 +192,18 @@ export function DocsView({ route }: { route: Route; go: (r: Route) => void; sess
           </div>
           <p className="text-xs text-muted-foreground mt-3">
             No token. Verification stays public regardless of plan — the protocol layer is commons, the operational layer is the product.
+          </p>
+
+          <h3 className="text-lg atelier-display mt-8">The trial lifecycle, precisely</h3>
+          <ol className="mt-3 space-y-2 text-sm text-muted-foreground list-decimal list-inside">
+            <li><strong className="text-foreground">One-click demo.</strong> The sign-in page provisions a throwaway workspace on a 14-day TRIAL subscription atomically — user, organization and subscription commit together or not at all.</li>
+            <li><strong className="text-foreground">Full access.</strong> Trial workspaces run on Pro limits: agents, the policy engine, API keys — everything, with live usage meters in Plan &amp; Billing.</li>
+            <li><strong className="text-foreground">Upgrade any time.</strong> Upgrading mid-trial keeps the trial clock as the current period end. The simulated payment provider records PAYMENT_SUCCEEDED; the Stripe/Paddle integration point is the same transaction.</li>
+            <li><strong className="text-foreground">Lapse → auto-downgrade.</strong> The subscription row is evaluated lazily on every request: when the trial expires, a race-safe conditional update downgrades to FREE exactly once. Agents lock, allowances drop, a banner explains what changed.</li>
+            <li><strong className="text-foreground">Nothing is deleted.</strong> Projects, releases, attestations and the audit trail are kept. Upgrading again restores access instantly.</li>
+          </ol>
+          <p className="text-xs text-muted-foreground mt-3">
+            Enforcement is server-side: every gated endpoint returns a 402 with the plan, the limit hit, and the upgrade path — the UI never guesses.
           </p>
         </section>
       </div>

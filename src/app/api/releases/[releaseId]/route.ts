@@ -135,7 +135,12 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ releaseId
       }
     }
 
-    const updated = await db.release.update({ where: { id: releaseId }, data })
+    // Compare-and-set transition: the write only lands if the status is still
+    // what we validated against. Concurrent transitions lose the race cleanly
+    // (409) instead of double-applying or skipping states.
+    const cas = await db.release.updateMany({ where: { id: releaseId, status: release.status }, data })
+    if (cas.count === 0) throw err('INVALID_TRANSITION', { from: release.status, to: target, reason: 'state changed concurrently; refresh and retry' })
+    const updated = await db.release.findUniqueOrThrow({ where: { id: releaseId } })
     await audit({
       organizationId: release.project.organizationId, projectId: release.projectId,
       actorUserId: user.id, action: `release.${action}`, targetType: 'RELEASE',

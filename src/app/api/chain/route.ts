@@ -260,7 +260,9 @@ export async function POST(req: NextRequest) {
       if (outcome === 'CONFIRMED' && tx.releaseId) {
         const rel = await db.release.findUnique({ where: { id: tx.releaseId }, select: { projectId: true } })
         if (rel) {
-          await db.project.update({ where: { id: rel.projectId }, data: { gnoRegistered: true, onChainRef: tx.txHash } }).catch(() => {})
+          await db.project.update({ where: { id: rel.projectId }, data: { gnoRegistered: true, onChainRef: tx.txHash } }).catch(e => {
+            console.error(JSON.stringify({ level: 'error', scope: 'chain-gateway', projectId: rel.projectId, message: String(e) }))
+          })
         }
       }
       return { txId, outcome }

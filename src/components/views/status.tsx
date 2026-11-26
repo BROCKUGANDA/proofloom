@@ -11,20 +11,38 @@ interface Health {
   status: string
   checks: {
     database?: string | { status: string; detail?: string }
-    chain?: { status: string; chainId?: string; network?: string; detail?: string }
+    chain?: { status: string; chainId?: string; network?: string; detail?: string; realmPrefix?: string }
     llmProviders?: { provider: string; available: boolean; model: string }[]
     stats?: { projects: number; releases: number; attestations: number } | null
     version?: string
   }
 }
 
+// Realm deployment manifest shape (chain/deployments/deployment-<network>.json).
+interface DeploymentManifest {
+  network: string
+  remote: string
+  deployer: string
+  namespace: string
+  deployedAt: string
+  packages: Record<string, { path: string; txHash: string }>
+}
+
+const REALM_ORDER = ['core', 'registry', 'releases', 'attestations', 'agents', 'policies', 'verify']
+
 export function StatusView(_props: unknown) {
   const { toast } = useApp()
   const [health, setHealth] = useState<Health | null>(null)
+  const [manifest, setManifest] = useState<DeploymentManifest | null>(null)
 
   useEffect(() => {
     const load = () => api.get<Health>('/api/health').then(setHealth).catch(() => setHealth(null))
     void load()
+    // The manifest is written by chain/scripts/deploy.sh and served by
+    // /api/deployment, so this page reflects the last real deployment.
+    api.get<{ manifest: DeploymentManifest | null }>('/api/deployment')
+      .then(d => setManifest(d.manifest))
+      .catch(() => setManifest(null))
     const t = setInterval(load, 30_000)
     return () => clearInterval(t)
   }, [toast])
@@ -61,6 +79,13 @@ export function StatusView(_props: unknown) {
             <ProofSeal status={p.available ? 'HEALTHY' : 'DEGRADED'} label={p.available ? `${p.model} available` : 'unavailable'} />
           </div>
         ))}
+        {manifest && (
+          <div className="p-4 flex items-center gap-3 flex-wrap">
+            <span className="text-sm font-medium w-40">Realm deployment</span>
+            <ProofSeal status="HEALTHY" label={`7 packages deployed · ${manifest.network}`} />
+            <span className="text-xs text-muted-foreground">{new Date(manifest.deployedAt).toLocaleString()} · {manifest.deployer.slice(0, 14)}…</span>
+          </div>
+        )}
         <div className="p-4 flex items-center gap-3 flex-wrap">
           <span className="text-sm font-medium w-40">Protocol realms</span>
           <ProofSeal status={(health.checks.stats?.releases ?? 0) > 0 ? 'HEALTHY' : 'PENDING'} label={(health.checks.stats?.releases ?? 0) > 0 ? 'records present' : 'no records yet'} />
@@ -71,6 +96,39 @@ export function StatusView(_props: unknown) {
           )}
         </div>
       </div>
+
+      {/* On-chain deployment manifest — written by chain/scripts/deploy.sh */}
+      {manifest && (
+        <div className="loom-panel p-5">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <p className="eyebrow">On-chain deployment · {manifest.network}</p>
+            <HashChip value={manifest.deployedAt} display={new Date(manifest.deployedAt).toLocaleDateString()} prefix="deployed " />
+          </div>
+          <div className="mt-3 overflow-x-auto scroll-slim">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-xs text-muted-foreground border-b border-[var(--border)]">
+                  <th className="py-1.5 pr-4 font-medium">Realm</th>
+                  <th className="py-1.5 pr-4 font-medium">Package path</th>
+                  <th className="py-1.5 font-medium">Deploy tx</th>
+                </tr>
+              </thead>
+              <tbody>
+                {REALM_ORDER.filter(k => manifest.packages[k]).map(k => (
+                  <tr key={k} className="border-b border-[var(--border)] last:border-0">
+                    <td className="py-2 pr-4 font-medium">{k}</td>
+                    <td className="py-2 pr-4 font-mono text-xs text-muted-foreground break-all">{manifest.packages[k].path}</td>
+                    <td className="py-2 font-mono text-xs text-muted-foreground whitespace-nowrap">{manifest.packages[k].txHash.slice(0, 18)}…</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="text-xs text-muted-foreground mt-3">
+            Deployed with <code className="font-mono">chain/scripts/deploy.sh</code> against {manifest.remote}. Cross-realm imports are rewritten to the deployer address at deploy time; Init ran for all five stateful realms.
+          </p>
+        </div>
+      )}
 
       <div className="parchment-section rounded-md p-5">
         <p className="eyebrow mb-2">Integration states (truthful)</p>

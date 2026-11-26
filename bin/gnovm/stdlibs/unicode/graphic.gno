@@ -33,6 +33,11 @@ var PrintRanges = []*RangeTable{
 // IsGraphic reports whether the rune is defined as a Graphic by Unicode.
 // Such characters include letters, marks, numbers, punctuation, symbols, and
 // spaces, from categories L, M, N, P, S, Zs.
+// IsPrint reports whether the rune is defined as printable by Go. Such
+// characters include letters, marks, numbers, punctuation, symbols, and the
+// ASCII space character, from categories L, M, N, P, S and the ASCII space
+// character. This categorization is the same as IsGraphic except that the
+// only spacing character is ASCII space, U+0020.
 func IsGraphic(r rune) bool {
 	// We convert to uint32 to avoid the extra test for negative,
 	// and in the index we convert to uint8 to avoid the range check.

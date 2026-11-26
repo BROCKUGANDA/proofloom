@@ -81,7 +81,11 @@ export async function startExecution(params: {
   })
 
   // Kick off the run without blocking the API response.
-  void runExecution(execution.id, agent.id, task?.title, task?.description).catch(() => {})
+  // Fire-and-forget: the run records its own terminal state (FAILED on error);
+  // this outer guard only prevents an unhandled rejection from killing the process.
+  void runExecution(execution.id, agent.id, task?.title, task?.description).catch(e => {
+    console.error(JSON.stringify({ level: 'error', scope: 'agent-runtime', executionId: execution.id, message: String(e) }))
+  })
   return execution
 }
 
@@ -155,7 +159,9 @@ async function runExecution(executionId: string, agentId: string, taskTitle?: st
         error: isProviderDown ? 'LLM_PROVIDER_UNAVAILABLE' : message.slice(0, 500),
         finishedAt: new Date(),
       },
-    }).catch(() => {})
+    }).catch(inner => {
+      console.error(JSON.stringify({ level: 'error', scope: 'agent-runtime', executionId, message: String(inner) }))
+    })
   }
 }
 
@@ -175,8 +181,10 @@ export async function approveExecution(params: {
   if (execution.agent.organizationId !== params.organizationId) throw err('TENANT_ISOLATION')
   if (execution.status !== 'AWAITING_APPROVAL') throw err('INVALID_TRANSITION', { current: execution.status })
 
-  const updated = await db.agentExecution.update({
-    where: { id: params.executionId },
+  // CAS: two concurrent approvals of the same execution must not both pass —
+  // the second writer loses with a 409 rather than double-crediting the agent.
+  const cas = await db.agentExecution.updateMany({
+    where: { id: params.executionId, status: 'AWAITING_APPROVAL' },
     data: {
       status: params.decision === 'APPROVED' ? 'COMPLETED' : 'REJECTED',
       approvedBy: params.reviewerUserId,
@@ -184,6 +192,8 @@ export async function approveExecution(params: {
       error: params.decision === 'REJECTED' ? (params.comment ?? 'rejected by reviewer').slice(0, 500) : null,
     },
   })
+  if (cas.count === 0) throw err('INVALID_TRANSITION', { current: execution.status, reason: 'execution was decided concurrently' })
+  const updated = await db.agentExecution.findUniqueOrThrow({ where: { id: params.executionId } })
 
   await audit({
     organizationId: params.organizationId,

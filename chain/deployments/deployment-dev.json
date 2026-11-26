@@ -1,23 +1,23 @@
 {
-  "network": "dev (gnodev local chain — pipeline verification; Onyx deployment pending faucet funding)",
+  "network": "dev",
   "remote": "http://127.0.0.1:26657",
-  "deployer": "g1pd8esjj02k67reyzquv42lf8tlc4g9nnntashq",
-  "namespace": "gno.land/r/g1pd8esjj02k67reyzquv42lf8tlc4g9nnntashq/proofloom",
-  "deployedAt": "2026-11-26T12:05:00Z",
+  "deployer": "g1t9fhmrdfvtpy0388xj68vq3cpsxp92nkan3uel",
+  "namespace": "gno.land/r/g1t9fhmrdfvtpy0388xj68vq3cpsxp92nkan3uel/proofloom",
+  "deployedAt": "2026-11-26T23:06:01Z",
   "packages": {
-    "core": { "path": "gno.land/r/g1pd8esjj02k67reyzquv42lf8tlc4g9nnntashq/proofloom/core", "txHash": "eYX6mxA6gsG6JBXVQVQufuZLXL3ZwFmS/6OHz7plQR0=" },
-    "registry": { "path": "gno.land/r/g1pd8esjj02k67reyzquv42lf8tlc4g9nnntashq/proofloom/registry", "txHash": "EwRXWoH1sN8hib1nvncs+lgaJLY3pMUHXtS6kwkrv0A=" },
-    "releases": { "path": "gno.land/r/g1pd8esjj02k67reyzquv42lf8tlc4g9nnntashq/proofloom/releases", "txHash": "fca74GpwPRJrn7qficfmxXj0bZ06ZcBirVlX09I2bE4=" },
-    "attestations": { "path": "gno.land/r/g1pd8esjj02k67reyzquv42lf8tlc4g9nnntashq/proofloom/attestations", "txHash": "sKDY1+EDhQgrUluksNTltpeP7fkXuPgK6o7F3NLn7vI=" },
-    "agents": { "path": "gno.land/r/g1pd8esjj02k67reyzquv42lf8tlc4g9nnntashq/proofloom/agents", "txHash": "Rx2gEgQ+HWxnyEnFdhhyaeo+Xp1Z4lefQ4wVQHO/0U4=" },
-    "policies": { "path": "gno.land/r/g1pd8esjj02k67reyzquv42lf8tlc4g9nnntashq/proofloom/policies", "txHash": "U9GYJRZXjbgJVNCzGWxNalmm1QY+BeYmHQVCvxFUW7s=" },
-    "verify": { "path": "gno.land/r/g1pd8esjj02k67reyzquv42lf8tlc4g9nnntashq/proofloom/verify", "txHash": "gTeDFktoby1BVrhG073YFEtJq4jHQRhHIE36KcL4bmg=" }
+    "core": { "path": "gno.land/r/g1t9fhmrdfvtpy0388xj68vq3cpsxp92nkan3uel/proofloom/core", "txHash": "taKEBnEvB5LhmP2rTubDk2gOqxJUOilkK1rHZ9HEqHQ=" },
+    "registry": { "path": "gno.land/r/g1t9fhmrdfvtpy0388xj68vq3cpsxp92nkan3uel/proofloom/registry", "txHash": "wqCvu4ixKG0QRIzQk7NzM1Hzxg5l/z63ptRZ5vtMdBA=" },
+    "releases": { "path": "gno.land/r/g1t9fhmrdfvtpy0388xj68vq3cpsxp92nkan3uel/proofloom/releases", "txHash": "kMe8RxJ0B8sLbpPW+Enb43loWDkYHME9kOKnWpbkeik=" },
+    "attestations": { "path": "gno.land/r/g1t9fhmrdfvtpy0388xj68vq3cpsxp92nkan3uel/proofloom/attestations", "txHash": "V1hU8A/d32brZYOCMkUpmz5VYE6pn4yBRStt5nNQkdA=" },
+    "agents": { "path": "gno.land/r/g1t9fhmrdfvtpy0388xj68vq3cpsxp92nkan3uel/proofloom/agents", "txHash": "J5q3sA/xgm/kryKAaJ/7IIdZHH/7wCKHRdBsQOI20ls=" },
+    "policies": { "path": "gno.land/r/g1t9fhmrdfvtpy0388xj68vq3cpsxp92nkan3uel/proofloom/policies", "txHash": "Q37e+D+pspRdbAbMbopDzGnhKjiBSCtR9ZbKEwQHvWk=" },
+    "verify": { "path": "gno.land/r/g1t9fhmrdfvtpy0388xj68vq3cpsxp92nkan3uel/proofloom/verify", "txHash": "D5lTCe/0B7n4n7qT+mPDiguIHmAynU8QWqs5PjAdje4=" }
   },
   "init": {
-    "registry": "8PPC5P3YkaIXc7dMtJ3iHjE5ftrc/YHSMi47qj1JToI=",
-    "releases": "fTrmtn3nFMyr7GVOvufhgl3w3FM+vEyl4D4CuxrTIx4=",
-    "attestations": "Til56WUZUXjRq3Upjqo0KgGDWdZL/0/Y7WUbnll1B7M=",
-    "agents": "6gQG1WLXtNIvop4L/SpbMQpadtwPrBYC/ButUR+zHCU=",
-    "policies": "f8Jcq00Y8NR8UWfNfAtxiqc+U8MY1ngctWE7fymspDc="
+    "registry": "Kz0wPRDp3t6WmWx03HsznVxUtPmXwovwb6cIsYkoweg=",
+    "releases": "HrYOVmaWeCtYY5Cf3ljKZxYAYojE94vghtjgAjGEM5s=",
+    "attestations": "n9VAWNlzTm9Sb5RwBXjeZyE4RDwRPvsBnniDuhUbQxY=",
+    "agents": "Rx/3GT8wc7+RGrH9q3t2deFB7Sba9p5RLkjIXEHpBOE=",
+    "policies": "MuWDtd++iUbCiiWa80zkVKjBhVc1Qhkj3QnSsSrmcmY="
   }
 }

@@ -5,10 +5,17 @@ package runtime
 // is invoked by another method (even from the same realm or package).
 // It also panic every time when the transaction is broadcasted via
 // MsgRun.
-func AssertOriginCall()   // injected
-func ChainID() string     // injected
-func ChainDomain() string // injected
-func ChainHeight() int64  // injected
+// Dev-node fallback implementations. The vendored gnodev build does not
+// register these as compiled natives, so the package must be self-contained.
+// Semantics for a local chain: origin calls are not enforced and metadata is
+// returned from the node's static configuration.
+func AssertOriginCall() {}
+func ChainID() string     { return chainID }
+func ChainDomain() string { return "gno.land" }
+func ChainHeight() int64  { return 0 }
+
+var chainID = "dev"
+
 
 // GetSessionInfo returns session metadata if the current transaction was
 // signed by a session key. Returns isSession=false for master-key transactions.

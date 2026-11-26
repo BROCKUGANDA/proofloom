@@ -20,20 +20,23 @@ KEYHOME="${GNOKY_HOME:-$HOME/.config/gno}"
 GNOKEY="${GNOKEY_BIN:-gnokey}"
 # Password feed: with PROOFLOOM_KEY_PASSWORD set (recommended for CI), the
 # passphrase is piped via --insecure-password-stdin; otherwise gnokey prompts.
+# Password feed: when PROOFLOOM_KEY_PASSWORD is SET (even empty), it is piped
+# via --insecure-password-stdin — CI-friendly. Otherwise gnokey prompts.
 PASS_ARGS=()
-if [ -n "${PROOFLOOM_KEY_PASSWORD:-}" ]; then
+if [ "${PROOFLOOM_KEY_PASSWORD+set}" = "set" ]; then
   PASS_ARGS=(--insecure-password-stdin)
 fi
 sign() {
-  if [ -n "${PROOFLOOM_KEY_PASSWORD:-}" ]; then
+  if [ "${PROOFLOOM_KEY_PASSWORD+set}" = "set" ]; then
     printf '%s\n' "$PROOFLOOM_KEY_PASSWORD" | "$GNOKEY" "$@"
   else
     "$GNOKEY" "$@"
   fi
 }
-REALMS_DIR="$(cd "$(dirname "$0")/../realms" && pwd)"
+REALMS_SRC="$(cd "$(dirname "$0")/../realms" && pwd)"
 OUT_DIR="$(cd "$(dirname "$0")/../deployments" && pwd)"
 mkdir -p "$OUT_DIR"
+
 
 ADDR=$("$GNOKEY" --home "$KEYHOME" list 2>/dev/null | grep -A2 "$KEY" | grep -oE 'g1[a-z0-9]{38}' | head -1 || true)
 if [ -z "$ADDR" ]; then
@@ -42,6 +45,24 @@ if [ -z "$ADDR" ]; then
   exit 1
 fi
 BASE="gno.land/r/$ADDR/proofloom"
+
+# Namespace staging: realm sources reference each other by absolute module
+# path (e.g. gno.land/r/<deployer>/proofloom/releases). Deployment is address-
+# specific, so stage a copy of the workspace and rewrite every module path and
+# cross-realm import to the deployer's actual address. The source tree on disk
+# is never mutated.
+STAGE="$(mktemp -d /tmp/proofloom-stage.XXXXXX)"
+cp -r "$REALMS_SRC" "$STAGE/realms"
+REALMS_DIR="$STAGE/realms"
+rewrote=0
+if grep -rlq "gno.land/r/g1" "$STAGE/realms/proofloom" 2>/dev/null; then
+  find "$STAGE/realms/proofloom" -type f \( -name '*.gno' -o -name 'gnomod.toml' \) | while read -r f; do
+    sed -i "s#gno\.land/r/g1[a-z0-9]\{36,42\}#gno.land/r/$ADDR#g" "$f"
+  done
+  rewrote=1
+  echo "── staged workspace: cross-realm imports rewritten to $BASE"
+fi
+
 echo "Network: $CHAINID @ $REMOTE"
 echo "Deployer: $ADDR"
 echo "Namespace: $BASE"
@@ -51,16 +72,20 @@ declare -A TXHASH
 
 for pkg in "${PACKAGES[@]}"; do
   echo "── deploying $pkg ..."
-  OUT=$(sign --home "$KEYHOME" maketx addpkg "${PASS_ARGS[@]}" \
+  if OUT=$(sign --home "$KEYHOME" maketx addpkg "${PASS_ARGS[@]}" \
     --pkgpath "$BASE/$pkg" \
     --pkgdir "$REALMS_DIR/proofloom/$pkg" \
     --remote "$REMOTE" --chainid "$CHAINID" \
     --gas-fee 100000000ugnot --gas-wanted 50000000 \
-    --broadcast -simulate test "$KEY" 2>&1)
-  HASH=$(echo "$OUT" | grep -E '^TX HASH:' | sed 's/^TX HASH:[[:space:]]*//' | grep -vE '^$' | head -1 || true)
-  TXHASH[$pkg]="${HASH:-unknown}"
-  echo "   tx: ${HASH:-<no hash>}"
-  echo "$OUT" | grep -iE "error|fail" && { echo "DEPLOY FAILED for $pkg"; exit 1; } || true
+    --broadcast "$KEY" 2>&1); then
+    HASH=$(echo "$OUT" | grep -E '^TX HASH:' | sed 's/^TX HASH:[[:space:]]*//' | grep -vE '^$' | head -1 || true)
+    TXHASH[$pkg]="${HASH:-unknown}"
+    echo "   tx: ${HASH:-<no hash>}"
+  else
+    echo "   DEPLOY FAILED for $pkg:"
+    echo "$OUT" | grep -iE "error|fail" | head -3 || echo "$OUT" | head -5
+    exit 1
+  fi
   sleep 1
 done
 

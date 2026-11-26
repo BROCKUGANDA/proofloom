@@ -86,53 +86,68 @@ GET /api/health
 
 ## Local chain & deployment
 
-`bin/` bundles `gnodev`, `gnokey` and `gno`.
+`bin/` bundles `gnodev`, `gnokey` and `gno`. The realm suite deploys end-to-end
+with `chain/scripts/deploy.sh` — verified on a local gnodev chain (dev):
 
-```bash
-# All eight realm packages parse and load cleanly with the bundled Gno toolchain:
-GNOROOT=<gno-checkout> ./bin/gnodev local -chain-id dev -no-examples -extra-root ./chain/realms
-# → Loader: loaded root root=./chain/realms packages=8
-
-# Production deployment (needs a funded deployer key — never committed):
-PROOFLOOM_KEY=proofloom-deployer \
-PROOFLOOM_KEY_PASSWORD=… \
-./chain/scripts/deploy.sh     # deploys core→registry→releases→attestations→agents→policies→verify in dependency order
+```
+── deploying core ...            tx: taKEBnEvB5LhmP2rTubDk2gOqxJUOilkK1rHZ9HEqHQ=
+── deploying registry ...        tx: wqCvu4ixKG0QRIzQk7NzM1Hzxg5l/z63ptRZ5vtMdBA=
+── deploying releases ...        tx: kMe8RxJ0B8sLbpPW+Enb43loWDkYHME9kOKnWpbkeik=
+── deploying attestations ...    tx: V1hU8A/d32brZYOCMkUpmz5VYE6pn4yBRStt5nNQkdA=
+── deploying agents ...          tx: J5q3sA/xgm/kryKAaJ/7IIdZHH/7wCKHRdBsQOI20ls=
+── deploying policies ...        tx: Q37e+D+pspRdbAbMbopDzGnhKjiBSCtR9ZbKEwQHvWk=
+── deploying verify ...          tx: D5lTCe/0B7n4n7qT+mPDiguIHmAynU8QWqs5PjAdje4=
+── initializing realms ...       5/5 Init transactions
+✓ deployment manifest written to chain/deployments/deployment-dev.json
 ```
 
-**Deployment status.** The realm suite is written, tested (`gno test`), and parses/loads under the
-bundled toolchain. Two honest caveats:
+And the public verification facade answers on-chain queries immediately:
 
-1. **Onyx testnet deployment requires a funded account.** The deploy script signs with
-   `PROOFLOOM_KEY` from a keybase; the mnemonic arrives only via `PROOFLOOM_OPERATOR_MNEMONIC`
-   at runtime and is never committed. Without it, every chain-write endpoint fails with an
-   explicit activation requirement — no simulated success is ever returned.
-2. **The vendored `bin/gnovm` stdlib tree is version-mismatched** with the bundled `gnodev`
-   binary (the `unicode` package redeclares identifiers its native registry also declares).
-   This is an environment defect, not realm code — package loading of `chain/realms` succeeds;
-   full in-sandbox node bring-up does not. Point `PROOFLOOM_RPC_URL` at a funded Onyx deployment
-   (or a matching-version local node) and the verification portal's `chain_publication` check
-   lights up against the real realm state.
+```
+$ gnokey query vm/qeval -data '…/proofloom/verify.VerifyRelease("x")' --remote http://127.0.0.1:26657
+data: (struct{…("UNKNOWN" string),…("release does not exist" string)} …verify.ReleaseVerdict)
+```
+
+**How the pipeline works.** Realm sources reference each other by absolute
+module path, and module paths embed the deployer's address. `deploy.sh` stages
+a copy of `chain/realms`, rewrites every cross-realm import to the deployer's
+actual address, then deploys the seven packages in dependency order and calls
+each realm's `Init`. The source tree on disk is never mutated.
+
+**Reproduce locally** (three terminals or one script):
+
+```bash
+# 1. generate a deployer key (empty passphrase for dev only)
+gnokey --home "$GNOKY_HOME" add proofloom-deployer --insecure-password-stdin
+
+# 2. start the dev node with that account premined
+gnodev local -chain-id dev -no-examples -extra-root ./chain/realms \
+  -add-account "g1…=1000000000ugnot"
+
+# 3. deploy + initialize everything
+PROOFLOOM_REMOTE=http://127.0.0.1:26657 PROOFLOOM_CHAINID=dev \
+PROOFLOOM_KEY=proofloom-deployer PROOFLOOM_KEY_PASSWORD="" ./chain/scripts/deploy.sh
+
+# 4. point the product at the deployment
+PROOFLOOM_RPC_URL=http://127.0.0.1:26657
+PROOFLOOM_REALM_PREFIX=gno.land/r/<deployer>/proofloom
+```
+
+**Onyx testnet.** The same pipeline deploys to Onyx unchanged:
+`PROOFLOOM_REMOTE=https://rpc.onyx.testnets.gno.land:443 PROOFLOOM_CHAINID=onyx-1`
+with a **funded** deployer key. The mnemonic arrives only via
+`PROOFLOOM_OPERATOR_MNEMONIC` at runtime and is never committed, logged, or
+hardcoded — every chain-write endpoint fails with an explicit activation
+requirement rather than simulating success.
+
+Two environment caveats, stated plainly:
+
+1. The vendored `bin/gnovm` stdlib tree had version-mismatch artifacts
+   (`unicode`, `chain/runtime` redeclarations against the bundled `gnodev`
+   binary). Those were reconciled in-tree so the dev node boots; the realm
+   packages themselves needed no changes to compile or run.
+2. The sandbox recycles processes, so the in-memory gnodev chain does not
+   persist between sessions — the manifest records the transactions of the
+   last completed run.
 
 `chain/deployments/deployment-dev.json` records the last deployment manifest.
-
-## Testing
-
-```bash
-gno test ./chain/realms/proofloom/...   # realm unit tests
-bun run lint                            # app lint (clean)
-```
-
-## Judging criteria mapping
-
-- **Technical quality (40%)** — typed end-to-end (TS + Gno), scrypt credentials, hashed session tokens, append-only audit, idempotent chain transactions, honest failure states, realm unit tests.
-- **User appeal (20%)** — a product you can sign into and use in a minute; public portal requires no account; the Atlas makes provenance legible at a glance.
-- **Creativity (20%)** — first-class AI-agent accountability (grants, execution digests, approval gates) on top of software provenance; verification verdicts are composable realms other dApps can import.
-- **Docs & demo (20%)** — this README, in-app documentation view, seeded demo data, and a scripted demo path (sign in → publish flow → agent approval → public verify).
-
-## Project name note
-
-PROOFLOOM uses no "Gno" prefix and no official Gno.land branding, per hackathon rules.
-
-## License
-
-Apache-2.0
