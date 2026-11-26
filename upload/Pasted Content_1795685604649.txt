@@ -1,0 +1,2469 @@
+# PROOFLOOM
+# MASTER FLAGSHIP PRODUCT CREATION DIRECTIVE
+## Product Architecture · Protocol Engineering · Design System · Full-Stack Implementation · Security · Deployment · Commercialization
+
+**Project codename:** PROOFLOOM  
+**Design system:** THE ATELIER  
+**Product category:** Software provenance, verifiable engineering, AI-agent accountability and cryptographic evidence infrastructure  
+**Blockchain foundation:** Gno.land  
+**Initial network:** Onyx Testnet  
+**Product ambition:** Flagship-grade, production-oriented platform with a complete architecture and a credible path to mainnet and enterprise commercialization  
+**Execution standard:** Staff Engineer + Principal Product Designer + Protocol Engineer + Security Architect + SRE + Product Strategist
+
+---
+
+# PART I. THE MANDATE
+
+## 1. Your assignment
+
+You are the autonomous founding engineering and product team responsible for designing, building, integrating, testing, documenting and deploying PROOFLOOM.
+
+You are not being asked to create:
+
+- A hackathon prototype.
+- A landing page with a few dashboard screens.
+- A minimally viable product.
+- A static Figma-style representation.
+- A mock blockchain explorer.
+- A superficial AI-agent dashboard.
+- A collection of disconnected CRUD pages.
+- A simulated demonstration that cannot survive real users.
+- A generic SaaS template with a new logo.
+
+You are being instructed to build a complete, coherent, extensible software product with the engineering depth, interaction quality, visual identity, security controls and operational architecture expected of a serious technology company.
+
+Treat this as a flagship product that must be capable of evolving into a commercially viable infrastructure platform.
+
+**The hackathon is the initial proving ground, not the product's architectural ceiling.**
+
+Build the complete intended product architecture. Where external credentials, third-party approvals, mainnet availability or other external dependencies prevent a particular integration from being activated, implement the real integration boundary, document the exact activation requirements, and provide a truthful operational status. Never replace missing integration capability with fabricated functionality.
+
+## 2. Non-negotiable operating principles
+
+1. Inspect the existing repository before making architectural decisions.
+2. Preserve useful existing functionality and data.
+3. Do not destroy working functionality through unnecessary rewrites.
+4. Establish a written implementation plan before major changes.
+5. Build actual backend functionality behind every functional interface.
+6. Use real persistence, real APIs, real authentication and real cryptographic verification.
+7. Use genuine Gno transactions when interacting with the network.
+8. Do not fabricate transaction hashes, verification results, attestations, identities, statistics or evidence.
+9. Do not use hardcoded demo data as a substitute for production functionality.
+10. Make every important action auditable.
+11. Implement complete loading, empty, error, retry, permission and recovery states.
+12. Test the complete user journey, not just isolated components.
+13. Document every important architectural decision.
+14. Maintain a clear distinction between implemented, tested, deployed, externally blocked and planned functionality.
+15. Do not stop after generating code. Run it, test it, fix it, verify it and document it.
+
+When requirements conflict, prioritize security, data integrity, protocol correctness and user trust.
+
+---
+
+# PART II. PRODUCT VISION
+
+## 3. What PROOFLOOM is
+
+PROOFLOOM is a verifiable engineering and software provenance platform.
+
+It creates an evidence-backed record of how software is developed, modified, tested, released, verified and maintained, including work performed by autonomous AI agents.
+
+The platform connects:
+
+- Software repositories.
+- Engineering teams.
+- Organizations.
+- Software components and dependencies.
+- CI/CD systems.
+- Build and release pipelines.
+- Human contributors.
+- AI agents.
+- Tasks and engineering activities.
+- Security policies.
+- Evidence artifacts.
+- Cryptographic attestations.
+- Public verification.
+- Blockchain commitments.
+- External developer tools.
+
+Its purpose is to make engineering activity independently inspectable and verifiable.
+
+A company should be able to establish:
+
+- What software was released.
+- Which source revision produced it.
+- Which dependencies were involved.
+- Which tests and security checks were performed.
+- Which people and agents contributed.
+- What evidence supports each claim.
+- Whether the evidence has changed.
+- Whether an attestation remains valid.
+- Whether a release has been revoked or superseded.
+- Whether another organization can independently verify the result.
+
+PROOFLOOM should become an infrastructure layer for trustworthy software production.
+
+## 4. Product philosophy
+
+**The architecture of trust, made visible.**
+
+The product should make complex engineering evidence understandable without diluting its technical rigor.
+
+The platform must serve several distinct audiences:
+
+- Founders and executives evaluating software trust.
+- Engineering leaders overseeing releases.
+- Security and compliance teams examining evidence.
+- Developers integrating repositories and pipelines.
+- AI-agent operators supervising autonomous work.
+- Independent auditors verifying claims.
+- External developers building on PROOFLOOM's protocol.
+
+Do not create one generic dashboard for all these users. Design purposeful workspaces and information hierarchies around their actual jobs.
+
+---
+
+# PART III. PRODUCT DOMAINS AND FUNCTIONAL REQUIREMENTS
+
+Build the following product domains as integrated, operational modules.
+
+## 5. Identity, organizations and access management
+
+Implement:
+
+- User registration and authentication.
+- Email verification.
+- Secure session management.
+- Password reset and recovery.
+- MFA support.
+- Organization creation.
+- Organization invitations.
+- Membership management.
+- Role-based access control.
+- Fine-grained permissions.
+- Organization switching.
+- Project-level access.
+- Team management.
+- Service accounts.
+- API credentials.
+- Personal access tokens.
+- Session revocation.
+- Security event history.
+- Organization audit history.
+- Account deletion and export workflows.
+
+Define roles such as:
+
+- Organization Owner.
+- Organization Administrator.
+- Security Administrator.
+- Engineering Lead.
+- Developer.
+- Auditor.
+- Read-only Viewer.
+- Service Account.
+- Agent Operator.
+
+Never trust client-side role declarations. Enforce permissions at the server and API layers.
+
+Provide clear authorization failures and prevent cross-tenant data exposure.
+
+## 6. Project registry
+
+Users must be able to create and manage software projects.
+
+Implement:
+
+- Project creation and configuration.
+- Repository linking.
+- GitHub integration architecture.
+- Repository ownership verification.
+- Branch and commit tracking.
+- Project environment configuration.
+- Team assignment.
+- Project status.
+- Release history.
+- Project evidence history.
+- Project security policies.
+- Project integrations.
+- Project-level access controls.
+- Project activity feeds.
+- Project health summaries.
+- Project archival and restoration.
+
+Each project should have a persistent identity and an independently verifiable history.
+
+Support multiple repositories per project and multiple projects per organization.
+
+## 7. Software component registry
+
+Create a registry for software components and dependencies.
+
+Implement:
+
+- Component registration.
+- Package metadata.
+- Component versions.
+- Dependency relationships.
+- Dependency trees.
+- Direct and transitive dependency tracking.
+- Version pinning.
+- License metadata.
+- Vulnerability references.
+- Component ownership.
+- Provenance records.
+- Component attestations.
+- Component verification.
+- Component replacement and deprecation.
+- Component risk classification.
+- Component history.
+
+Support common software ecosystem formats where practical, including:
+
+- npm.
+- PyPI.
+- Maven.
+- Go modules.
+- Cargo.
+- Container images.
+- SBOM formats.
+
+Use established standards such as SPDX and CycloneDX where appropriate.
+
+Do not invent proprietary replacements for mature standards without a documented reason.
+
+## 8. Release provenance engine
+
+This is one of the platform's central capabilities.
+
+Implement an evidence-backed release lifecycle.
+
+A release should connect:
+
+1. Project identity.
+2. Repository identity.
+3. Source commit.
+4. Build configuration.
+5. Build environment metadata.
+6. Dependencies.
+7. Build execution.
+8. Test execution.
+9. Security scan results.
+10. Artifact identity.
+11. Release version.
+12. Release evidence.
+13. Signatures and attestations.
+14. Cryptographic commitments.
+15. Verification status.
+16. Supersession or revocation history.
+
+Implement:
+
+- Release creation.
+- Release ingestion from CI/CD.
+- Build metadata collection.
+- Artifact digest calculation.
+- Provenance statement generation.
+- Evidence attachment.
+- Release signing.
+- Release verification.
+- Release comparison.
+- Release revocation.
+- Release supersession.
+- Release timeline.
+- Release export.
+- Public verification references.
+
+Support integration patterns for GitHub Actions and other CI/CD platforms through documented adapters.
+
+Use established provenance standards such as SLSA and in-toto where appropriate.
+
+A release must never be marked verified merely because a record exists.
+
+Verification must evaluate the actual evidence, signatures, policy requirements and cryptographic integrity.
+
+## 9. Evidence and attestation protocol
+
+Create a first-class evidence system.
+
+Evidence may include:
+
+- Build logs.
+- Test reports.
+- Security scan reports.
+- SBOM documents.
+- Signed release statements.
+- Repository metadata.
+- Commit references.
+- Agent execution records.
+- Human approvals.
+- Deployment records.
+- Policy decisions.
+- Cryptographic proofs.
+
+Implement:
+
+- Evidence ingestion.
+- Evidence classification.
+- Evidence metadata.
+- Evidence storage.
+- Content hashing.
+- Integrity verification.
+- Evidence access permissions.
+- Evidence retention policies.
+- Evidence versioning.
+- Evidence expiration.
+- Evidence redaction.
+- Evidence revocation.
+- Evidence provenance.
+- Evidence export.
+- Evidence chain visualization.
+
+Support cryptographic signatures and verification using appropriate established algorithms and formats.
+
+Design a versioned attestation schema.
+
+Each attestation should contain sufficient information to establish:
+
+- Issuer.
+- Subject.
+- Claim.
+- Evidence references.
+- Creation timestamp.
+- Schema version.
+- Signature metadata.
+- Verification requirements.
+- Revocation or supersession status.
+
+Do not place confidential evidence or sensitive personal information directly on a public blockchain.
+
+Use off-chain storage for sensitive or large evidence artifacts and commit appropriate cryptographic digests or commitments on-chain.
+
+Implement a clear distinction between:
+
+- Evidence exists.
+- Evidence is accessible.
+- Evidence integrity is valid.
+- Signature is valid.
+- Attestation is authentic.
+- Policy requirements are satisfied.
+- Overall verification is complete.
+
+These states must never be conflated.
+
+## 10. AI-agent registry and accountability
+
+AI-agent accountability is a defining PROOFLOOM capability.
+
+Create a registry of AI agents operating within engineering environments.
+
+Implement:
+
+- Agent registration.
+- Agent identity.
+- Agent owner.
+- Organization association.
+- Agent type.
+- Model and provider metadata.
+- Tool permissions.
+- Environment permissions.
+- Task assignments.
+- Agent version history.
+- Agent execution history.
+- Agent action records.
+- Agent evidence.
+- Agent policy compliance.
+- Agent performance summaries.
+- Agent trust history.
+- Agent suspension.
+- Agent revocation.
+
+Create a structured agent activity record.
+
+For each material agent action, record:
+
+- Agent identifier.
+- Task identifier.
+- Initiating organization.
+- Execution timestamp.
+- Action category.
+- Tool or integration used.
+- Input reference or protected input digest.
+- Output reference or protected output digest.
+- Authorization context.
+- Policy evaluation.
+- Result.
+- Error state.
+- Evidence references.
+- Human approval status, where applicable.
+
+Do not log secrets, credentials, private prompts or sensitive payloads in plain text.
+
+Implement policy enforcement for agent permissions.
+
+Agents must not receive implicit access to every project, repository or organization resource.
+
+Implement:
+
+- Least-privilege authorization.
+- Tool allowlists.
+- Scoped credentials.
+- Approval-required actions.
+- Sensitive-operation restrictions.
+- Agent suspension.
+- Agent revocation.
+- Execution budgets.
+- Rate limits.
+- Audit trails.
+- Human override.
+- Policy violation alerts.
+
+A trust score, if implemented, must be explainable and derived from disclosed evidence. Never represent an arbitrary score as an objective measure of intelligence or safety.
+
+## 11. Tasks and contribution coordination
+
+Build a system connecting engineering tasks to verified outcomes.
+
+Implement:
+
+- Task creation.
+- Assignment to humans or agents.
+- Task dependencies.
+- Task status transitions.
+- Acceptance criteria.
+- Evidence requirements.
+- Execution records.
+- Review workflows.
+- Human approvals.
+- Rejection and revision.
+- Contribution attribution.
+- Completion attestations.
+- Task history.
+
+A completed task must have an inspectable relationship to its evidence.
+
+Support collaborative work without confusing an agent's contribution with a human contributor's approval.
+
+## 12. Security and policy centre
+
+Create a centralized policy and security workspace.
+
+Implement:
+
+- Organization security settings.
+- Project security settings.
+- Agent policy configuration.
+- Release policy configuration.
+- Evidence requirements.
+- Approval rules.
+- Credential management.
+- Webhook security.
+- API security.
+- Audit event review.
+- Security alerts.
+- Policy versioning.
+- Policy testing.
+- Policy simulation.
+- Policy enforcement.
+- Policy exceptions.
+- Policy revocation.
+
+Provide clear explanations of why an operation passed or failed a policy.
+
+Policy exceptions must be time-bounded, permission-controlled and auditable.
+
+## 13. Public verification portal
+
+Create a public-facing verification experience.
+
+External users must be able to inspect a public release or attestation without requiring an account, subject to the publisher's visibility settings.
+
+Implement:
+
+- Public project verification pages.
+- Release verification pages.
+- Attestation verification.
+- Evidence integrity checks.
+- Signature validation.
+- Verification history.
+- Revocation status.
+- Supersession history.
+- Public API access.
+- Shareable verification references.
+- Downloadable verification reports.
+- Machine-readable results.
+
+Clearly communicate the limits of verification.
+
+A valid cryptographic signature does not automatically prove that a software artifact is safe or correct.
+
+The portal must explain exactly what was verified and what remains unverified.
+
+## 14. Analytics and intelligence
+
+Build a meaningful analytical workspace.
+
+Include:
+
+- Release activity.
+- Verification coverage.
+- Evidence completeness.
+- Project provenance health.
+- Dependency risk.
+- Vulnerability trends.
+- Agent activity.
+- Agent policy compliance.
+- Task completion.
+- Attestation status.
+- Revocation history.
+- Organization-level activity.
+- Integration health.
+
+All charts must be based on real persisted data.
+
+Provide useful date filters, organization filters, project filters, export functionality and drill-down paths.
+
+Never use fabricated metrics to make the dashboard look populated.
+
+Provide carefully designed empty states when data does not exist.
+
+---
+
+# PART IV. GNOLAND PROTOCOL ENGINEERING
+
+## 15. Blockchain architecture
+
+Gno.land is the protocol foundation for PROOFLOOM's verifiable public commitments.
+
+The initial integration target is Onyx Testnet.
+
+Initial network configuration:
+
+- Network: Onyx Testnet.
+- Chain ID: `onyx-1`.
+- RPC: `https://rpc.onyx.testnets.gno.land:443`.
+- Tooling: `gno`, `gnokey`, `gnodev`, subject to current compatibility and official documentation.
+- Realm architecture: `gno.land/r/<publisher>/proofloom/` as a proposed namespace.
+
+Verify all network configuration, tooling versions, deployment procedures and current Gno APIs against official documentation before implementation.
+
+Do not assume that a previously documented command, package or network endpoint remains valid.
+
+## 16. Realm architecture
+
+Design a modular realm structure.
+
+Suggested organization:
+
+```text
+gno.land/r/<publisher>/proofloom/
+    core/
+    identity/
+    registry/
+    releases/
+    attestations/
+    agents/
+    policies/
+    verify/
+    reputation/
+```
+
+The final realm boundaries must be justified by:
+
+- Security.
+- State ownership.
+- Upgrade strategy.
+- Interrealm calls.
+- Gas considerations.
+- Public versus private data.
+- Long-term maintainability.
+
+Implement clear ownership of state and authority.
+
+Do not expose mutable internal state through unsafe references.
+
+Validate caller identity and authorization at every relevant boundary.
+
+Follow Gno's actual execution and security model, including appropriate use of `cur.Previous().Address()` and interrealm authority validation where required.
+
+Do not assume that familiar Solidity or EVM patterns translate directly to Gno.
+
+Respect Gno realm constraints. Do not introduce unsupported operating-system access, networking, goroutines or other prohibited runtime behavior inside realms.
+
+## 17. On-chain responsibilities
+
+Use the chain for compact, verifiable commitments and public protocol state.
+
+Potential on-chain records include:
+
+- Organization or publisher references.
+- Project identifiers.
+- Release identifiers.
+- Artifact digests.
+- Attestation commitments.
+- Issuer references.
+- Verification references.
+- Revocation status.
+- Supersession relationships.
+- Protocol version information.
+- Registry events.
+
+Keep large artifacts and confidential evidence off-chain.
+
+Avoid unnecessary state growth.
+
+Design for deterministic identifiers, replay protection, authorization and predictable transaction costs.
+
+## 18. Wallet and transaction experience
+
+Implement a real wallet connection and transaction lifecycle.
+
+Investigate and integrate suitable Gno-compatible wallet infrastructure, including GnoConnect and Adena where supported.
+
+Implement:
+
+- Wallet discovery.
+- Wallet connection.
+- Wallet disconnection.
+- Address display.
+- Network detection.
+- Network mismatch handling.
+- Transaction construction.
+- Transaction preview.
+- User approval.
+- Transaction submission.
+- Confirmation tracking.
+- Transaction failure handling.
+- Retry and recovery.
+- Transaction history.
+- Explorer links when supported.
+
+The interface must clearly distinguish:
+
+- A transaction prepared.
+- A transaction awaiting signature.
+- A transaction submitted.
+- A transaction included.
+- A transaction confirmed.
+- A transaction failed.
+- A transaction whose status is unknown.
+
+Never mark a transaction successful before receiving authoritative confirmation.
+
+Implement idempotency and reconciliation for transactions that are submitted but whose response is interrupted.
+
+## 19. Protocol development and testing
+
+Create:
+
+- Realm unit tests.
+- Authorization tests.
+- Interrealm interaction tests.
+- State transition tests.
+- Replay and duplicate submission tests.
+- Revocation tests.
+- Malformed input tests.
+- Boundary tests.
+- Gas and execution-cost analysis where supported.
+- Deployment tests.
+- Integration tests.
+- Testnet transaction verification.
+
+Include documented deployment scripts and repeatable release procedures.
+
+Never deploy unreviewed protocol changes to mainnet.
+
+Create a mainnet readiness checklist and explicit approval gate.
+
+## 20. External Gno integration
+
+Investigate Gno ecosystem tooling and integrations.
+
+Evaluate GnoConnect, Adena, gnomcp and relevant developer tooling against current documentation and maturity.
+
+Do not make an experimental dependency a critical production dependency without a fallback.
+
+Provide integration adapters and capability detection.
+
+---
+
+# PART V. APPLICATION ARCHITECTURE
+
+## 21. Technology stack
+
+Use a modern, maintainable architecture.
+
+Recommended baseline:
+
+**Frontend**
+- Next.js.
+- React.
+- TypeScript.
+- Server-side rendering for public, indexable and data-sensitive initial views.
+- Client-side rendering for interactive workspaces.
+- A well-structured component system.
+- Accessible interaction primitives.
+
+**Backend**
+- TypeScript services or another justified production-grade backend.
+- Versioned REST APIs or carefully scoped RPC interfaces.
+- Background workers.
+- Webhook processing.
+- Integration adapters.
+- Authentication and authorization services.
+
+**Data**
+- PostgreSQL as the primary relational database.
+- Redis for caching, rate limiting and queues where appropriate.
+- Object storage for evidence and large artifacts.
+- Durable event and audit records.
+
+**Infrastructure**
+- Docker.
+- Environment-specific configuration.
+- CI/CD.
+- Database migrations.
+- Centralized observability.
+- Backup and recovery.
+- Infrastructure-as-code where practical.
+
+**Developer tooling**
+- SDK.
+- CLI.
+- API documentation.
+- Integration examples.
+- CI/CD adapters.
+- Webhook testing tools.
+
+The exact stack may be adjusted after repository inspection, but every change must be justified in an architecture decision record.
+
+Do not introduce unnecessary technologies for novelty.
+
+## 22. Core architecture principles
+
+Design the system around clearly separated domains:
+
+1. Identity and access.
+2. Organizations.
+3. Projects.
+4. Components.
+5. Releases.
+6. Evidence.
+7. Attestations.
+8. Agents.
+9. Tasks.
+10. Policies.
+11. Blockchain integration.
+12. Verification.
+13. Analytics.
+14. Notifications.
+15. Billing and entitlements, where applicable.
+16. Administrative operations.
+
+Use explicit contracts between domains.
+
+Implement:
+
+- Schema validation.
+- Versioned API contracts.
+- Structured errors.
+- Request correlation IDs.
+- Idempotency keys.
+- Audit event generation.
+- Transactional database operations.
+- Retry policies.
+- Dead-letter handling.
+- Outbox or equivalent reliable event publication where needed.
+- Background job observability.
+- Integration health monitoring.
+
+Do not let frontend components directly become the source of truth for business rules.
+
+## 23. Data model
+
+Design a coherent relational model.
+
+At minimum, evaluate entities for:
+
+- Users.
+- Sessions.
+- Organizations.
+- Memberships.
+- Roles.
+- Permissions.
+- Invitations.
+- Projects.
+- Repositories.
+- Components.
+- Dependencies.
+- Releases.
+- Build records.
+- Artifacts.
+- Evidence.
+- Attestations.
+- Signatures.
+- Verification records.
+- Agents.
+- Agent versions.
+- Agent executions.
+- Tasks.
+- Approvals.
+- Policies.
+- Policy evaluations.
+- Integrations.
+- Webhooks.
+- API credentials.
+- Blockchain transactions.
+- Chain events.
+- Notifications.
+- Audit events.
+- Usage records.
+
+Define:
+
+- Primary keys.
+- Foreign keys.
+- Tenant boundaries.
+- Uniqueness constraints.
+- Indexes.
+- Retention policies.
+- Soft deletion rules.
+- Data ownership.
+- Versioning.
+- Migration strategy.
+
+Use database constraints to enforce important integrity rules.
+
+Do not rely solely on application-level validation.
+
+---
+
+# PART VI. THE ATELIER DESIGN SYSTEM
+
+# 24. Design mandate
+
+Create an original, recognizable product design language called:
+
+# THE ATELIER
+
+**Design principle:** The architecture of trust, made visible.
+
+The design must be bespoke to PROOFLOOM.
+
+Do not deliver a generic AI dashboard, a default shadcn interface, a generic enterprise template or a lightly recolored component library.
+
+The product should feel like a sophisticated engineering instrument: part editorial publication, part technical observatory, part precision control environment.
+
+Its visual identity must be recognizable even when the PROOFLOOM logo is removed.
+
+Build the design system as actual reusable code, tokens, components, interaction rules and documentation.
+
+## 25. Three visual environments
+
+The product has three coordinated environments.
+
+### A. ATELIER: Editorial
+
+Purpose:
+- Marketing.
+- Product storytelling.
+- Documentation.
+- Public project pages.
+- Educational experiences.
+
+Characteristics:
+- Spacious composition.
+- Warm parchment surfaces.
+- Elegant typography.
+- Technical illustrations.
+- Editorial grids.
+- Carefully controlled negative space.
+- Large, distinctive headings.
+- Detailed evidence storytelling.
+
+### B. OBSERVATORY: Analytical
+
+Purpose:
+- Project intelligence.
+- Release analysis.
+- Verification.
+- Provenance graphs.
+- Dependency relationships.
+- Agent performance.
+
+Characteristics:
+- Dark analytical surfaces.
+- Precision grids.
+- Structured information.
+- Technical typography.
+- Dense but readable data.
+- Graph-based visualization.
+- Clear evidence hierarchy.
+- Restrained use of color.
+
+### C. CONTROL ROOM: Operational
+
+Purpose:
+- Security operations.
+- Policy management.
+- Agent supervision.
+- Release approvals.
+- Integration health.
+- Administrative workflows.
+
+Characteristics:
+- High information density.
+- Strong status hierarchy.
+- Clear operational controls.
+- Explicit destructive-action boundaries.
+- Persistent system status.
+- High-contrast actionable elements.
+- Precise feedback and recovery states.
+
+These environments must share one design language while retaining distinct information architecture.
+
+## 26. Brand identity and emblem
+
+Create an original PROOFLOOM emblem.
+
+Concept:
+
+Three interlocking paths converge into a central verification point.
+
+The paths represent:
+
+- Source.
+- Execution.
+- Evidence.
+
+The convergence represents independently verifiable trust.
+
+Open endpoints represent extensibility and external verification.
+
+Develop:
+
+- Primary logo.
+- Horizontal logo.
+- Compact mark.
+- Emblem-only variant.
+- Monochrome variant.
+- Light-background variant.
+- Dark-background variant.
+- Favicon.
+- App icon.
+- Social avatar.
+- Product loading mark.
+- Animated emblem.
+
+Produce vector assets, preferably SVG, and document their correct usage.
+
+The emblem must remain legible at small sizes.
+
+Do not use a generic shield, checkmark, padlock or circuit-brain icon as the main brand mark.
+
+## 27. Colour system
+
+Use the following foundation palette.
+
+| Token | Colour | Hex |
+|---|---|---|
+| Obsidian | Deep background | #090D11 |
+| Carbon | Primary dark surface | #151D24 |
+| Iron | Elevated dark surface | #25333B |
+| Parchment | Warm light surface | #F2EFE7 |
+| Mist | Secondary light text | #B7C1C2 |
+| Verdigris | Primary accent | #55D8C2 |
+| Copper | Secondary accent | #D6A36C |
+| Cobalt | Informational accent | #7599D9 |
+
+Create semantic tokens for:
+
+- Primary.
+- Secondary.
+- Accent.
+- Background.
+- Surface.
+- Elevated surface.
+- Border.
+- Divider.
+- Text primary.
+- Text secondary.
+- Muted text.
+- Focus.
+- Selection.
+- Hover.
+- Active.
+- Disabled.
+- Verified.
+- Pending.
+- Informational.
+- Rejected.
+- Revoked.
+- Unknown.
+- Warning.
+- Critical.
+
+Semantic status colors must be distinguishable without relying on color alone.
+
+Do not use verdigris to imply successful verification unless verification has genuinely completed.
+
+Create light and dark themes, with deliberate contrast and surface adjustments.
+
+## 28. Typography
+
+Use a distinctive typographic system.
+
+Preferred roles:
+
+- Instrument Serif: editorial display and selected storytelling moments.
+- Geist Sans or Manrope: interface typography.
+- IBM Plex Mono: technical identifiers, hashes, timestamps, code and metadata.
+
+Define:
+
+- Display sizes.
+- Heading hierarchy.
+- Body sizes.
+- Caption sizes.
+- Labels.
+- Monospace sizes.
+- Line heights.
+- Letter spacing.
+- Font weights.
+- Responsive scaling.
+- Text wrapping rules.
+- Long identifier handling.
+
+Do not use decorative serif typography for dense operational interfaces.
+
+Do not sacrifice readability to achieve an aesthetic effect.
+
+## 29. Layout and spatial system
+
+Create a documented layout system.
+
+Include:
+
+- 4-point spacing foundation.
+- Responsive grid.
+- Content width constraints.
+- Sidebar dimensions.
+- Header dimensions.
+- Table density options.
+- Card and panel spacing.
+- Mobile gutters.
+- Modal widths.
+- Drawer widths.
+- Dashboard layout rules.
+- Responsive breakpoints.
+
+The design should have a strong visual rhythm.
+
+Use asymmetry where it improves storytelling, not randomly.
+
+Avoid excessive rounded cards and endless nested containers.
+
+## 30. Signature component vocabulary
+
+Develop original, reusable components.
+
+At minimum:
+
+**LoomPanel**  
+A structured information surface with a clear hierarchy and carefully controlled density.
+
+**EvidenceThread**  
+A visual connection between a claim and its supporting evidence.
+
+**LoomNode**  
+A graph node representing a project, artifact, release, agent or attestation.
+
+**ProofSeal**  
+A visual representation of an actual verification state.
+
+**TraceLine**  
+A visual timeline or connection showing provenance.
+
+**ArtifactTile**  
+A compact representation of a software artifact.
+
+**AgentSigil**  
+A distinct identity representation for an AI agent.
+
+**ChainReceipt**  
+A blockchain transaction and confirmation component.
+
+**TrustMeter**  
+An explainable evidence completeness or policy compliance indicator.
+
+**ProvenanceRail**  
+A sequential release and evidence history.
+
+**EvidenceDrawer**  
+A detailed evidence inspection surface.
+
+**AttestationStamp**  
+A signed claim with issuer, status and verification metadata.
+
+**PolicyVerdict**  
+A transparent explanation of policy evaluation.
+
+**ReleaseCard**  
+A structured release summary with source, version and verification state.
+
+**DependencyConstellation**  
+A visualization of dependency relationships.
+
+**ActivityTrace**  
+A chronological record of meaningful activity.
+
+**IntegrationPulse**  
+An integration status indicator showing connection and health.
+
+**CommandSurface**  
+A consistent operational command and action area.
+
+Each component must have:
+
+- Defined props.
+- Accessibility behavior.
+- Keyboard support.
+- Responsive behavior.
+- Loading state.
+- Empty state, where relevant.
+- Error state.
+- Disabled state.
+- Hover and focus behavior.
+- Documentation.
+- Tests.
+
+Avoid components that only look functional.
+
+## 31. Signature experience: PROOF ATLAS
+
+Build PROOF ATLAS as the product's defining visual experience.
+
+It is a data-driven visualization of software provenance.
+
+It should show the relationship between:
+
+- Projects.
+- Repositories.
+- Commits.
+- Components.
+- Builds.
+- Artifacts.
+- Releases.
+- Attestations.
+- Evidence.
+- Agents.
+- Verification events.
+
+A user should be able to move through the evidence graph and inspect relationships.
+
+Implement:
+
+- Node selection.
+- Node details.
+- Relationship inspection.
+- Filtering.
+- Search.
+- Zoom.
+- Pan.
+- Focus mode.
+- Time navigation.
+- Evidence highlighting.
+- Verification-state highlighting.
+- Dependency exploration.
+- Release comparison.
+- Accessible list and table alternative.
+
+Use real data.
+
+Use a suitable 3D or graph rendering library only after evaluating performance, accessibility and maintenance.
+
+Provide a high-quality 2D fallback.
+
+The graph must remain usable on mobile devices and lower-powered hardware.
+
+Do not create decorative 3D that has no relationship to actual product data.
+
+## 32. Motion and interaction language
+
+Create a coherent motion system.
+
+Motion should communicate:
+
+- State change.
+- Progress.
+- Relationships.
+- Focus.
+- Completion.
+- Error.
+- Navigation.
+- System activity.
+
+Define motion tokens for:
+
+- Micro-interactions.
+- Hover transitions.
+- Press feedback.
+- Drawer transitions.
+- Modal transitions.
+- Page transitions.
+- Graph transitions.
+- Loading animations.
+- Status changes.
+- Major visual sequences.
+
+Use restrained durations and appropriate easing.
+
+Respect `prefers-reduced-motion`.
+
+Avoid continuous animation that distracts from operational tasks.
+
+Create signature interactions for:
+
+- ProofSeal verification completion.
+- EvidenceThread expansion.
+- LoomNode selection.
+- ProvenanceRail traversal.
+- AgentSigil activity.
+- ChainReceipt confirmation.
+- Proof Atlas navigation.
+
+All animations must degrade gracefully.
+
+## 33. Micro and macro interactions
+
+Implement meaningful interaction feedback.
+
+Examples:
+
+- Buttons acknowledge press and loading states.
+- Copy controls confirm successful copying.
+- Tables provide sorting and filtering feedback.
+- Forms explain validation errors.
+- Uploads show progress and retry capability.
+- Wallet actions communicate signing and confirmation stages.
+- Graph selection reveals relevant evidence.
+- Navigation maintains user context.
+- Dangerous actions require explicit confirmation.
+- Permission failures explain the missing permission.
+- Background operations expose their current state.
+
+Do not use decorative animation to hide slow or broken functionality.
+
+## 34. Complete screen design
+
+Design and implement every relevant state for the following surfaces.
+
+### Public experience
+- Homepage.
+- Product overview.
+- Platform capabilities.
+- Architecture.
+- Protocol overview.
+- Documentation.
+- Developer portal.
+- Public project pages.
+- Public release pages.
+- Verification laboratory.
+- Pricing and plans.
+- Security overview.
+- About.
+- Contact.
+- Legal pages.
+
+### Authenticated experience
+- Onboarding.
+- Workspace overview.
+- Organization settings.
+- Project workspace.
+- Project registry.
+- Component registry.
+- Release Foundry.
+- Evidence Library.
+- Attestation management.
+- Agent Command.
+- Task coordination.
+- Security and policy centre.
+- Verification Laboratory.
+- Proof Atlas.
+- Analytics.
+- Integrations.
+- API keys.
+- Notifications.
+- Billing and entitlements, if activated.
+- User settings.
+
+### Administrative experience
+- Platform overview.
+- Organization administration.
+- User administration.
+- Integration health.
+- Queue monitoring.
+- System events.
+- Audit history.
+- Abuse and security review.
+- Operational controls.
+
+## 35. Design states and boundaries
+
+Every screen must account for:
+
+- Initial loading.
+- Background refresh.
+- Empty data.
+- Partial data.
+- Successful completion.
+- Validation failure.
+- Network failure.
+- Server failure.
+- Permission denial.
+- Expired session.
+- Rate limiting.
+- External service failure.
+- Transaction pending.
+- Transaction rejected.
+- Transaction confirmation timeout.
+- Missing evidence.
+- Invalid evidence.
+- Revoked attestation.
+- Unavailable resource.
+- Unexpected application error.
+
+Implement:
+
+- Page-level error boundaries.
+- Component-level error boundaries where appropriate.
+- Route-level loading states.
+- Skeletons.
+- Empty-state illustrations or visual treatments.
+- Retry controls.
+- Recovery instructions.
+- Error codes.
+- User-readable messages.
+- Diagnostic identifiers.
+
+Never expose stack traces, secrets or internal implementation details to end users.
+
+## 36. Accessibility
+
+Target WCAG 2.2 AA where practical.
+
+Implement:
+
+- Semantic HTML.
+- Keyboard navigation.
+- Visible focus states.
+- Accessible forms.
+- Screen-reader labels.
+- Proper heading hierarchy.
+- Contrast checks.
+- Accessible tables.
+- Reduced motion.
+- Accessible dialogs.
+- Accessible status announcements.
+- Alternative representations of complex visualizations.
+
+Do not make essential information available only through color, hover or 3D interaction.
+
+## 37. Responsive design
+
+Create deliberate desktop, tablet and mobile experiences.
+
+Do not merely shrink the desktop interface.
+
+Desktop should support complex analysis and multi-panel work.
+
+Tablet should retain meaningful analytical capability.
+
+Mobile should prioritize:
+
+- Essential status.
+- Evidence inspection.
+- Release summaries.
+- Notifications.
+- Approval workflows.
+- Wallet interactions.
+- Security alerts.
+
+The application must remain usable on narrow screens.
+
+---
+
+# PART VII. SSR, CSR AND APPLICATION PERFORMANCE
+
+## 38. Rendering architecture
+
+Use server-side rendering for:
+
+- Public product pages.
+- Documentation.
+- Public project pages.
+- Public verification pages where appropriate.
+- Initial authenticated page data when it improves performance and security.
+
+Use client-side rendering for:
+
+- Interactive graphs.
+- Filters.
+- Dynamic tables.
+- Live activity.
+- Wallet interactions.
+- Complex workspace tools.
+- Interactive configuration.
+
+Use streaming and progressive loading where appropriate.
+
+Do not expose server-only secrets or sensitive tenant data through serialized client props.
+
+Define a clear server/client boundary.
+
+## 39. Performance requirements
+
+Implement:
+
+- Route-level code splitting.
+- Lazy loading.
+- Image optimization.
+- Font optimization.
+- Query optimization.
+- Pagination.
+- Virtualized large tables where needed.
+- Graph rendering performance controls.
+- Caching.
+- Background processing.
+- API response limits.
+- Database indexing.
+- Bundle analysis.
+
+Measure real performance.
+
+Establish performance budgets and document exceptions.
+
+Do not optimize by removing useful functionality.
+
+---
+
+# PART VIII. SECURITY, PRIVACY AND TRUST
+
+## 40. Security architecture
+
+Implement a security-first design.
+
+Include:
+
+- Secure authentication.
+- Strong authorization.
+- Tenant isolation.
+- Input validation.
+- Output encoding.
+- CSRF protection where applicable.
+- XSS protection.
+- SQL injection prevention.
+- SSRF protection.
+- Secure file handling.
+- Upload size restrictions.
+- File type validation.
+- Malware scanning integration boundary.
+- Secret management.
+- Rate limiting.
+- Abuse prevention.
+- Webhook signature verification.
+- API credential rotation.
+- Secure cookie settings.
+- Dependency scanning.
+- Audit logging.
+- Encryption in transit.
+- Encryption at rest where supported.
+
+Protect against:
+
+- Cross-tenant data exposure.
+- Privilege escalation.
+- Agent permission abuse.
+- Replay attacks.
+- Forged attestations.
+- Malicious evidence uploads.
+- Duplicate transactions.
+- Webhook replay.
+- Dependency confusion.
+- Compromised CI/CD credentials.
+- Malicious integration callbacks.
+- Unauthorized release revocation.
+
+## 41. Privacy and data governance
+
+Create explicit data classification.
+
+Separate:
+
+- Public protocol data.
+- Organization-confidential data.
+- User personal data.
+- Credentials and secrets.
+- Private evidence.
+- Operational telemetry.
+
+Implement retention, deletion, export and access controls.
+
+Public blockchain commitments must not reveal confidential content.
+
+Document the privacy implications of immutable public records.
+
+---
+
+# PART IX. INTEGRATIONS AND DEVELOPER ECOSYSTEM
+
+## 42. Integration framework
+
+Create a reusable integration architecture.
+
+Each integration should support:
+
+- Connection setup.
+- Authentication.
+- Permission scopes.
+- Connection validation.
+- Health checks.
+- Event ingestion.
+- Webhook validation.
+- Retry.
+- Failure handling.
+- Disconnection.
+- Credential revocation.
+- Audit history.
+
+Prioritize:
+
+- GitHub.
+- GitHub Actions.
+- CI/CD pipelines.
+- Container registries.
+- SBOM tools.
+- Security scanners.
+- Developer APIs.
+- Gno wallet infrastructure.
+
+Build adapters so additional integrations can be added without rewriting the core platform.
+
+## 43. API and SDK
+
+Build a versioned public API.
+
+Include endpoints for:
+
+- Organizations.
+- Projects.
+- Components.
+- Releases.
+- Evidence.
+- Attestations.
+- Agents.
+- Tasks.
+- Policies.
+- Verification.
+- Public records.
+
+Provide:
+
+- OpenAPI documentation.
+- Authentication examples.
+- Pagination.
+- Filtering.
+- Structured errors.
+- Rate limits.
+- Idempotency.
+- Webhooks.
+- API versioning.
+- SDK architecture.
+
+Build a developer-friendly SDK and CLI.
+
+A developer should be able to:
+
+1. Authenticate.
+2. Register a project.
+3. Connect a repository.
+4. Submit build evidence.
+5. Create a release.
+6. Generate an attestation.
+7. Publish an on-chain commitment.
+8. Verify the release.
+9. Retrieve the verification report.
+
+Provide complete examples and executable integration tests.
+
+---
+
+# PART X. RELIABILITY AND OPERATIONS
+
+## 44. Background jobs and event processing
+
+Implement reliable processing for:
+
+- Repository synchronization.
+- Webhook ingestion.
+- Evidence processing.
+- Artifact hashing.
+- Attestation generation.
+- Verification.
+- Blockchain transaction submission.
+- Transaction reconciliation.
+- Notifications.
+- Analytics aggregation.
+- Scheduled retention operations.
+
+Every job must have:
+
+- A unique identity.
+- Status.
+- Retry policy.
+- Failure reason.
+- Execution history.
+- Idempotency behavior.
+- Dead-letter or manual recovery path where appropriate.
+
+Do not silently discard failed jobs.
+
+## 45. Observability
+
+Implement:
+
+- Structured logs.
+- Metrics.
+- Distributed tracing where practical.
+- Error monitoring.
+- Queue health.
+- API latency.
+- Database performance.
+- Integration status.
+- Blockchain submission status.
+- Transaction reconciliation status.
+- Security events.
+
+Use correlation IDs to connect frontend actions, API requests, jobs and blockchain transactions.
+
+Create an operational dashboard that reflects real system state.
+
+## 46. Backup and disaster recovery
+
+Document and implement:
+
+- Database backups.
+- Object storage recovery.
+- Backup verification.
+- Recovery procedures.
+- Migration rollback strategy.
+- Service restoration.
+- Incident escalation.
+- Data integrity checks.
+
+A backup that has never been tested is not a proven recovery mechanism.
+
+---
+
+# PART XI. TESTING AND QUALITY ASSURANCE
+
+## 47. Testing strategy
+
+Build a layered testing system.
+
+**Unit tests**
+- Business logic.
+- Validation.
+- Authorization.
+- State transitions.
+- Cryptographic helpers.
+- Domain rules.
+
+**Integration tests**
+- Database.
+- APIs.
+- Queues.
+- Storage.
+- Webhooks.
+- Wallet adapters.
+- Blockchain adapters.
+
+**End-to-end tests**
+- Registration.
+- Organization creation.
+- Project creation.
+- Repository connection.
+- Evidence submission.
+- Release publication.
+- Attestation creation.
+- Verification.
+- Agent registration.
+- Agent execution record.
+- Policy enforcement.
+- Revocation.
+- Public verification.
+
+**Security tests**
+- Authentication bypass.
+- Authorization bypass.
+- Tenant isolation.
+- Injection.
+- Replay.
+- Malicious uploads.
+- Webhook forgery.
+- Credential leakage.
+- Transaction duplication.
+
+**Visual tests**
+- Responsive layouts.
+- Component states.
+- Theme variants.
+- Accessibility.
+- Visual regressions.
+
+## 48. Edge-case programme
+
+Create a minimum of 250 documented edge cases and mitigations.
+
+Do not satisfy the requirement with superficial one-line entries.
+
+Cover at least these areas:
+
+1. Identity and account recovery.
+2. Organization membership.
+3. Permissions and authorization.
+4. Tenant isolation.
+5. Repository connection.
+6. Repository synchronization.
+7. Commit ingestion.
+8. Dependency metadata.
+9. Release creation.
+10. Build failures.
+11. Artifact corruption.
+12. Evidence ingestion.
+13. Evidence expiration.
+14. Evidence redaction.
+15. Attestation signing.
+16. Signature verification.
+17. Revocation.
+18. Supersession.
+19. Agent identity.
+20. Agent permissions.
+21. Agent execution failures.
+22. Agent policy violations.
+23. Task assignment.
+24. Approval workflows.
+25. Blockchain transaction submission.
+26. Wallet disconnection.
+27. Network mismatch.
+28. Transaction timeout.
+29. Duplicate transaction submission.
+30. Chain reorganization or unexpected chain-state behavior where applicable.
+31. API rate limiting.
+32. Webhook replay.
+33. Queue failure.
+34. Database failure.
+35. Object storage failure.
+36. Integration outages.
+37. Privacy and data retention.
+38. Public verification.
+39. Analytics integrity.
+40. Deployment and recovery.
+
+For every edge case document:
+
+- Trigger.
+- Preconditions.
+- Expected behavior.
+- Failure behavior.
+- Security implications.
+- User-facing response.
+- Recovery procedure.
+- Tests required.
+
+Add further cases based on the actual implementation.
+
+---
+
+# PART XII. IMPLEMENTATION EXECUTION PLAN
+
+## 49. Phase 0: Repository and environment reconnaissance
+
+Before writing significant code:
+
+1. Inspect the entire repository.
+2. Identify the framework and package manager.
+3. Inspect existing routes and components.
+4. Inspect backend services.
+5. Inspect the database schema.
+6. Inspect authentication.
+7. Inspect existing integrations.
+8. Inspect existing deployment configuration.
+9. Inspect current tests.
+10. Identify unfinished features.
+11. Identify security issues.
+12. Identify duplicated or obsolete code.
+13. Identify infrastructure gaps.
+
+Produce:
+
+- Repository architecture report.
+- Existing functionality inventory.
+- Dependency inventory.
+- Security audit.
+- Data model assessment.
+- Technical debt report.
+- Build and deployment assessment.
+- Prioritized implementation plan.
+
+Do not discard useful work.
+
+## 50. Phase 1: Architecture and design foundations
+
+Create:
+
+- Product requirements specification.
+- System architecture.
+- Domain model.
+- Data model.
+- API contract.
+- Threat model.
+- Gno realm architecture.
+- Design system specification.
+- Design tokens.
+- Component inventory.
+- Implementation dependency graph.
+
+Create an explicit definition of done for every major domain.
+
+## 51. Phase 2: Design-system implementation
+
+Before building all screens, implement the actual Atelier foundation.
+
+Build:
+
+- Typography.
+- Colors.
+- Theme system.
+- Layout primitives.
+- Navigation.
+- Buttons.
+- Forms.
+- Inputs.
+- Tables.
+- Drawers.
+- Dialogs.
+- Notifications.
+- Status indicators.
+- Signature components.
+- Motion system.
+- Responsive behavior.
+- Accessibility foundations.
+
+Create a design-system gallery showing every component and state.
+
+Do not build the entire product with arbitrary one-off styling.
+
+## 52. Phase 3: Core platform implementation
+
+Implement:
+
+1. Identity.
+2. Organizations.
+3. Permissions.
+4. Project registry.
+5. Component registry.
+6. Evidence management.
+7. Release provenance.
+8. Attestation management.
+9. Verification.
+10. Audit history.
+
+Connect frontend, backend and database functionality end-to-end.
+
+## 53. Phase 4: Agent accountability and policies
+
+Implement:
+
+- Agent registry.
+- Agent identities.
+- Agent permissions.
+- Agent execution records.
+- Task coordination.
+- Approval workflows.
+- Policy centre.
+- Agent audit history.
+- Agent verification references.
+
+Test all permission boundaries.
+
+## 54. Phase 5: Gno protocol implementation
+
+Implement the realm architecture, test suite, wallet integration and testnet deployment.
+
+Prove the following workflow:
+
+1. Register or identify a project.
+2. Produce a release.
+3. Generate evidence.
+4. Generate an attestation.
+5. Create the appropriate cryptographic commitment.
+6. Obtain the user's authorized transaction signature.
+7. Submit the transaction.
+8. Confirm the chain result.
+9. Persist the transaction reference.
+10. Verify the published commitment.
+11. Display the result in the public verification portal.
+
+The workflow must be real and repeatable.
+
+## 55. Phase 6: Integrations and developer tools
+
+Implement:
+
+- Repository integration.
+- CI/CD ingestion.
+- Webhooks.
+- Public APIs.
+- SDK.
+- CLI.
+- Documentation.
+- Integration health monitoring.
+
+Provide executable examples.
+
+## 56. Phase 7: Complete user experience
+
+Finish:
+
+- Public experience.
+- Authenticated workspaces.
+- Administrative experience.
+- Proof Atlas.
+- Release Foundry.
+- Agent Command.
+- Verification Laboratory.
+- Analytics.
+- Mobile experience.
+- All loading and error states.
+- All permission and recovery states.
+
+No dead buttons or placeholder navigation.
+
+## 57. Phase 8: Hardening and verification
+
+Run:
+
+- Full test suite.
+- Security testing.
+- Dependency scanning.
+- Performance testing.
+- Database integrity checks.
+- Accessibility checks.
+- Responsive testing.
+- Blockchain integration tests.
+- Backup and recovery verification.
+- Deployment verification.
+
+Resolve critical and high-severity issues before declaring production readiness.
+
+## 58. Phase 9: Deployment and operational handover
+
+Deploy to the available authorized environment.
+
+Do not invent credentials or deployment targets.
+
+If access to a VPS, cloud environment, domain, wallet or third-party account is unavailable, produce the exact deployment procedure and clearly identify the required owner action.
+
+Verify:
+
+- Application startup.
+- Database connectivity.
+- Migrations.
+- Authentication.
+- API health.
+- Background workers.
+- Storage.
+- Integrations.
+- Blockchain connection.
+- Testnet transactions.
+- Public verification.
+- Logs.
+- Monitoring.
+- Backup configuration.
+
+Provide a complete handover.
+
+---
+
+# PART XIII. REQUIRED REPOSITORY DELIVERABLES
+
+## 59. Documentation
+
+Create and maintain:
+
+```text
+docs/
+  product/
+    PRODUCT_VISION.md
+    PRODUCT_REQUIREMENTS.md
+    USER_JOURNEYS.md
+    FEATURE_MATRIX.md
+
+  architecture/
+    SYSTEM_ARCHITECTURE.md
+    DOMAIN_MODEL.md
+    DATABASE_ARCHITECTURE.md
+    API_ARCHITECTURE.md
+    EVENT_ARCHITECTURE.md
+    ADR/
+
+  design/
+    ATELIER_DESIGN_SYSTEM.md
+    BRAND_GUIDELINES.md
+    DESIGN_TOKENS.md
+    COMPONENT_CATALOG.md
+    MOTION_GUIDELINES.md
+    ACCESSIBILITY_GUIDE.md
+
+  protocol/
+    GNO_ARCHITECTURE.md
+    REALM_SPECIFICATION.md
+    TRANSACTION_LIFECYCLE.md
+    SECURITY_MODEL.md
+    DEPLOYMENT_GUIDE.md
+
+  security/
+    THREAT_MODEL.md
+    SECURITY_CONTROLS.md
+    PRIVACY_MODEL.md
+    INCIDENT_RESPONSE.md
+
+  integrations/
+    GITHUB.md
+    CI_CD.md
+    API.md
+    SDK.md
+    WEBHOOKS.md
+
+  operations/
+    LOCAL_SETUP.md
+    ENVIRONMENT_CONFIGURATION.md
+    DEPLOYMENT.md
+    BACKUP_AND_RECOVERY.md
+    MONITORING.md
+    TROUBLESHOOTING.md
+
+  testing/
+    TEST_STRATEGY.md
+    EDGE_CASE_REGISTER.md
+    E2E_SCENARIOS.md
+    SECURITY_TESTS.md
+
+  audits/
+    IMPLEMENTATION_STATUS.md
+    PRODUCTION_READINESS.md
+    MAINNET_READINESS.md
+    KNOWN_LIMITATIONS.md
+```
+
+Update documentation as implementation changes.
+
+Do not create documentation that claims functionality exists when it has not been implemented and verified.
+
+## 60. Environment and setup documentation
+
+Provide:
+
+- Prerequisites.
+- Supported runtime versions.
+- Installation commands.
+- Environment variable reference.
+- Database setup.
+- Migration commands.
+- Local development instructions.
+- Test commands.
+- Build commands.
+- Deployment commands.
+- Gno tool installation and configuration.
+- Wallet setup.
+- Testnet configuration.
+- Troubleshooting.
+
+Provide an `.env.example` with safe placeholders.
+
+Never commit real secrets.
+
+---
+
+# PART XIV. COMMERCIAL PRODUCT READINESS
+
+## 61. Commercialization architecture
+
+Design PROOFLOOM to support future commercial deployment.
+
+Evaluate pricing dimensions such as:
+
+- Organizations.
+- Projects.
+- Releases.
+- Evidence storage.
+- Verification volume.
+- Agent executions.
+- API usage.
+- Retention.
+- Enterprise controls.
+
+Potential plans:
+
+- Developer.
+- Team.
+- Business.
+- Enterprise.
+- Protocol/API.
+
+Do not activate payment collection without a real payment provider, tested entitlement enforcement and appropriate legal and operational preparation.
+
+Implement the entitlement architecture so commercial plans can be introduced without rebuilding the platform.
+
+## 62. Enterprise requirements
+
+Prepare for:
+
+- Multiple organizations.
+- Enterprise access controls.
+- Audit exports.
+- Security reporting.
+- Custom retention.
+- Private integrations.
+- API access.
+- Compliance evidence.
+- Support workflows.
+- Usage reporting.
+- Enterprise onboarding.
+
+Do not claim regulatory certification or compliance without independent substantiation.
+
+---
+
+# PART XV. DEMONSTRATION AND COMPETITION READINESS
+
+## 63. Demonstration workflow
+
+Prepare a coherent end-to-end demonstration using a clearly identified test project and test data.
+
+The demonstration must show:
+
+1. Creating a project.
+2. Registering a repository.
+3. Registering an AI agent.
+4. Recording an agent task.
+5. Producing a release record.
+6. Ingesting build evidence.
+7. Generating an attestation.
+8. Creating a cryptographic commitment.
+9. Publishing to Gno testnet.
+10. Verifying the transaction.
+11. Opening the public verification page.
+12. Inspecting the provenance graph.
+13. Inspecting the evidence history.
+14. Revoking or superseding an attestation.
+15. Demonstrating the changed verification status.
+
+Label test data and testnet records accurately.
+
+Do not use a simulated transaction to represent an on-chain transaction.
+
+## 64. Competition deliverables
+
+Prepare:
+
+- Project title and tagline.
+- Product description.
+- Technical architecture overview.
+- Gno integration explanation.
+- Working testnet demonstration.
+- Repository documentation.
+- Deployment instructions.
+- Screenshots.
+- Short product video or demonstration plan.
+- Technical limitations.
+- Roadmap.
+- Mainnet readiness plan.
+- Open-source or public developer documentation where appropriate.
+
+Verify all current official competition requirements before submission.
+
+Do not invent judging criteria, prize conditions or submission requirements.
+
+---
+
+# PART XVI. QUALITY GATES AND DEFINITION OF DONE
+
+## 65. Feature-level definition of done
+
+A feature is not complete merely because a screen exists.
+
+It is complete only when:
+
+- The user journey is defined.
+- The interface is implemented.
+- The backend behavior exists.
+- The data model is implemented.
+- Validation exists.
+- Authorization exists.
+- Loading states exist.
+- Error states exist.
+- Empty states exist.
+- Audit behavior exists where relevant.
+- Automated tests exist.
+- Documentation exists.
+- The feature has been manually verified.
+
+## 66. Release-level definition of done
+
+A release is ready for deployment only when:
+
+- The build succeeds.
+- Tests pass.
+- Migrations are reviewed.
+- Security checks are completed.
+- Environment variables are documented.
+- Deployment instructions are verified.
+- Observability is operational.
+- Rollback procedures are documented.
+- Critical user journeys work.
+- No known critical blocker remains.
+
+## 67. Mainnet definition of done
+
+Mainnet is a separate approval gate.
+
+Do not deploy to mainnet simply because testnet deployment works.
+
+Require:
+
+- Reviewed realm code.
+- Security review.
+- Protocol authorization review.
+- Upgrade strategy.
+- Transaction recovery.
+- State integrity verification.
+- Deployment rehearsal.
+- Operational monitoring.
+- Incident response.
+- Backup and recovery strategy.
+- Explicit human approval.
+
+---
+
+# PART XVII. AUTONOMOUS AGENT EXECUTION RULES
+
+## 68. How you must work
+
+Operate as a disciplined engineering organization.
+
+Do not ask the user to make decisions that can be resolved through repository inspection, documentation research, sound engineering judgment or a reversible implementation choice.
+
+Ask only when an external decision, permission, credential, irreversible operation or material business choice genuinely requires the user's input.
+
+Maintain these living files:
+
+- `docs/implementation/MASTER_EXECUTION_PLAN.md`
+- `docs/implementation/PROGRESS.md`
+- `docs/implementation/BLOCKERS.md`
+- `docs/implementation/DECISIONS.md`
+- `docs/implementation/VERIFICATION_LOG.md`
+
+For each workstream, record:
+
+- Objective.
+- Dependencies.
+- Files affected.
+- Implementation details.
+- Tests.
+- Verification evidence.
+- Outstanding issues.
+- Completion status.
+
+## 69. Workstream discipline
+
+Use specialized implementation workstreams where the available agent environment supports parallel execution:
+
+1. Product and architecture.
+2. Design system and frontend.
+3. Backend and data.
+4. Gno protocol.
+5. Security and privacy.
+6. Integrations and developer tooling.
+7. Testing and quality assurance.
+8. Infrastructure and deployment.
+
+Assign clear ownership.
+
+Do not allow parallel agents to make conflicting changes to the same critical files without coordination.
+
+Integrate and test all workstreams before declaring completion.
+
+## 70. Weak-agent compatibility
+
+Write implementation instructions with explicit steps.
+
+For every complex task:
+
+1. Explain the objective.
+2. Identify the relevant files.
+3. Explain dependencies.
+4. State the expected behavior.
+5. Describe the implementation.
+6. Identify security requirements.
+7. Specify tests.
+8. Specify the verification procedure.
+9. Explain common failure modes.
+10. Define the completion criteria.
+
+Do not use vague instructions such as "make this production-ready" without specifying what that means.
+
+Do not silently skip tasks because they are difficult.
+
+If a task is blocked, document why, implement any safe independent work and identify the precise external dependency.
+
+## 71. Prohibited shortcuts
+
+The following are unacceptable:
+
+- Fake API responses presented as production functionality.
+- Fake transaction hashes.
+- Hardcoded verification results.
+- Static charts presented as live analytics.
+- Simulated agent activity presented as real execution.
+- Buttons without actions.
+- Placeholder forms.
+- Dead navigation.
+- Unvalidated uploads.
+- Insecure authorization.
+- In-memory persistence for critical production data.
+- Unreviewed database changes.
+- Unexplained architectural shortcuts.
+- Fake integrations.
+- Hardcoded credentials.
+- Unhandled errors.
+- Empty test suites presented as test coverage.
+- Unverified deployment claims.
+- Generic template design presented as bespoke design.
+
+Test fixtures are permitted in automated testing and clearly labeled demonstration environments. They must never be confused with production records.
+
+---
+
+# PART XVIII. FINAL EXECUTION INSTRUCTIONS
+
+## 72. Your immediate first actions
+
+Begin with the following sequence:
+
+**Step 1:** Inspect the existing repository, its deployment configuration and all available documentation.
+
+**Step 2:** Produce the architecture and implementation assessment.
+
+**Step 3:** Map existing functionality against every product domain in this directive.
+
+**Step 4:** Identify the highest-risk dependencies, especially Gno protocol compatibility, wallet integration, cryptographic evidence and multi-tenant authorization.
+
+**Step 5:** Produce the detailed execution plan and dependency graph.
+
+**Step 6:** Establish the Atelier design tokens and component architecture.
+
+**Step 7:** Implement the core domain and data foundations.
+
+**Step 8:** Implement the complete user journeys in connected workstreams.
+
+**Step 9:** Integrate and verify Gno testnet functionality.
+
+**Step 10:** Implement the remaining operational, security, developer and commercial surfaces.
+
+**Step 11:** Run the full quality programme and resolve failures.
+
+**Step 12:** Deploy to the authorized environment, verify the running application and prepare the competition demonstration.
+
+Do not stop after Step 5 and return a plan as though the product has been built.
+
+Continue execution until the available environment, permissions or a genuine external dependency prevents further progress.
+
+## 73. Final expected outcome
+
+The finished PROOFLOOM platform must have:
+
+- A distinctive, original brand identity.
+- A fully implemented Atelier design system.
+- A complete responsive application.
+- Real authentication and authorization.
+- Real organizational and project management.
+- Real software component and dependency records.
+- Real release provenance.
+- Real evidence management.
+- Real attestation and verification functionality.
+- AI-agent identity and accountability.
+- Operational policy enforcement.
+- Real Gno testnet integration.
+- Wallet-based transaction authorization.
+- Public verification.
+- A functioning Proof Atlas.
+- Developer APIs and integration architecture.
+- SDK and CLI foundations.
+- Security and privacy controls.
+- Complete loading, empty, error and recovery states.
+- Automated tests.
+- Technical documentation.
+- Deployment and operational documentation.
+- A credible mainnet readiness pathway.
+- A commercial product architecture.
+
+## 74. Final reporting requirement
+
+At the end of the engagement, provide a factual implementation report containing:
+
+1. What existed before work began.
+2. What was implemented.
+3. What was materially improved.
+4. What was tested.
+5. What passed.
+6. What failed.
+7. What was deployed.
+8. The actual deployment location.
+9. Verified Gno testnet transactions, if performed.
+10. Links to relevant transaction or explorer records, if available.
+11. Security findings.
+12. Remaining blockers.
+13. External credentials or approvals still required.
+14. Mainnet readiness status.
+15. Exact instructions for running and maintaining the platform.
+
+Clearly classify every major capability as:
+
+- Implemented and verified.
+- Implemented but not fully verified.
+- Deployed and operational.
+- Externally blocked.
+- Not implemented.
+- Planned.
+
+Never claim success without evidence.
+
+---
+
+# THE FINAL DIRECTIVE
+
+Build PROOFLOOM as a serious software infrastructure company would build its defining product.
+
+The product must be technically credible, visually unmistakable, operationally dependable and commercially extensible.
+
+The design system is not a layer of decoration added after engineering. The protocol is not a blockchain badge attached to a conventional SaaS application. The AI-agent functionality is not a collection of activity cards. The verification system is not a green checkmark.
+
+Every part must reinforce the same central proposition:
+
+**Software should not merely claim to be trustworthy. Its history, evidence and execution should make that trust independently verifiable.**
+
+Build the complete product. Connect its systems. Test its claims. Verify its transactions. Document its limitations. Deploy what can genuinely be deployed.
+
+**PROOFLOOM. The architecture of trust, made visible.**

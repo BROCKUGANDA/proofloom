@@ -1,0 +1,373 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   THE ATELIER — PROOFLOOM design system
+   "The architecture of trust, made visible."
+   Three coordinated environments share one language:
+   - ATELIER (editorial parchment)  - OBSERVATORY (dark analysis)
+   - CONTROL ROOM (operational density)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Foundation palette */
+  --obsidian: #090D11;
+  --carbon: #151D24;
+  --iron: #25333B;
+  --parchment: #F2EFE7;
+  --parchment-deep: #E9E4D8;
+  --mist: #B7C1C2;
+  --verdigris: #55D8C2;
+  --copper: #D6A36C;
+  --cobalt: #7599D9;
+  --ash: #6E7A80;
+
+  /* Semantic — dark (Observatory) is the product default */
+  --background: var(--obsidian);
+  --surface: var(--carbon);
+  --surface-raised: var(--iron);
+  --surface-editorial: var(--parchment);
+  --border: #26323B;
+  --border-strong: #33424C;
+  --text-primary: #E9EDEE;
+  --text-secondary: var(--mist);
+  --text-muted: #7E8C93;
+  --text-on-editorial: #1A232B;
+
+  --accent: var(--verdigris);
+  --accent-ink: #0B2B26;
+  --accent-warm: var(--copper);
+  --accent-info: var(--cobalt);
+
+  --verified: #55D8C2;
+  --pending: #E7B95C;
+  --info: #7599D9;
+  --rejected: #E86D72;
+  --revoked: #C77B80;
+  --unknown: #8A969D;
+  --critical: #E86D72;
+  --warning: #E7A65C;
+
+  --focus-ring: rgba(85, 216, 194, 0.45);
+  --selection: rgba(85, 216, 194, 0.16);
+
+  /* Typography */
+  --font-display: var(--font-instrument-serif), Georgia, 'Times New Roman', serif;
+  --font-ui: var(--font-manrope), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --text-xs: 0.72rem;
+  --text-sm: 0.82rem;
+  --text-base: 0.92rem;
+  --text-md: 1rem;
+  --text-lg: 1.18rem;
+  --text-xl: 1.45rem;
+  --text-2xl: 1.9rem;
+  --text-3xl: 2.6rem;
+  --text-4xl: 3.6rem;
+  --text-5xl: 4.8rem;
+
+  /* Layout */
+  --sidebar-w: 232px;
+  --header-h: 56px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Motion tokens — restrained, purposeful */
+  --micro-duration: 140ms;
+  --transition-duration: 240ms;
+  --macro-duration: 420ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* hash/id typography */
+  --hash-tracking: 0.02em;
+}
+
+/* ── Shadcn variable bridge (dark is default) ─────────────────────────────── */
+:root {
+  --radius: 8px;
+  --background-rgb: 9, 13, 17;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--text-primary);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--text-primary);
+  --color-popover: var(--surface-raised);
+  --color-popover-foreground: var(--text-primary);
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--accent-ink);
+  --color-secondary: var(--surface-raised);
+  --color-secondary-foreground: var(--text-secondary);
+  --color-muted: var(--surface);
+  --color-muted-foreground: var(--text-muted);
+  --color-accent: var(--surface-raised);
+  --color-accent-foreground: var(--text-primary);
+  --color-destructive: var(--critical);
+  --color-border: var(--border);
+  --color-input: var(--border-strong);
+  --color-ring: var(--focus-ring);
+  --font-sans: var(--font-ui);
+  --font-serif: var(--font-display);
+  --font-mono: var(--font-mono);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+}
+
+/* ── Light theme: ATELIER editorial ───────────────────────────────────────── */
+.light {
+  --background: var(--parchment);
+  --surface: #FBF9F3;
+  --surface-raised: #FFFFFF;
+  --surface-editorial: var(--parchment-deep);
+  --border: #DDD6C6;
+  --border-strong: #C9C0AC;
+  --text-primary: #1A232B;
+  --text-secondary: #46545C;
+  --text-muted: #6E7A80;
+  --text-on-editorial: #1A232B;
+  --accent: #0E7C6B;
+  --accent-ink: #FFFFFF;
+  --accent-warm: #A8683A;
+  --accent-info: #3D63A8;
+  --verified: #0E7C6B;
+  --pending: #A8683A;
+  --rejected: #B23A40;
+  --revoked: #9E4A50;
+  --critical: #B23A40;
+  --warning: #A8683A;
+  --focus-ring: rgba(14, 124, 107, 0.4);
+  --selection: rgba(14, 124, 107, 0.12);
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────────── */
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--selection);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ── Atelier primitives ───────────────────────────────────────────────────── */
+
+.font-display { font-family: var(--font-display); }
+.font-mono { font-family: var(--font-mono); letter-spacing: var(--hash-tracking); }
+.font-mono-sm { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: var(--hash-tracking); }
+
+/* Editorial display headings (ATELIER environment) */
+.atelier-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+}
+
+/* Eyebrow label — the small caps lead-in used across environments */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+}
+
+/* Hash/id chip */
+.hash-chip {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  background: color-mix(in oklab, var(--surface-raised) 80%, transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 2px 7px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Precision grid backdrop (Observatory) */
+.obs-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--border) 55%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--border) 55%, transparent) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* LoomPanel — structured information surface */
+.loom-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--micro-duration) var(--ease-out);
+}
+.loom-panel:hover {
+  border-color: var(--border-strong);
+}
+.loom-panel-raised {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+/* ProofSeal — the verification state seal */
+.proof-seal {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+.seal-verified { color: var(--verified); border-color: color-mix(in oklab, var(--verified) 45%, transparent); background: color-mix(in oklab, var(--verified) 10%, transparent); }
+.seal-pending { color: var(--pending); border-color: color-mix(in oklab, var(--pending) 45%, transparent); background: color-mix(in oklab, var(--pending) 10%, transparent); }
+.seal-rejected { color: var(--rejected); border-color: color-mix(in oklab, var(--rejected) 45%, transparent); background: color-mix(in oklab, var(--rejected) 10%, transparent); }
+.seal-revoked { color: var(--revoked); border-color: color-mix(in oklab, var(--revoked) 45%, transparent); background: color-mix(in oklab, var(--revoked) 10%, transparent); }
+.seal-unknown { color: var(--unknown); border-color: color-mix(in oklab, var(--unknown) 40%, transparent); background: color-mix(in oklab, var(--unknown) 8%, transparent); }
+.seal-info { color: var(--accent-info); border-color: color-mix(in oklab, var(--accent-info) 45%, transparent); background: color-mix(in oklab, var(--accent-info) 10%, transparent); }
+.seal-critical { color: var(--critical); border-color: color-mix(in oklab, var(--critical) 50%, transparent); background: color-mix(in oklab, var(--critical) 12%, transparent); }
+
+/* Status dot */
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+/* TraceLine — provenance rail connector */
+.trace-line {
+  position: relative;
+  padding-left: 22px;
+}
+.trace-line::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 14px;
+  bottom: -8px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--border-strong), transparent);
+}
+.trace-node {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 13px;
+  height: 13px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border-strong);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.trace-node-verified { border-color: var(--verified); box-shadow: 0 0 0 3px color-mix(in oklab, var(--verified) 14%, transparent); }
+.trace-node-pending { border-color: var(--pending); }
+.trace-node-rejected { border-color: var(--rejected); }
+
+/* Evidence thread — connection between claim and evidence */
+.evidence-thread {
+  border-left: 2px solid color-mix(in oklab, var(--accent) 35%, var(--border));
+  padding-left: 14px;
+}
+
+/* Signature interaction: the verification reveal */
+@keyframes seal-land {
+  0% { transform: scale(0.86); opacity: 0.4; }
+  60% { transform: scale(1.03); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.seal-land { animation: seal-land var(--transition-duration) var(--ease-out); }
+
+@keyframes hash-scan {
+  0% { clip-path: inset(0 100% 0 0); }
+  100% { clip-path: inset(0 0 0 0); }
+}
+.hash-scan { animation: hash-scan 900ms var(--ease-out) both; }
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.pulse-soft { animation: pulse-soft 2.2s var(--ease-in-out) infinite; }
+
+/* Editorial parchment section (ATELIER environment) */
+.parchment-section {
+  background: var(--surface-editorial);
+  color: var(--text-on-editorial);
+}
+.parchment-section .eyebrow { color: color-mix(in oklab, var(--text-on-editorial) 55%, transparent); }
+.parchment-section .hash-chip { color: #3D4A52; background: rgba(26, 35, 43, 0.05); border-color: rgba(26, 35, 43, 0.14); }
+
+/* Buttons — press feedback */
+.btn-press:active { transform: translateY(0.5px) scale(0.995); }
+
+/* Scrollbars */
+.scroll-slim::-webkit-scrollbar { width: 8px; height: 8px; }
+.scroll-slim::-webkit-scrollbar-track { background: transparent; }
+.scroll-slim::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 8px; }
+.scroll-slim::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* Reduced motion: honor the user's preference everywhere */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+.reduce-motion *, *::before, *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* Destructive action boundary */
+.destructive-zone {
+  border: 1px solid color-mix(in oklab, var(--critical) 30%, transparent);
+  background: color-mix(in oklab, var(--critical) 4%, transparent);
+  border-radius: var(--radius-md);
+}
+
+/* Keyboard hint */
+.kbd {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  border: 1px solid var(--border-strong);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: var(--text-secondary);
+  background: var(--surface-raised);
+}

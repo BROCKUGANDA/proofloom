@@ -1,0 +1,2015 @@
+# PROOFLOOM
+## MASTER PRODUCT DEVELOPMENT, PROTOCOL ARCHITECTURE, DESIGN SYSTEM & PRODUCTION IMPLEMENTATION DIRECTIVE
+
+**Competition:** Gnome Tavern Hackathon by Gno.land  
+**Submission platform:** DoraHacks  
+**Product:** PROOFLOOM  
+**Product category:** Developer Infrastructure / AI Agent Infrastructure / Software Provenance / Web3  
+**Target network:** Gno.land Onyx Testnet  
+**Network ID:** onyx-1  
+**Project classification:** Full-scale product, not MVP  
+**Target outcome:** A mature, professionally engineered, usable, extensible decentralized product with a fully operational Gno.land integration.
+
+---
+
+# PART I — YOUR MANDATE
+
+You are operating as an autonomous principal engineering organization entrusted with delivering a serious technology product.
+
+You are simultaneously responsible for:
+
+1. Principal Software Architecture.
+2. Staff-Level Full-Stack Engineering.
+3. Gno Protocol and Smart Contract Engineering.
+4. AI Agent Infrastructure Engineering.
+5. Product Strategy and Systems Design.
+6. Senior Product and Interaction Design.
+7. Application Security and Threat Modeling.
+8. DevOps, SRE and Release Engineering.
+9. QA Automation and Performance Engineering.
+10. Technical Documentation and Developer Experience.
+
+You are not being asked to produce an MVP, landing-page prototype, visual concept, static dashboard, pitch deck pretending to be a product, or a collection of disconnected demonstrations.
+
+You are being instructed to build PROOFLOOM as a complete product with mature architecture, coherent features, durable state, genuine blockchain integration, operational backend services, functional frontend experiences, meaningful integrations and a comprehensive testing system.
+
+**Do not interpret the hackathon timeline as permission to deliver an inferior product.**
+
+Build the complete product architecture and implement its essential product domains end-to-end. Do not artificially reduce the product to a single smart contract and an attractive dashboard.
+
+Do not stop after writing an implementation plan. Inspect the repository, make architectural decisions, implement the application, execute tests, deploy the Gno components, verify the real testnet deployment, and prepare the submission package.
+
+Do not ask the user to repeat information already present in the repository or conversation.
+
+When credentials or external services are unavailable, build the real integration adapter, implement its configuration and error handling, and clearly identify the credential-dependent activation requirement. Never pretend an integration is operational when it is not.
+
+---
+
+# PART II — PRODUCT VISION
+
+## 1. Product definition
+
+PROOFLOOM is a decentralized software provenance and AI-agent accountability platform.
+
+It enables organizations, developers, maintainers, auditors and autonomous agents to create, publish, inspect and verify durable records of software work.
+
+The platform connects:
+
+- Software projects.
+- Open-source components.
+- Development teams.
+- Release pipelines.
+- CI/CD processes.
+- AI agents.
+- Security assessments.
+- Build artifacts.
+- Evaluation results.
+- Cryptographic attestations.
+- Verifiable work histories.
+- Third-party applications.
+
+The product creates a common trust infrastructure for software delivery.
+
+A project should be able to demonstrate:
+
+- Who created it.
+- Who contributed to it.
+- Which agents participated.
+- What version was released.
+- Which build produced the release.
+- Which checks passed.
+- Whether a security review was completed.
+- Whether the evidence has changed.
+- Which attestations remain valid.
+- Whether a release or attestation has been revoked.
+
+PROOFLOOM must make these records independently verifiable.
+
+## 2. The fundamental problem
+
+Modern software ecosystems depend on claims that are often difficult to independently establish.
+
+Examples:
+
+- A developer says a release passed testing.
+- An AI agent claims it completed a task.
+- An organization publishes an audit report.
+- A project claims that a specific commit generated a binary.
+- A software component claims a particular security status.
+- An organization wants to know whether an external project is trustworthy.
+- A downstream developer needs to verify a dependency before integrating it.
+
+Most conventional systems distribute this information among repositories, CI/CD providers, documents, dashboards, messages and private databases.
+
+PROOFLOOM creates a unified verification layer.
+
+The application must combine off-chain execution infrastructure with durable, composable on-chain attestations.
+
+## 3. Product principles
+
+1. Evidence must be distinguishable from claims.
+2. Every published attestation must have an identifiable issuer.
+3. Evidence must be verifiable independently of the interface.
+4. On-chain state must not depend on a centralized dashboard for correctness.
+5. Private data must remain private.
+6. AI-generated analysis must not become an unquestioned source of authority.
+7. Agent permissions must be scoped, revocable and auditable.
+8. A consumer application must be able to integrate the public protocol without depending on the PROOFLOOM frontend.
+9. All important state transitions must have a traceable history.
+10. The architecture must support future Gno.land mainnet operation.
+
+---
+
+# PART III — COMPLETE PRODUCT DOMAINS
+
+Implement all of the following as coherent application domains.
+
+## 1. Identity and organization infrastructure
+
+Develop a complete identity system that supports:
+
+- Gno wallet connection.
+- Adena wallet integration.
+- Gno address identity.
+- Organization creation.
+- Organization ownership.
+- Member invitations.
+- Membership management.
+- Organization switching.
+- Multiple organization memberships.
+- Member roles.
+- Role-based permissions.
+- Public and private profiles.
+- Developer profiles.
+- Maintainer profiles.
+- Auditor profiles.
+- Agent identities.
+- Wallet-to-profile association.
+- Identity verification status.
+- Account activity history.
+- Session expiration.
+- Secure session revocation.
+
+Support the following roles:
+
+- Platform owner.
+- Organization owner.
+- Organization administrator.
+- Project administrator.
+- Maintainer.
+- Developer.
+- Auditor.
+- Reviewer.
+- AI agent.
+- External verifier.
+- Read-only observer.
+
+Never equate a blockchain address with a verified legal identity.
+
+Provide clear distinctions between wallet ownership, organization membership, verified external credentials and self-asserted profile information.
+
+## 2. Project registry
+
+Build a full project-management and provenance registry.
+
+A project must support:
+
+- Project creation.
+- Project metadata.
+- Project owner.
+- Contributors.
+- Repository association.
+- Project visibility.
+- Project category.
+- Technology stack.
+- Description.
+- Documentation.
+- Version history.
+- Release history.
+- Component associations.
+- Project dependencies.
+- Verification status.
+- Activity timeline.
+- Project attestations.
+- External verification links.
+- Ownership transfer workflow.
+- Project archival.
+- Dispute reporting.
+
+Each project must have a public profile and an internal management workspace.
+
+## 3. Software component registry
+
+Develop a component registry for software packages and dependencies.
+
+Include:
+
+- Package registration.
+- Package namespace.
+- Component maintainers.
+- Version identifiers.
+- Dependency declarations.
+- License declarations.
+- Repository references.
+- Artifact checksums.
+- Release associations.
+- Security assessments.
+- Verification history.
+- Deprecation status.
+- Revocation status.
+- Dependency relationship visualization.
+- Cross-project component usage.
+- Component search.
+- Package discovery.
+
+Create a dependency graph capable of showing how software projects and components relate.
+
+Support multiple artifact types, including source archives, container images, binaries, SBOM files and documentation.
+
+Never store sensitive artifacts directly on-chain.
+
+Publish compact metadata and cryptographic commitments on Gno.land while retaining larger evidence objects in appropriately secured off-chain storage.
+
+## 4. Release provenance engine
+
+This is one of the flagship product features.
+
+Build a release management system that creates complete evidence records for software releases.
+
+Each release should support:
+
+- Project and component association.
+- Version and release identifier.
+- Git commit hash.
+- Branch.
+- Repository.
+- Build environment.
+- Build pipeline.
+- Build execution identifier.
+- Test result.
+- Security scan result.
+- Dependency manifest.
+- SBOM reference.
+- Build artifact digest.
+- Release creator.
+- Agent participation.
+- Human approvals.
+- Timestamp.
+- Verification state.
+- Revocation state.
+
+Implement a complete state machine:
+
+DRAFT → EVIDENCE_PENDING → VALIDATING → REVIEW_REQUIRED → APPROVED → PUBLISHED → VERIFIED.
+
+Also support:
+
+REJECTED, EXPIRED, REVOKED, SUPERSEDED and DISPUTED.
+
+State transitions must be validated server-side and, where they affect authoritative public records, on-chain.
+
+A published record cannot silently change.
+
+Corrections must create a new version or explicit superseding attestation.
+
+## 5. Attestation and evidence protocol
+
+Build the complete evidence engine.
+
+Support the following attestation categories:
+
+- Source provenance.
+- Build provenance.
+- Test execution.
+- Security assessment.
+- Code review.
+- Release approval.
+- Agent task completion.
+- Benchmark result.
+- Dependency verification.
+- Ownership verification.
+- Deployment verification.
+- Compliance evidence.
+- Incident and remediation evidence.
+
+Every attestation must include:
+
+- Unique identifier.
+- Issuer.
+- Subject.
+- Type.
+- Creation time.
+- Expiration where applicable.
+- Evidence digest.
+- Evidence location or content-addressed reference.
+- Signature or authenticated issuer proof.
+- Verification method.
+- Status.
+- Version.
+- Revocation information.
+- Related attestations.
+
+Support multiple issuers and multiple independent attestations for one release.
+
+Create an attestation verification engine.
+
+It must distinguish:
+
+1. Signature validity.
+2. Digest integrity.
+3. Issuer identity.
+4. Issuer authorization.
+5. Expiration.
+6. Revocation.
+7. Chain publication.
+8. Evidence accessibility.
+9. Evidence completeness.
+10. Verification limitations.
+
+Do not display a green verified state merely because a record exists on-chain.
+
+A record must pass the applicable verification checks.
+
+## 6. AI agent registry and accountability
+
+Make autonomous agents first-class participants in the product.
+
+Create an agent registry supporting:
+
+- Agent registration.
+- Agent name and description.
+- Agent owner.
+- Agent wallet association.
+- Agent runtime.
+- Agent capabilities.
+- Agent version.
+- Agent model provider metadata.
+- Agent authorization status.
+- Agent permissions.
+- Agent task history.
+- Agent activity.
+- Agent revocation.
+- Agent performance.
+- Agent attestations.
+- Agent ownership history.
+
+Implement an agent execution and evidence subsystem.
+
+An agent must be capable of:
+
+1. Receiving an assigned task.
+2. Inspecting the relevant project and policy context.
+3. Gathering permitted evidence.
+4. Executing its authorized workflow.
+5. Producing a structured execution report.
+6. Submitting evidence.
+7. Requesting publication.
+8. Receiving approval or rejection.
+9. Recording a final execution receipt.
+
+Create agent permissions for:
+
+- Read-only operations.
+- Evidence creation.
+- Verification requests.
+- Task updates.
+- Review proposals.
+- Release publication requests.
+
+Do not give every agent unrestricted signing or publishing authority.
+
+Implement:
+
+- Least-privilege permissions.
+- Explicit authorization.
+- Expiring permissions.
+- Per-agent operation limits.
+- Allowed-project scopes.
+- Allowed-operation scopes.
+- Approval thresholds.
+- Emergency revocation.
+- Execution audit logs.
+- Duplicate-execution protection.
+
+AI providers must be abstracted behind a provider interface.
+
+Support configurable LLM adapters without tying the entire application to one model provider.
+
+Do not expose model-provider API keys to browsers or smart contracts.
+
+The agent runtime operates off-chain. Gno realms provide authoritative state, policy checks, attestations and verification interfaces.
+
+Do not implement network requests or AI inference inside Gno contracts.
+
+## 7. Task and contribution coordination
+
+Implement a real task coordination system.
+
+Features:
+
+- Create task.
+- Assign developer.
+- Assign agent.
+- Multiple assignees.
+- Task dependencies.
+- Task priorities.
+- Deadlines.
+- Evidence requirements.
+- Reviewers.
+- Approval workflow.
+- Reassignment.
+- Dispute handling.
+- Completion receipts.
+- Contribution history.
+
+Task states:
+
+OPEN, ASSIGNED, IN_PROGRESS, EVIDENCE_SUBMITTED, REVIEW, APPROVED, REJECTED, COMPLETED, EXPIRED and CANCELLED.
+
+Provide an activity stream and immutable on-chain records for important authorized milestones.
+
+## 8. Security and policy centre
+
+Build an enterprise-grade policy and governance subsystem.
+
+Support:
+
+- Organization policies.
+- Project policies.
+- Agent policies.
+- Release policies.
+- Attestation requirements.
+- Reviewer requirements.
+- Approval thresholds.
+- Signature requirements.
+- Expiration requirements.
+- Allowed issuers.
+- Revocation lists.
+- Access history.
+- Policy versioning.
+
+An organization must be able to require that a release has:
+
+- A valid build attestation.
+- A successful test report.
+- A verified SBOM.
+- An authorized reviewer.
+- No active critical security finding.
+- A valid release approval.
+
+The policy engine must evaluate requirements deterministically.
+
+Show precisely why a policy passed or failed.
+
+Never rely on an LLM as the final authority for security policy decisions.
+
+## 9. Public verification portal
+
+Create a standalone verification experience.
+
+Users should be able to enter:
+
+- A project identifier.
+- A component.
+- A release.
+- An attestation identifier.
+- A content digest.
+- A transaction hash.
+
+The public portal retrieves the corresponding record and checks the evidence.
+
+Display:
+
+- Verification result.
+- Network.
+- Realm address.
+- Transaction reference.
+- Issuer.
+- Subject.
+- Evidence digest.
+- Signature status.
+- Publication time.
+- Expiration.
+- Revocation.
+- Verification history.
+- Known limitations.
+
+Generate permanent shareable verification URLs.
+
+Create embeddable verification components for third-party websites.
+
+Provide public JSON verification responses.
+
+Make it possible for external applications to verify a release without registering for PROOFLOOM.
+
+## 10. Analytics and intelligence
+
+Build meaningful analytics rather than decorative graphs.
+
+Include:
+
+- Projects registered.
+- Active organizations.
+- Registered agents.
+- Releases published.
+- Attestations published.
+- Verified evidence.
+- Failed verification attempts.
+- Revoked attestations.
+- Project contribution activity.
+- Agent task completion.
+- Policy compliance.
+- External verification requests.
+- Cross-project integrations.
+- Unique participating addresses.
+- Monthly active projects.
+
+All metrics must have explicit definitions and traceable source data.
+
+Clearly distinguish on-chain metrics, off-chain metrics, estimated metrics and unavailable data.
+
+Do not fabricate users, transactions, adoption numbers or performance improvements.
+
+---
+
+# PART IV — GNOLAND PROTOCOL ARCHITECTURE
+
+## 1. The chain is not an optional integration
+
+PROOFLOOM must be Gno-native.
+
+It must not be an ordinary application that simply displays a GNOT balance.
+
+Design Gno realm modules as the authoritative source for the platform's publicly verifiable records.
+
+The frontend must operate against actual Gno testnet state.
+
+The backend must never falsely report a successful blockchain operation before transaction confirmation and subsequent state verification.
+
+## 2. Target network
+
+Use the currently documented Onyx testnet.
+
+Network configuration:
+
+- Network: Onyx / Test17.
+- Chain ID: `onyx-1`.
+- RPC: `https://rpc.onyx.testnets.gno.land:443`.
+- Latest-network fallback: `https://rpc.latest.testnets.gno.land:443`.
+- WebSocket pattern: `wss://rpc.onyx.testnets.gno.land:443/websocket`.
+- Faucet: `https://faucet.gno.land/`.
+
+Read the current network configuration from official documentation before deployment.
+
+Never hardcode an obsolete testnet.
+
+Implement configurable chain profiles and an explicit chain identity check.
+
+## 3. Gno implementation
+
+Use:
+
+- Gno.
+- `gno`.
+- `gnokey`.
+- `gnodev`.
+- Official Gno standard-library interfaces.
+- Official RPC methods.
+- Gno realm and interrealm functionality.
+
+Gno has different runtime constraints from conventional Go.
+
+Do not use:
+
+- Goroutines.
+- OS or filesystem access in realms.
+- Networking in realms.
+- Arbitrary external imports.
+- Nondeterministic contract logic.
+
+Keep HTTP, storage, GitHub integrations, AI execution and indexing outside the on-chain execution environment.
+
+Use `gno fmt`, `gno lint` and `gno test` as regular CI checks.
+
+## 4. Realm architecture
+
+Create well-defined, reusable realm modules.
+
+Proposed initial namespace:
+
+`gno.land/r/<publisher>/proofloom/`
+
+Suggested domains:
+
+- `core`: central protocol state and shared interfaces.
+- `identity`: project and participant identity associations.
+- `registry`: project and software component registration.
+- `releases`: release publication and version history.
+- `attestations`: evidence commitments and issuer records.
+- `agents`: agent registrations and authorization records.
+- `policies`: publication and authorization policies.
+- `verify`: read-only public verification interfaces.
+- `reputation`: transparent contribution and issuer reliability records.
+
+You may reorganize the package layout if the actual Gno import rules or engineering findings require it.
+
+Do not create unnecessary realm boundaries.
+
+Each realm must have a narrowly defined responsibility, explicit ownership and clear public interfaces.
+
+## 5. Composability requirement
+
+A defining property of PROOFLOOM must be third-party reuse.
+
+Publish a stable consumer interface so external projects can:
+
+- Register a project.
+- Query release provenance.
+- Retrieve attestations.
+- Check attestation status.
+- Verify a digest.
+- Inspect issuer information.
+- Read permitted policy information.
+
+Create an integration example showing another application consuming PROOFLOOM realm records directly.
+
+This external consumer must be a genuine working example, not a diagram or an invented future integration.
+
+Document the supported public functions and integration contract.
+
+## 6. Contract security rules
+
+Read the official Gno security documentation before implementing the realm architecture.
+
+Apply all applicable rules, especially:
+
+- Validate realm-call identity.
+- Use `cur realm` and `cur.IsCurrent()` where appropriate.
+- Derive caller identity from `cur.Previous().Address()` rather than trusting an address supplied as an argument.
+- Never store ephemeral realm values in persisted state.
+- Do not expose pointers to mutable internal structures.
+- Return safe values or immutable-style copies.
+- Do not invoke untrusted caller callbacks while exercising your realm's authority.
+- Validate externally supplied interfaces and objects.
+- Enforce explicit ownership and authorization on state-changing operations.
+- Never confuse foreign realm read access with permission to mutate foreign state.
+
+Write adversarial tests against unauthorized cross-realm calls, caller impersonation, mutable pointer exposure and unauthorized administrative operations.
+
+Do not invent security guarantees based on the fact that Gno uses deterministic execution.
+
+## 7. Transaction and chain gateway
+
+Implement a chain gateway that handles:
+
+- Network discovery.
+- Chain ID verification.
+- RPC connections.
+- Account queries.
+- Realm queries.
+- Transaction preparation.
+- Wallet signing requests.
+- Broadcast.
+- Confirmation tracking.
+- Receipt processing.
+- State reconciliation.
+- Retry policy.
+- Failure classification.
+- Rate limiting.
+
+Never silently retry a transaction in a way that can create duplicate state-changing operations.
+
+Use stable operation identifiers and idempotency controls.
+
+Build transaction lifecycle states:
+
+CREATED, SIMULATED, AWAITING_SIGNATURE, SIGNED, BROADCAST, PENDING, CONFIRMED, FAILED, EXPIRED and RECONCILIATION_REQUIRED.
+
+Do not use EVM-specific tooling or ERC-20 assumptions for Gno transactions.
+
+## 8. Wallet integration
+
+Use the official GnoConnect integration approach where supported.
+
+Support Adena.
+
+Provide a wallet abstraction to accommodate future supported Gno wallets.
+
+Display:
+
+- Account address.
+- Active network.
+- Network mismatch.
+- Signing request.
+- Function and arguments.
+- Expected effects.
+- Transaction status.
+- Failure message.
+- Explorer or realm link.
+
+The user must approve wallet operations.
+
+Never request or transmit a user's mnemonic or private key to PROOFLOOM servers.
+
+## 9. Gnomcp integration
+
+Evaluate `gnomcp` as an optional agent-development integration.
+
+Important: the currently published gnomcp repository describes itself as work in progress, unaudited and pre-release.
+
+Therefore:
+
+- Do not make it a critical runtime dependency.
+- Do not use it as an unchecked transaction-signing authority.
+- Isolate it behind an integration adapter.
+- Support read-only discovery and developer tooling first.
+- Apply explicit authorization and human approval for experimental write paths.
+- Document its maturity accurately.
+
+The primary product must continue functioning without gnomcp.
+
+---
+
+# PART V — APPLICATION ARCHITECTURE
+
+## 1. Technical architecture
+
+Use an architecture suitable for a serious production platform.
+
+Recommended greenfield foundation:
+
+### Frontend
+
+- Next.js.
+- React.
+- TypeScript.
+- App Router.
+- Tailwind CSS with a bespoke design-token system.
+- Accessible headless component primitives.
+- Motion library for controlled interaction.
+- Three.js or React Three Fiber for carefully selected 3D experiences.
+- TanStack Query or an equivalent query-management system.
+- Schema-validated forms.
+
+### Backend
+
+- TypeScript API service or Go service where appropriate.
+- Strict request validation.
+- PostgreSQL.
+- Redis-backed queues where required.
+- Background workers.
+- Object storage with content addressing.
+- OpenAPI documentation.
+- Structured audit logging.
+
+### Gno infrastructure
+
+- Official Gno toolchain.
+- Onyx testnet.
+- Gno realm packages.
+- `gnokey`.
+- Gno RPC.
+- GnoConnect-compatible wallet interactions.
+
+### Infrastructure
+
+- Docker.
+- Docker Compose for local development.
+- CI/CD.
+- Database migrations.
+- Environment-specific configurations.
+- Health checks.
+- Metrics and structured logs.
+- Error monitoring.
+- Backup and recovery procedures.
+
+Do not blindly impose this stack if the existing repository already contains a well-engineered equivalent. Inspect first, retain what works and justify material architectural changes.
+
+## 2. Architectural boundaries
+
+Separate:
+
+1. User interface.
+2. Application domain services.
+3. Identity and authorization.
+4. Agent orchestration.
+5. Evidence processing.
+6. Verification.
+7. Blockchain gateway.
+8. Gno indexing.
+9. Persistence.
+10. External integrations.
+11. Notification services.
+12. Administrative operations.
+
+No frontend component should directly become the authority for permissions or release validity.
+
+All trust-critical decisions must be independently validated by server-side and on-chain rules as appropriate.
+
+## 3. Data architecture
+
+Design a normalized data model with clear tenant boundaries.
+
+At minimum, support:
+
+- users
+- wallets
+- sessions
+- organizations
+- memberships
+- roles
+- projects
+- components
+- dependencies
+- releases
+- artifacts
+- evidence
+- attestations
+- issuers
+- agents
+- agent_permissions
+- agent_executions
+- tasks
+- reviews
+- policies
+- policy_versions
+- verification_results
+- revocations
+- audit_events
+- integrations
+- webhook_deliveries
+- API_credentials
+- chain_transactions
+- realm_registrations
+- external_consumers
+- notifications
+- subscription_entitlements
+
+Define:
+
+- Primary keys.
+- Foreign keys.
+- Indexes.
+- Unique constraints.
+- Tenant isolation.
+- Soft deletion where appropriate.
+- Immutable audit records.
+- Retention policies.
+- Data classification.
+- Migration and recovery procedures.
+
+Never put private credentials, raw signing secrets or sensitive personal information into public chain state.
+
+---
+
+# PART VI — EXTERNAL INTEGRATIONS
+
+Implement a genuine integration framework.
+
+## GitHub
+
+Build:
+
+- OAuth connection.
+- Repository selection.
+- Installation management.
+- Webhook signature validation.
+- Commit association.
+- Release detection.
+- Pull request association.
+- CI status retrieval.
+- Contributor associations.
+- Security event ingestion where permissions allow.
+
+Use least-privilege GitHub permissions.
+
+## CI/CD
+
+Provide an integration contract for:
+
+- GitHub Actions.
+- Generic HTTP webhooks.
+- External build pipelines.
+- Test result ingestion.
+- Artifact digest submission.
+- SBOM publication.
+
+Provide a ready-to-use GitHub Action example that can publish a release evidence record.
+
+## Developer APIs
+
+Build:
+
+- REST API.
+- OpenAPI specification.
+- TypeScript SDK.
+- CLI.
+- Webhook subscription system.
+- API credential management.
+- API usage analytics.
+- Rate limits.
+- Pagination.
+- Versioning.
+- Structured machine-readable errors.
+
+Provide public read-only verification APIs.
+
+## Storage
+
+Support configurable object storage.
+
+Make storage adapters replaceable.
+
+Support content-addressed evidence with integrity verification.
+
+Avoid putting sensitive evidence in public storage.
+
+## AI model providers
+
+Use a provider abstraction.
+
+Implement:
+
+- Configuration.
+- Model selection.
+- Timeouts.
+- Retry controls.
+- Usage tracking.
+- Token/cost accounting where available.
+- Provider health checks.
+- Fallback handling.
+- Output validation.
+
+An unavailable AI provider must not prevent manual verification, project registration or basic protocol functionality.
+
+---
+
+# PART VII — COMPLETE PRODUCT DESIGN SYSTEM
+
+Do not use a generic SaaS template, stock dashboard kit or default shadcn appearance.
+
+Create a distinctive visual identity for PROOFLOOM.
+
+The system should communicate:
+
+- Precision.
+- Evidence.
+- Software craftsmanship.
+- Cryptographic integrity.
+- Transparency.
+- Intelligent automation.
+- Enterprise credibility.
+
+## 1. Art direction
+
+Create the visual language around the idea of woven evidence becoming an interconnected trust network.
+
+Use a refined dark editorial interface with warm archival surfaces and restrained luminous accents.
+
+Avoid excessive cyberpunk styling, excessive gradients, generic purple AI aesthetics and random glowing borders.
+
+## 2. Core visual palette
+
+Establish CSS variables and semantic tokens around:
+
+- Forge Black: `#0B0F14`
+- Carbon: `#131B23`
+- Slate: `#202D37`
+- Archive Ivory: `#F3F0E8`
+- Soft Mist: `#AAB5BC`
+- Proof Teal: `#58D7C4`
+- Signal Amber: `#E7A65C`
+- Verification Blue: `#6B9FF0`
+- Critical Red: `#E86D72`
+- Muted Border: `#29343D`
+
+Create complete light and dark themes.
+
+Define proper contrast and accessible semantic colours rather than applying arbitrary colours to individual components.
+
+## 3. Typography
+
+Establish a deliberate type hierarchy.
+
+Recommended directions:
+
+- Geist or a similarly refined sans serif for application UI.
+- IBM Plex Mono for hashes, identifiers, transaction details and technical data.
+- A restrained editorial display family for marketing headings.
+
+Use consistent weights, line heights, letter spacing and typographic scales.
+
+Never use random font sizes across components.
+
+## 4. Custom identity assets
+
+Create:
+
+- Primary logo.
+- Horizontal wordmark.
+- Compact emblem.
+- Favicon.
+- App icon.
+- Monochrome logo.
+- Light-mode logo.
+- Dark-mode logo.
+- Brand illustration system.
+- Custom trust-state glyphs.
+- Custom evidence symbols.
+- Product empty-state illustrations.
+
+The logo should express interwoven lines resolving into a verified central node.
+
+Use vector assets rather than emoji as identity marks.
+
+## 5. Custom glyph system
+
+Create an internal glyph vocabulary:
+
+- Verified evidence.
+- Pending evidence.
+- Revoked evidence.
+- Agent identity.
+- Release artifact.
+- Source provenance.
+- Cryptographic commitment.
+- External issuer.
+- Cross-realm integration.
+- Human approval.
+- Policy failure.
+- Audit trail.
+- Evidence mismatch.
+
+Every glyph must have consistent stroke weight, geometry and optical alignment.
+
+## 6. Component system
+
+Build reusable components for:
+
+- Navigation.
+- Sidebar.
+- Breadcrumbs.
+- Command palette.
+- Search.
+- Data tables.
+- Filter bars.
+- Kanban boards.
+- Detail drawers.
+- Status indicators.
+- Evidence cards.
+- Agent cards.
+- Project cards.
+- Release timelines.
+- Verification results.
+- Transaction panels.
+- Activity streams.
+- Relationship graphs.
+- Code blocks.
+- Hash displays.
+- Signature panels.
+- Approval dialogs.
+- Notifications.
+- Toasts.
+- Modal workflows.
+- Empty states.
+- Loading skeletons.
+- Inline error messages.
+
+Provide interaction states, focus states, disabled states and responsive rules for every relevant component.
+
+## 7. 3D experience
+
+Create a distinctive interactive Proof Atlas.
+
+The Atlas visualizes relationships between:
+
+- Projects.
+- Releases.
+- Software components.
+- Agents.
+- Issuers.
+- Evidence.
+- Attestations.
+
+The central visual metaphor is a structured evidence network.
+
+Requirements:
+
+- 3D orbit and exploration.
+- Selectable nodes.
+- Relationship highlighting.
+- Search and filtering.
+- Tooltips.
+- Object detail panels.
+- Timeline playback.
+- Zoom controls.
+- Reset view.
+- Reduced-motion mode.
+- Mobile fallback.
+- Lazy loading.
+- WebGL error fallback.
+- Performance budget.
+
+The 3D element must communicate real information, not merely decorate the landing page.
+
+A 2D graph alternative must remain fully functional.
+
+## 8. Motion system
+
+Implement both micro-interactions and macro-transitions.
+
+Micro-interactions:
+
+- Button feedback.
+- Wallet connection transitions.
+- Hash verification animation.
+- Copy-to-clipboard feedback.
+- Status transitions.
+- Form validation.
+- Evidence attachment.
+- Transaction progress.
+- Sidebar interactions.
+- Filter transitions.
+- Focus indicators.
+
+Macro-interactions:
+
+- Page transitions.
+- Workspace transitions.
+- Evidence graph exploration.
+- Release publication sequence.
+- Verification reveal.
+- Agent execution timeline.
+- Modal and drawer transitions.
+
+Use controlled durations and consistent easing.
+
+Honor reduced-motion preferences.
+
+Animation must never conceal critical transaction information or cause accessibility problems.
+
+## 9. CSR, SSR and rendering boundaries
+
+Use server-side rendering for:
+
+- Public project pages.
+- Public releases.
+- Public verification records.
+- SEO metadata.
+- Documentation.
+- Public protocol information.
+
+Use client-side rendering where appropriate for:
+
+- Wallet interactions.
+- Dynamic dashboards.
+- Transaction progress.
+- Interactive graphs.
+- Editor experiences.
+- Real-time activity.
+
+Define hydration boundaries carefully.
+
+Do not leak private organization data through server-rendered pages or caching.
+
+Ensure cache invalidation after on-chain updates.
+
+## 10. Loading and error experiences
+
+Create complete loading boundaries.
+
+Include:
+
+- Initial application shell.
+- Route-level skeletons.
+- Table skeletons.
+- Graph loading.
+- Wallet connection loading.
+- RPC loading.
+- Transaction pending.
+- Evidence verification loading.
+- Agent execution progress.
+- Background processing states.
+
+Create error boundaries for:
+
+- Frontend rendering failures.
+- Authentication failures.
+- Permission failures.
+- API failures.
+- RPC unavailability.
+- Network mismatch.
+- Reverted transactions.
+- Missing evidence.
+- Invalid signatures.
+- Expired attestations.
+- Storage unavailability.
+- External integration outages.
+
+Every important error needs a unique machine-readable error code, understandable message, recovery instruction and appropriate retry policy.
+
+---
+
+# PART VIII — APPLICATION NAVIGATION AND PRODUCT SURFACES
+
+Implement the following product surfaces as actual functional pages.
+
+## Marketing and public experience
+
+1. Landing page.
+2. Product overview.
+3. How Proofloom works.
+4. Protocol architecture.
+5. Public project explorer.
+6. Public release explorer.
+7. Public attestation explorer.
+8. Public verification portal.
+9. Developer documentation.
+10. API documentation.
+11. Integration directory.
+12. Pricing.
+13. Security and trust centre.
+14. About.
+15. Status and service health.
+
+## Authenticated product experience
+
+1. Executive workspace dashboard.
+2. Organization switcher.
+3. Project management.
+4. Component registry.
+5. Release management.
+6. Evidence management.
+7. Attestation centre.
+8. Verification centre.
+9. AI agent registry.
+10. Agent execution console.
+11. Task coordination.
+12. Policy centre.
+13. Reviews and approvals.
+14. Audit explorer.
+15. Proof Atlas.
+16. Dependency graph.
+17. Analytics.
+18. Integration management.
+19. Developer settings.
+20. API credentials.
+21. Notification centre.
+22. Organization settings.
+23. Member management.
+24. Billing and entitlements.
+25. Account security.
+
+## Administrative surfaces
+
+Include:
+
+- System configuration.
+- User administration.
+- Organization oversight.
+- Integration health.
+- Job monitoring.
+- Transaction monitoring.
+- Audit event inspection.
+- Abuse monitoring.
+- Rate-limit administration.
+- Storage health.
+- RPC health.
+- Incident management.
+
+Use appropriate administrative authorization.
+
+Never expose privileged administrative controls to ordinary users.
+
+---
+
+# PART IX — SECURITY, RELIABILITY AND TRUST
+
+Perform a serious threat model.
+
+Cover:
+
+- Wallet impersonation.
+- Identity spoofing.
+- Unauthorized publishing.
+- Unauthorized revocation.
+- Malicious realm calls.
+- Interrealm authority errors.
+- Mutable state exposure.
+- Replay attacks.
+- Duplicate operations.
+- Expired signatures.
+- Invalid signatures.
+- Malicious evidence.
+- Content hash mismatch.
+- Prompt injection.
+- Agent privilege escalation.
+- API credential compromise.
+- Session hijacking.
+- CSRF.
+- XSS.
+- SQL injection.
+- SSR data leakage.
+- Cross-tenant data access.
+- Webhook spoofing.
+- RPC impersonation.
+- Chain ID confusion.
+- Transaction races.
+- Storage abuse.
+- Denial of service.
+- Dependency compromise.
+- Privileged insider actions.
+
+Implement:
+
+- Server-side authorization.
+- Secure wallet authentication.
+- Session rotation.
+- Permission scopes.
+- Tenant isolation.
+- Rate limiting.
+- Request validation.
+- Input sanitization.
+- Webhook signature validation.
+- Secret management.
+- Encryption at rest where appropriate.
+- TLS.
+- Audit trails.
+- Secure error handling.
+- Dependency scanning.
+- Secret scanning.
+- Backup verification.
+- Recovery testing.
+
+Every privileged action should produce an auditable record.
+
+Security decisions affecting on-chain state must be enforced by the relevant realm functions, not merely by UI checks.
+
+Do not present the platform as independently audited unless a real independent audit has occurred.
+
+---
+
+# PART X — PRODUCT MATURITY AND OPERATIONS
+
+Build the complete operating foundation.
+
+## Observability
+
+Implement:
+
+- Structured logs.
+- Trace identifiers.
+- Request correlation.
+- RPC latency metrics.
+- Transaction failure metrics.
+- Queue health.
+- Job duration.
+- Database health.
+- Integration health.
+- Evidence-processing health.
+- Verification latency.
+- Application error monitoring.
+
+## Reliability
+
+Implement:
+
+- Exponential backoff.
+- Jitter.
+- Circuit breakers where appropriate.
+- Idempotency.
+- Dead-letter queues.
+- Transaction reconciliation.
+- Background job recovery.
+- Graceful shutdown.
+- RPC timeout handling.
+- Safe database transactions.
+- Health checks.
+- Readiness checks.
+
+## Data integrity
+
+Implement:
+
+- Referential integrity.
+- Duplicate prevention.
+- Evidence digest verification.
+- Transaction reconciliation.
+- Immutable audit events.
+- Migration versioning.
+- Backup and restore procedures.
+
+## Performance
+
+Set and test realistic budgets.
+
+Pay particular attention to:
+
+- Initial page rendering.
+- Large evidence tables.
+- Graph rendering.
+- Blockchain query latency.
+- Dashboard data retrieval.
+- Search and filtering.
+- Mobile responsiveness.
+
+Avoid excessive on-chain storage writes.
+
+Store bulky artifacts off-chain and commit only the required verification data on-chain.
+
+---
+
+# PART XI — COMPLETE TESTING PROGRAMME
+
+Do not confuse a passing frontend build with a functioning product.
+
+Implement multiple independent testing layers.
+
+## 1. Gno testing
+
+- Unit tests.
+- Realm state transition tests.
+- Authorization tests.
+- Cross-realm tests.
+- Caller identity tests.
+- Invalid argument tests.
+- Revocation tests.
+- Expiration tests.
+- Duplicate operation tests.
+- Adversarial interaction tests.
+- Read-only query tests.
+- Storage growth tests.
+
+Run:
+
+- `gno fmt ./...`
+- `gno lint ./...`
+- `gno test ./...`
+
+## 2. Backend testing
+
+- Unit testing.
+- Integration testing.
+- Database testing.
+- Queue testing.
+- API contract testing.
+- Webhook testing.
+- Authentication testing.
+- Authorization testing.
+- Tenant isolation testing.
+- Retry testing.
+- Failure recovery testing.
+
+## 3. Frontend testing
+
+- Component tests.
+- Interaction tests.
+- Wallet states.
+- Responsive tests.
+- Loading states.
+- Error states.
+- Keyboard navigation.
+- Accessibility tests.
+- Browser compatibility.
+
+## 4. End-to-end testing
+
+Test complete user workflows:
+
+- Create account.
+- Connect wallet.
+- Create organization.
+- Create project.
+- Register component.
+- Publish evidence.
+- Create release.
+- Submit attestation.
+- Verify release.
+- Register an agent.
+- Assign a task.
+- Review agent execution.
+- Approve publication.
+- Query the public record.
+- Revoke an attestation.
+- Verify that the revoked record remains visibly revoked.
+
+## 5. Edge-case matrix
+
+Produce a detailed minimum 250-case edge-condition and mitigation matrix.
+
+Organize it under:
+
+- Wallet.
+- Identity.
+- Authentication.
+- Authorization.
+- Multi-tenancy.
+- Project registration.
+- Component management.
+- Releases.
+- Attestations.
+- Evidence storage.
+- Hash verification.
+- Signatures.
+- Gno execution.
+- Interrealm calls.
+- RPC.
+- Transaction lifecycle.
+- Chain upgrades.
+- Agent orchestration.
+- Prompt injection.
+- API.
+- Webhooks.
+- CI/CD.
+- Indexing.
+- Data consistency.
+- Performance.
+- Accessibility.
+- Mobile.
+- Deployment.
+- Disaster recovery.
+
+Each entry must include:
+
+1. Failure scenario.
+2. Trigger.
+3. Expected behaviour.
+4. Prevention.
+5. Detection.
+6. Recovery.
+7. Test case.
+8. Severity.
+
+Do not invent completed test results.
+
+---
+
+# PART XII — REPOSITORY AND DELIVERY STRUCTURE
+
+Create an understandable, maintainable repository.
+
+Suggested structure:
+
+```text
+proofloom/
+│
+├── apps/
+│   ├── web/
+│   ├── api/
+│   ├── admin/
+│   └── docs/
+│
+├── packages/
+│   ├── ui/
+│   ├── design-tokens/
+│   ├── types/
+│   ├── sdk/
+│   ├── api-client/
+│   ├── verification/
+│   └── shared/
+│
+├── chain/
+│   ├── realms/
+│   │   ├── core/
+│   │   ├── identity/
+│   │   ├── registry/
+│   │   ├── releases/
+│   │   ├── attestations/
+│   │   ├── agents/
+│   │   ├── policies/
+│   │   └── verify/
+│   ├── scripts/
+│   ├── tests/
+│   └── deployments/
+│
+├── services/
+│   ├── chain-gateway/
+│   ├── indexer/
+│   ├── evidence-worker/
+│   ├── agent-runtime/
+│   └── webhook-worker/
+│
+├── integrations/
+│   ├── github/
+│   ├── github-actions/
+│   ├── ci/
+│   ├── gnomcp/
+│   └── storage/
+│
+├── examples/
+│   ├── consumer-project/
+│   ├── verification-widget/
+│   └── agent-integration/
+│
+├── infrastructure/
+│   ├── docker/
+│   ├── deployment/
+│   ├── monitoring/
+│   └── ci/
+│
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   ├── e2e/
+│   ├── security/
+│   └── performance/
+│
+├── docs/
+│   ├── architecture/
+│   ├── protocol/
+│   ├── api/
+│   ├── security/
+│   ├── operations/
+│   ├── deployment/
+│   ├── decisions/
+│   ├── limitations/
+│   └── roadmap/
+│
+├── .env.example
+├── docker-compose.yml
+├── README.md
+├── LICENSE
+└── SECURITY.md
+```
+
+Modify the structure when the existing repository gives a sound reason to do so.
+
+Never scatter business logic arbitrarily across pages, components and route handlers.
+
+---
+
+# PART XIII — IMPLEMENTATION SEQUENCE
+
+Execute the build using disciplined engineering stages.
+
+## Stage 0 — Repository intelligence
+
+Before editing:
+
+1. Inspect the entire repository.
+2. Identify the framework and package manager.
+3. Inspect existing routes.
+4. Inspect existing database schemas.
+5. Inspect deployed contracts and packages.
+6. Identify existing integrations.
+7. Inspect deployment infrastructure.
+8. Run the existing tests.
+9. Identify security issues.
+10. Create a dependency and implementation map.
+
+Produce:
+
+- Repository audit.
+- Current-state architecture.
+- Existing functionality inventory.
+- Defect inventory.
+- Risk register.
+- Implementation plan.
+- Migration plan.
+
+Preserve functioning code.
+
+Do not overwrite existing systems without understanding them.
+
+## Stage 1 — Product foundation
+
+Implement:
+
+- Brand identity.
+- Design tokens.
+- Component library.
+- Routing.
+- Authentication.
+- Organization model.
+- Authorization.
+- Database migrations.
+- Error handling.
+- Observability foundation.
+
+## Stage 2 — Protocol engineering
+
+Implement:
+
+- Gno realm architecture.
+- Core state types.
+- Public query interfaces.
+- Publishing functions.
+- Role enforcement.
+- Attestation functions.
+- Revocation functions.
+- Cross-realm compatibility.
+- Test coverage.
+
+Run locally on gnodev before testnet deployment.
+
+## Stage 3 — Blockchain connectivity
+
+Implement:
+
+- Onyx network profile.
+- Wallet connectivity.
+- RPC integration.
+- Transaction builder.
+- Signing flow.
+- Broadcast.
+- Confirmation.
+- State synchronization.
+- Transaction history.
+
+Deploy real packages to Onyx.
+
+Record their actual package paths and transaction hashes.
+
+Verify the public realm pages and queries.
+
+## Stage 4 — Complete application domains
+
+Implement identity, projects, components, releases, attestations, agent orchestration, verification, analytics and administration.
+
+Every important action must persist correctly.
+
+## Stage 5 — External integrations
+
+Implement GitHub, CI/CD, webhook processing, SDK, API and public verification interfaces.
+
+Build the independent consumer-project example.
+
+## Stage 6 — Product design completion
+
+Complete all pages, interactions, mobile layouts, design states, visualizations, animations, accessibility and performance optimization.
+
+## Stage 7 — Security and reliability
+
+Execute the complete threat model, security testing, failure testing, edge-case matrix and recovery drills.
+
+## Stage 8 — Production deployment
+
+Deploy the frontend, backend, workers, database and required infrastructure.
+
+Use production-grade environment management.
+
+Deploy all required Gno packages to Onyx.
+
+Perform a clean end-to-end acceptance test from a new browser session.
+
+## Stage 9 — Competition submission
+
+Prepare:
+
+- Public GitHub repository.
+- Project README.
+- Technical documentation.
+- Architecture diagrams.
+- Gno deployment references.
+- Live product URL.
+- Public verification URL.
+- External integration example.
+- Under-three-minute demonstration video.
+- Submission description.
+- Feature inventory.
+- Security limitations.
+- Post-hackathon roadmap.
+
+Never submit an undocumented or inaccessible repository.
+
+---
+
+# PART XIV — DESIGN THE DEMONSTRATION
+
+The demonstration must show a coherent real workflow, not a tour of disconnected screens.
+
+Target runtime: 2 minutes 45 seconds.
+
+Suggested presentation:
+
+**0:00–0:20 — The problem**
+
+Show a software release whose claims cannot easily be verified.
+
+Introduce PROOFLOOM's evidence and provenance layer.
+
+**0:20–0:45 — Create a project**
+
+Connect an Adena wallet and register a project.
+
+Show its actual Gno identity.
+
+**0:45–1:15 — Publish evidence**
+
+Register a release, attach build and test evidence, and calculate its digest.
+
+**1:15–1:45 — Publish on-chain**
+
+Submit the actual transaction to Onyx and show its confirmation.
+
+**1:45–2:10 — Verify the record**
+
+Open the public verification page.
+
+Demonstrate the release evidence and the actual realm record.
+
+**2:10–2:30 — Agent accountability**
+
+Show a registered agent completing an authorized task and submitting evidence for approval.
+
+**2:30–2:45 — Composability**
+
+Show a separate consumer application retrieving and verifying the PROOFLOOM record through the public realm interface.
+
+The demo must use real deployment data and genuine on-chain interactions.
+
+No fabricated transaction hashes, fabricated testnet results or prerecorded transactions falsely represented as live.
+
+---
+
+# PART XV — POST-HACKATHON RETENTION AND BUSINESS DEVELOPMENT
+
+Do not design a disposable competition submission.
+
+Create a realistic six-month operating strategy.
+
+The product must be architected to support:
+
+- Public mainnet deployment after a security and migration review.
+- Continued monthly releases.
+- Third-party realm integration.
+- Active developer communities.
+- Real-world project registrations.
+- Repeat verification.
+- External SDK adoption.
+
+Retention targets to design toward:
+
+**Month 1**
+- Stable public testnet release.
+- Developer documentation.
+- First external integration.
+
+**Month 2**
+- More integrations.
+- Public project registry.
+- Community participation.
+- Improved verification infrastructure.
+
+**Month 3**
+- Mainnet-ready release, subject to security review.
+- At least 50 genuine unique participating addresses.
+- Monthly product release.
+- Another project actively using or importing the protocol.
+
+**Months 4–6**
+- Continued monthly releases.
+- At least 100 genuine unique participating addresses by month six.
+- Multiple external integrations.
+- Documented mainnet adoption.
+- Operational evidence of continued product development.
+
+These targets align with the announced retention programme, but they must never be represented as guaranteed prize eligibility or payment.
+
+## Business model
+
+Design commercial packages for:
+
+- Individual developers.
+- Open-source projects.
+- Growing development teams.
+- Enterprise software organizations.
+- Security and compliance teams.
+- AI agent platform operators.
+
+Potential revenue:
+
+- Team subscriptions.
+- Enterprise workspaces.
+- Verification API usage.
+- CI/CD integrations.
+- Advanced provenance analytics.
+- Self-hosted enterprise deployments.
+- Premium policy and audit capabilities.
+
+No speculative token issuance is required.
+
+Do not introduce a token simply to make the application appear more Web3-oriented.
+
+---
+
+# PART XVI — FINAL QUALITY GATE
+
+The following conditions are mandatory before declaring the product complete.
+
+### Product
+
+- Full navigation works.
+- All core features are connected.
+- No dead buttons.
+- No placeholder workflows.
+- No fake blockchain records.
+- No fictitious agent executions.
+- No broken critical paths.
+- Proper organization and account isolation.
+- Useful public verification.
+
+### Blockchain
+
+- Genuine Gno code.
+- Genuine Onyx deployment.
+- Correct chain ID.
+- Verified package paths.
+- Successful state-changing transaction.
+- Readable public realm.
+- Correct authorization.
+- Tested cross-realm interactions.
+- Verifiable public state.
+
+### Engineering
+
+- Clean architecture.
+- Strong type checking.
+- Working migrations.
+- Appropriate indexes.
+- Secure secrets.
+- Automated tests.
+- Structured logging.
+- Retry and recovery systems.
+- Deployment documentation.
+- No high-severity unresolved blockers.
+
+### Design
+
+- Complete identity system.
+- Custom design tokens.
+- Bespoke component library.
+- Responsive layouts.
+- Desktop and mobile experiences.
+- Proper 3D fallback.
+- Reduced-motion support.
+- Accessible interactions.
+- Loading and failure states.
+- Consistent typography and visual language.
+
+### Submission
+
+- Public repository.
+- Working public application.
+- Public Onyx deployment.
+- README.
+- Architecture documentation.
+- Demo video under three minutes.
+- Submission description.
+- Correct project name.
+- No exposed secrets.
+
+---
+
+# PART XVII — EXECUTION RULES
+
+Observe these rules throughout the entire assignment.
+
+1. Build the real product, not a simulation of one.
+2. Never substitute mocked transactions for actual Gno operations.
+3. Never represent a development-only integration as a production capability.
+4. Never claim an audit or verification that did not occur.
+5. Do not use an unpublished library or unstable API without checking its current availability.
+6. Do not introduce unnecessary technical dependencies.
+7. Do not break existing working functionality.
+8. Do not leave core buttons inert.
+9. Do not leave critical API methods unimplemented.
+10. Do not hide errors from users.
+11. Do not make the UI the sole security boundary.
+12. Do not store secrets in the repository.
+13. Do not commit generated credentials.
+14. Do not skip adversarial contract tests.
+15. Do not end at the planning stage.
+16. Do not sacrifice product coherence for the number of features.
+17. Do not stop after the first successful local build.
+18. Do not declare success until the actual testnet and complete workflow have been verified.
+
+Maintain these continuously updated records:
+
+- `IMPLEMENTATION_STATUS.md`
+- `ARCHITECTURE.md`
+- `SECURITY_AUDIT.md`
+- `EDGE_CASES.md`
+- `DEPLOYMENT.md`
+- `SUBMISSION_READINESS.md`
+- `CHANGELOG.md`
+
+Each completed item must have evidence.
+
+Where something remains incomplete, identify the exact blocker, its impact, the required action and the owner.
+
+## FINAL DIRECTIVE
+
+Build PROOFLOOM as a serious software trust infrastructure company could commercialize.
+
+It must look and feel like a mature developer platform, not a weekend experiment.
+
+It must contain a real application, an actual Gno protocol implementation, a production-minded backend, meaningful autonomous-agent capabilities, a coherent design system, secure workflows, complete documentation and an architecture that can continue growing beyond the hackathon.
+
+Most importantly, make the Gno component indispensable to the product's central value.
+
+The project must demonstrate why Gno is the appropriate technology for this system, rather than merely demonstrate that Gno can execute a transaction.
+
+**Start by auditing the existing repository. Then implement, test, deploy, verify, document and prepare the submission.**
+
+Do not return just a plan. Deliver the working product.

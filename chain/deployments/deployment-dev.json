@@ -1,0 +1,23 @@
+{
+  "network": "dev (gnodev local chain — pipeline verification; Onyx deployment pending faucet funding)",
+  "remote": "http://127.0.0.1:26657",
+  "deployer": "g1pd8esjj02k67reyzquv42lf8tlc4g9nnntashq",
+  "namespace": "gno.land/r/g1pd8esjj02k67reyzquv42lf8tlc4g9nnntashq/proofloom",
+  "deployedAt": "2026-11-26T12:05:00Z",
+  "packages": {
+    "core": { "path": "gno.land/r/g1pd8esjj02k67reyzquv42lf8tlc4g9nnntashq/proofloom/core", "txHash": "eYX6mxA6gsG6JBXVQVQufuZLXL3ZwFmS/6OHz7plQR0=" },
+    "registry": { "path": "gno.land/r/g1pd8esjj02k67reyzquv42lf8tlc4g9nnntashq/proofloom/registry", "txHash": "EwRXWoH1sN8hib1nvncs+lgaJLY3pMUHXtS6kwkrv0A=" },
+    "releases": { "path": "gno.land/r/g1pd8esjj02k67reyzquv42lf8tlc4g9nnntashq/proofloom/releases", "txHash": "fca74GpwPRJrn7qficfmxXj0bZ06ZcBirVlX09I2bE4=" },
+    "attestations": { "path": "gno.land/r/g1pd8esjj02k67reyzquv42lf8tlc4g9nnntashq/proofloom/attestations", "txHash": "sKDY1+EDhQgrUluksNTltpeP7fkXuPgK6o7F3NLn7vI=" },
+    "agents": { "path": "gno.land/r/g1pd8esjj02k67reyzquv42lf8tlc4g9nnntashq/proofloom/agents", "txHash": "Rx2gEgQ+HWxnyEnFdhhyaeo+Xp1Z4lefQ4wVQHO/0U4=" },
+    "policies": { "path": "gno.land/r/g1pd8esjj02k67reyzquv42lf8tlc4g9nnntashq/proofloom/policies", "txHash": "U9GYJRZXjbgJVNCzGWxNalmm1QY+BeYmHQVCvxFUW7s=" },
+    "verify": { "path": "gno.land/r/g1pd8esjj02k67reyzquv42lf8tlc4g9nnntashq/proofloom/verify", "txHash": "gTeDFktoby1BVrhG073YFEtJq4jHQRhHIE36KcL4bmg=" }
+  },
+  "init": {
+    "registry": "8PPC5P3YkaIXc7dMtJ3iHjE5ftrc/YHSMi47qj1JToI=",
+    "releases": "fTrmtn3nFMyr7GVOvufhgl3w3FM+vEyl4D4CuxrTIx4=",
+    "attestations": "Til56WUZUXjRq3Upjqo0KgGDWdZL/0/Y7WUbnll1B7M=",
+    "agents": "6gQG1WLXtNIvop4L/SpbMQpadtwPrBYC/ButUR+zHCU=",
+    "policies": "f8Jcq00Y8NR8UWfNfAtxiqc+U8MY1ngctWE7fymspDc="
+  }
+}

@@ -1,0 +1,563 @@
+// PROOFLOOM data model.
+// Tenancy: every tenant-scoped row carries organizationId; all queries
+// filter by membership server-side. Audit events are append-only.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Identity ────────────────────────────────────────────────────────────────
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String
+  displayName   String
+  avatarSeed    String   @default("loom")
+  gnoAddress    String?  @unique // linked wallet (verified via signature challenge)
+  walletLinkedAt DateTime?
+  emailVerified Boolean  @default(false)
+  totpSecret    String?  // MFA secret (base32), null when MFA disabled
+  mfaEnabled    Boolean  @default(false)
+  status        String   @default("ACTIVE") // ACTIVE | SUSPENDED | DELETED
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions       Session[]
+  wallets        Wallet[]
+  memberships    Membership[]
+  organizations  Organization[] @relation("OrgOwner")
+  attestations   Attestation[]  @relation("AttestIssuer")
+  apiCredentials ApiCredential[]
+  notifications  Notification[]
+
+  @@index([status])
+}
+
+model Wallet {
+  id        String   @id @default(cuid())
+  userId    String
+  address   String   @unique // g1... bech32
+  provider  String   // adena | gnoconnect | gnokey
+  chainId   String   // chain the wallet reported at link time
+  verified  Boolean  @default(false)
+  challenge String?  // pending signature challenge
+  linkedAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Session {
+  id               String   @id @default(cuid())
+  userId           String
+  tokenHash        String   @unique // sha256 of the session token; raw token never stored
+  ip               String?
+  userAgent        String?
+  createdAt        DateTime @default(now())
+  lastRotatedAt    DateTime @default(now())
+  expiresAt        DateTime
+  revokedAt        DateTime?
+  revokedReason    String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+// ─── Organizations ───────────────────────────────────────────────────────────
+
+model Organization {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String
+  ownerId   String
+  createdAt DateTime @default(now())
+  archived  Boolean  @default(false)
+
+  owner      User         @relation("OrgOwner", fields: [ownerId], references: [id])
+  memberships Membership[]
+  projects   Project[]
+  policies   Policy[]
+  agents     Agent[]
+  apiKeys    ApiCredential[]
+  auditEvents AuditEvent[]
+  integrations Integration[]
+  invitations Invitation[]
+
+  @@index([ownerId])
+}
+
+model Membership {
+  id             String   @id @default(cuid())
+  userId         String
+  organizationId String
+  role           String   // OWNER | ADMIN | SECURITY_ADMIN | ENGINEERING_LEAD | DEVELOPER | AUDITOR | VIEWER | AGENT_OPERATOR
+  createdAt      DateTime @default(now())
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
+  @@index([organizationId])
+}
+
+model Invitation {
+  id             String   @id @default(cuid())
+  organizationId String
+  email          String
+  role           String
+  tokenHash      String   @unique
+  invitedBy      String
+  status         String   @default("PENDING") // PENDING | ACCEPTED | REVOKED | EXPIRED
+  expiresAt      DateTime
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, status])
+}
+
+// ─── Projects & components ───────────────────────────────────────────────────
+
+model Project {
+  id             String   @id @default(cuid())
+  organizationId String
+  slug           String   @unique // protocol-facing identifier
+  name           String
+  description    String   @default("")
+  repoUrl        String   @default("")
+  category       String   @default("service")
+  visibility     String   @default("public") // public | private
+  status         String   @default("ACTIVE") // ACTIVE | ARCHIVED
+  techStack      String   @default("") // comma-separated tags
+  gnoRegistered  Boolean  @default(false) // project commitment registered on-chain
+  onChainRef     String?  // tx hash of registration
+  createdBy      String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  components   Component[]
+  dependencies Dependency[]
+  releases     Release[]
+  policies     Policy[]
+  tasks        Task[]
+  agents       Agent[]      @relation("AgentProjectScope")
+  auditEvents  AuditEvent[]
+
+  @@index([organizationId])
+  @@index([visibility, status])
+}
+
+model Component {
+  id           String   @id @default(cuid())
+  projectId    String
+  name         String
+  namespace    String   @default("")
+  artifactType String   // source | container | binary | sbom | docs | library
+  license      String   @default("")
+  version      String   @default("")
+  deprecated   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  project  Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  releases Release[]
+
+  @@index([projectId])
+}
+
+model Dependency {
+  id         String   @id @default(cuid())
+  projectId  String
+  name       String
+  ecosystem  String   // npm | pypi | maven | go | cargo | oci
+  version    String
+  license    String   @default("")
+  risk       String   @default("UNKNOWN") // UNKNOWN | LOW | MEDIUM | HIGH
+  isDirect   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+// ─── Releases ────────────────────────────────────────────────────────────────
+
+model Release {
+  id             String   @id @default(cuid())
+  projectId      String
+  componentId    String?
+  version        String
+  commitHash     String
+  branch         String   @default("")
+  repoUrl        String   @default("")
+  buildEnv       String   @default("")
+  pipelineRef    String   @default("")
+  artifactDigest String?  // sha256 hex of primary artifact
+  artifactName   String   @default("")
+  status         String   @default("DRAFT")
+  // DRAFT | EVIDENCE_PENDING | VALIDATING | REVIEW_REQUIRED | APPROVED |
+  // PUBLISHED | VERIFIED | REJECTED | REVOKED | SUPERSEDED | DISPUTED
+  publishedAt    DateTime?
+  supersededBy   String?
+  createdBy      String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  project      Project        @relation(fields: [projectId], references: [id])
+  component    Component?     @relation(fields: [componentId], references: [id])
+  evidence     Evidence[]
+  transactions ChainTransaction[]
+  reviews      Review[]
+
+  @@unique([projectId, version])
+  @@index([status])
+  @@index([artifactDigest])
+}
+
+// ─── Evidence & attestations ─────────────────────────────────────────────────
+
+model Evidence {
+  id          String   @id @default(cuid())
+  releaseId   String?
+  projectId   String?
+  kind        String   // build_log | test_report | security_scan | sbom | approval | agent_report | deployment | other
+  title       String
+  contentHash String   // sha256 hex, content-addressed
+  mimeType    String   @default("text/plain")
+  sizeBytes   Int      @default(0)
+  storage     String   @default("inline") // inline | object
+  content     String?  // inline payloads only; object storage holds the rest
+  storageKey  String?
+  uploadedBy  String
+  createdAt   DateTime @default(now())
+
+  release      Release?      @relation(fields: [releaseId], references: [id])
+  attestations Attestation[]
+
+  @@index([contentHash])
+  @@index([releaseId])
+}
+
+model Attestation {
+  id            String   @id @default(cuid())
+  // protocol id mirrors the on-chain deterministic id
+  protocolId    String   @unique
+  subjectType   String   // RELEASE | PROJECT | COMPONENT | TASK | AGENT_EXECUTION
+  subjectId     String
+  category      String   // BUILD_PROVENANCE | TEST_EXECUTION | SECURITY_ASSESSMENT | ...
+  issuerId      String?  // user issuer
+  issuerAddress String   // gno address of issuer
+  digest        String   // evidence digest committed
+  evidenceId    String?
+  status        String   @default("ACTIVE") // ACTIVE | REVOKED | EXPIRED
+  issuedAt      DateTime @default(now())
+  expiresAt     DateTime?
+  revokedAt     DateTime?
+  revokedReason String?
+  onChain       Boolean  @default(false)
+  chainTxHash   String?
+  projectId     String?  // denormalized for tenant scoping
+  organizationId String?
+
+  issuer   User?    @relation("AttestIssuer", fields: [issuerId], references: [id])
+  evidence Evidence? @relation(fields: [evidenceId], references: [id])
+
+  @@index([subjectType, subjectId])
+  @@index([status])
+  @@index([organizationId])
+}
+
+// ─── Agents ──────────────────────────────────────────────────────────────────
+
+model Agent {
+  id            String   @id @default(cuid())
+  organizationId String
+  projectId     String?
+  slug          String   @unique
+  name          String
+  description   String   @default("")
+  ownerAddress  String   // gno address of agent owner
+  ownerUserId   String?
+  runtime       String   @default("")
+  modelProvider String   @default("") // abstracted provider name; never a key
+  modelId       String   @default("")
+  capabilities  String   @default("") // comma-separated
+  version       String   @default("1.0.0")
+  status        String   @default("ACTIVE") // ACTIVE | SUSPENDED | REVOKED
+  onChain       Boolean  @default(false)
+  chainTxHash   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  project      Project?     @relation("AgentProjectScope", fields: [projectId], references: [id])
+  grants       AgentGrant[]
+  executions   AgentExecution[]
+  tasks        Task[]
+
+  @@index([organizationId])
+}
+
+model AgentGrant {
+  id         String   @id @default(cuid())
+  agentId    String
+  projectId  String
+  scopes     String   // comma-separated: READ, EVIDENCE, VERIFY_REQUEST, TASK_UPDATE, REVIEW_PROPOSE, PUBLISH_REQUEST
+  expiresAt  DateTime?
+  grantedBy  String
+  revokedAt  DateTime?
+  createdAt  DateTime @default(now())
+
+  agent Agent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@unique([agentId, projectId])
+}
+
+model AgentExecution {
+  id            String   @id @default(cuid())
+  agentId       String
+  taskId        String?
+  projectId     String?
+  trigger       String   @default("manual") // manual | webhook | schedule | api
+  status        String   @default("RUNNING") // RUNNING | COMPLETED | FAILED | AWAITING_APPROVAL | REJECTED
+  inputDigest   String?  // digest of protected input (never raw prompt)
+  outputDigest  String?
+  report        String?  // structured execution report (sanitized)
+  reportDigest  String?
+  policyVerdict String?  // json array of policy checks
+  tokensUsed    Int      @default(0)
+  costMicros    Int      @default(0)
+  error         String?
+  approvedBy    String?
+  approvedAt    DateTime?
+  startedAt     DateTime @default(now())
+  finishedAt    DateTime?
+
+  agent Agent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@index([agentId])
+  @@index([status])
+}
+
+// ─── Tasks & reviews ─────────────────────────────────────────────────────────
+
+model Task {
+  id            String   @id @default(cuid())
+  projectId     String
+  title         String
+  description   String   @default("")
+  state         String   @default("OPEN")
+  // OPEN | ASSIGNED | IN_PROGRESS | EVIDENCE_SUBMITTED | REVIEW |
+  // APPROVED | REJECTED | COMPLETED | EXPIRED | CANCELLED
+  priority      String   @default("MEDIUM") // LOW | MEDIUM | HIGH | CRITICAL
+  assigneeType  String   @default("HUMAN") // HUMAN | AGENT
+  assigneeUserId String?
+  assigneeAgentId String?
+  requiresEvidence Boolean @default(true)
+  dueAt         DateTime?
+  createdBy     String
+  completionDigest String?
+  completedAt   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  project    Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  agent      Agent?           @relation(fields: [assigneeAgentId], references: [id])
+  reviews    Review[]
+
+  @@index([projectId])
+  @@index([state])
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  releaseId  String?
+  taskId     String?
+  reviewerId String
+  decision   String   @default("PENDING") // PENDING | APPROVED | REJECTED | CHANGES_REQUESTED
+  comment    String   @default("")
+  decidedAt  DateTime?
+  createdAt  DateTime @default(now())
+
+  release Release? @relation(fields: [releaseId], references: [id])
+  task    Task?    @relation(fields: [taskId], references: [id])
+
+  @@index([decision])
+}
+
+// ─── Policies ────────────────────────────────────────────────────────────────
+
+model Policy {
+  id             String   @id @default(cuid())
+  organizationId String?
+  projectId      String?
+  name           String
+  version        Int      @default(1)
+  requireCategories String @default("") // comma-separated required attestation categories
+  minApprovals   Int      @default(0)
+  allowedIssuers String   @default("") // comma-separated gno addresses; empty = any
+  requireNoCritical Boolean @default(false)
+  requireValidSBOM  Boolean @default(false)
+  requireSignedEvidence Boolean @default(false)
+  active         Boolean  @default(true)
+  updatedBy      String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  project      Project?      @relation(fields: [projectId], references: [id])
+
+  @@index([projectId])
+  @@index([organizationId])
+}
+
+// ─── Chain ───────────────────────────────────────────────────────────────────
+
+model ChainTransaction {
+  id            String   @id @default(cuid())
+  releaseId     String?
+  attestationId String?
+  kind          String   // REGISTER_PROJECT | PUBLISH_RELEASE | ATTEST | REVOKE | REGISTER_AGENT | AGENT_EXECUTION
+  // lifecycle: CREATED → SIMULATED → AWAITING_SIGNATURE → SIGNED → BROADCAST
+  // → PENDING → CONFIRMED | FAILED | EXPIRED | RECONCILIATION_REQUIRED
+  status        String   @default("CREATED")
+  chainId       String   @default("onyx-1")
+  txHash        String?  @unique
+  gasUsed       Int?
+  height        Int?
+  error         String?
+  attempts      Int      @default(0)
+  idempotencyKey String? @unique
+  createdBy     String
+  createdAt     DateTime @default(now())
+  confirmedAt   DateTime?
+
+  release Release? @relation(fields: [releaseId], references: [id])
+
+  @@index([status])
+  @@index([kind])
+}
+
+// ─── Platform ────────────────────────────────────────────────────────────────
+
+model AuditEvent {
+  id             String   @id @default(cuid())
+  organizationId String?
+  projectId      String?
+  actorUserId    String?
+  actorAddress   String?
+  action         String   // e.g. project.create, release.publish, attestation.revoke, agent.grant
+  targetType     String
+  targetId       String
+  metadata       String   @default("{}") // json
+  ip             String?
+  traceId        String?
+  createdAt      DateTime @default(now())
+
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  project      Project?      @relation(fields: [projectId], references: [id])
+
+  @@index([organizationId, createdAt])
+  @@index([targetType, targetId])
+}
+
+model ApiCredential {
+  id             String   @id @default(cuid())
+  organizationId String
+  userId         String
+  name           String
+  prefix         String   // first 8 chars for identification
+  keyHash        String   @unique
+  scopes         String   @default("read")
+  lastUsedAt     DateTime?
+  revokedAt      DateTime?
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  user         User         @relation(fields: [userId], references: [id])
+
+  @@index([organizationId])
+}
+
+model WebhookDelivery {
+  id         String   @id @default(cuid())
+  url        String
+  event      String
+  payload    String
+  signature  String
+  status     String   @default("PENDING") // PENDING | DELIVERED | FAILED | DEAD
+  attempts   Int      @default(0)
+  lastError  String?
+  nextRetryAt DateTime?
+  createdAt  DateTime @default(now())
+  deliveredAt DateTime?
+
+  @@index([status])
+}
+
+model Integration {
+  id             String   @id @default(cuid())
+  organizationId String
+  kind           String   // github | github_actions | generic_webhook
+  status         String   @default("DISCONNECTED") // CONNECTED | DISCONNECTED | ERROR
+  config         String   @default("{}") // json, never secrets in plaintext
+  secretRef      String?  // reference to encrypted secret store
+  lastSyncAt     DateTime?
+  lastError      String?
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@unique([organizationId, kind])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  kind      String
+  title     String
+  body      String   @default("")
+  link      String?
+  readAt    DateTime?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt])
+}
+
+model UsageRecord {
+  id        String   @id @default(cuid())
+  organizationId String?
+  key       String   // rate-limit bucket or metric key
+  window    DateTime // window start
+  count     Int      @default(0)
+
+  @@unique([key, window])
+  @@index([window])
+}
+
+model VerificationResult {
+  id           String   @id @default(cuid())
+  targetType   String   // RELEASE | ATTESTATION | DIGEST
+  targetId     String
+  verdict      String
+  checks       String   // json array of {requirement, passed, detail}
+  chainState   String?  // json of on-chain state at verification time
+  requesterIp  String?
+  durationMs   Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  @@index([targetType, targetId])
+  @@index([createdAt])
+}
