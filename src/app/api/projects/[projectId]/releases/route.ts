@@ -8,6 +8,11 @@ import { isValidDigest } from '@/lib/crypto'
 
 export const dynamic = 'force-dynamic'
 
+// The on-chain project id is the slug; releases compose their protocol id
+// from it (core.ComposeReleaseID: projectID + '-' + version).
+const slugOf = (r: { project?: { slug?: string } | null; projectId: string }) =>
+  r.project?.slug ?? ''
+
 // GET /api/projects/[projectId]/releases
 export async function GET(req: NextRequest, ctx: { params: Promise<{ projectId: string }> }) {
   return withApi(async () => {

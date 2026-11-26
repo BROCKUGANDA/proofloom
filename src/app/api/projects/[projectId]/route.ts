@@ -28,7 +28,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ projectId: 
     const attsByRelease = new Map(allAtts.map(a => [a.subjectId, [{ id: a.id, protocolId: a.protocolId, category: a.category, status: a.status, onChain: a.onChain }]]))
 
     // on-chain mirror (live query when the realm is deployed)
-    let onChainProject = null
+    let onChainProject: Awaited<ReturnType<typeof fetchOnChainProject>> = null
     try {
       onChainProject = await fetchOnChainProject(project.slug)
     } catch { /* chain unavailable: report platform data only */ }

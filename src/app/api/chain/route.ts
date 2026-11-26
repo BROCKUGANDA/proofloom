@@ -3,7 +3,7 @@ import { db } from '@/lib/db'
 import { withApi, readJson, clientIp } from '@/lib/api'
 import { requireAuth, requireProjectAccess, requireMembership } from '@/lib/auth'
 import { err } from '@/lib/errors'
-import { activeChain, verifyChainIdentity, realmPath, fetchOnChainVerdict, fetchReleaseStatus, txExplorerUrl, TX_STATES } from '@/lib/chain'
+import { activeChain, verifyChainIdentity, realmPath, realmEval, fetchOnChainVerdict, fetchReleaseStatus, txExplorerUrl, TX_STATES } from '@/lib/chain'
 import { operatorAvailable, operatorBroadcastCall } from '@/lib/operator'
 import { audit } from '@/lib/audit'
 
@@ -88,11 +88,12 @@ export async function POST(req: NextRequest) {
       const tx = await db.chainTransaction.findUnique({ where: { id: body.txId } })
       if (!tx) throw err('NOT_FOUND')
       const status = body.status ?? ''
-      if (![...TX_STATES].includes(status)) throw err('VALIDATION_FAILED', { field: 'status', allowed: TX_STATES })
+      const VALID_STATES: string[] = [...TX_STATES]
+      if (!VALID_STATES.includes(status)) throw err('VALIDATION_FAILED', { field: 'status', allowed: TX_STATES })
       const updated = await db.chainTransaction.update({
         where: { id: body.txId },
         data: {
-          status,
+          status: status as (typeof TX_STATES)[number],
           txHash: body.txHash ?? tx.txHash,
           gasUsed: body.gasUsed ?? tx.gasUsed,
           height: body.height ?? tx.height,
@@ -122,9 +123,17 @@ export async function POST(req: NextRequest) {
 
     if (body.op === 'publish-on-chain') {
       // Platform-operated REAL broadcast of a release commitment to the
-      // deployed releases realm. Requires: operator credential configured,
-      // release APPROVED with a valid digest. The tx hash + height are
-      // recorded; the UI labels operator-signed records as such.
+      // deployed realms. The on-chain release lifecycle is a sequence of
+      // realm calls (each a separate signed transaction):
+      //   1. registry.RegisterProject  (if the project is not on-chain yet)
+      //   2. releases.CreateRelease    (DRAFT)
+      //   3. releases.SetEvidence      (attaches the artifact digest commitment)
+      //   4. releases.MarkValidating   (EVIDENCE_PENDING -> VALIDATING)
+      //   5. releases.Approve          (platform approval, audited)
+      //   6. releases.Publish          (APPROVED -> PUBLISHED)
+      // Requires: operator credential configured, release APPROVED with a
+      // valid digest. The final tx hash + all step hashes are recorded; the
+      // UI labels operator-signed records as such.
       if (!body.releaseId) throw err('VALIDATION_FAILED', { missing: ['releaseId'] })
       const release = await db.release.findUnique({ where: { id: body.releaseId }, include: { project: true } })
       if (!release) throw err('NOT_FOUND')
@@ -132,17 +141,50 @@ export async function POST(req: NextRequest) {
       if (release.status !== 'APPROVED' && release.status !== 'PUBLISHED') {
         throw err('INVALID_TRANSITION', { reason: 'on-chain publication requires an APPROVED release' })
       }
-      const protocolId = `${release.project.slug}-${release.version.toLowerCase()}`
-      const func = 'PublishRelease'
-      const args = [protocolId, release.project.slug, release.version, release.commitHash.slice(0, 12), release.artifactDigest ?? '']
-      const tx = await operatorBroadcastCall({
-        pkgpath: realmPath('releases'), func, args,
-        memo: `proofloom:publish:${protocolId}`,
-      })
+      const slug = release.project.slug
+      const protocolId = `${slug}-${release.version.toLowerCase()}`
+      const commit = (release.commitHash || '').replace(/[^0-9a-f]/gi, '').toLowerCase().slice(0, 12)
+      const steps: { func: string; pkg: string; args: string[]; label: string }[] = []
+
+      // 1. registry pre-check: HasProject is a free read; register when absent.
+      let registered = true
+      try {
+        const has = await realmEval<string>('registry', `HasProject("${slug}")`)
+        registered = /true/i.test(has)
+      } catch { registered = true /* fail-safe: attempt register and surface tx error if any */ }
+      if (!registered) {
+        steps.push({ pkg: 'registry', func: 'RegisterProject', args: [slug, release.project.name.slice(0, 96), (release.project.description ?? '').slice(0, 200), (release.project.repoUrl ?? '').slice(0, 240), release.project.category ?? 'service', 'public'], label: 'register-project' })
+      }
+      // 2. releases pre-check: ReleaseStatus is a free read.
+      let existing: string | null = null
+      try { existing = await fetchReleaseStatus(protocolId) } catch { existing = null }
+      if (!existing) {
+        steps.push({ pkg: 'releases', func: 'CreateRelease', args: [slug, release.version, commit, 'main', (release.project.repoUrl ?? '').slice(0, 240), ''], label: 'create-release' })
+        steps.push({ pkg: 'releases', func: 'SetEvidence', args: [protocolId, release.artifactDigest ?? ''], label: 'set-evidence' })
+        steps.push({ pkg: 'releases', func: 'MarkValidating', args: [protocolId], label: 'mark-validating' })
+        steps.push({ pkg: 'releases', func: 'Approve', args: [protocolId], label: 'approve' })
+      }
+      if (existing !== 'PUBLISHED' && existing !== 'VERIFIED') {
+        steps.push({ pkg: 'releases', func: 'Publish', args: [protocolId], label: 'publish' })
+      }
+      if (steps.length === 0) {
+        return { protocolId, alreadyPublished: true, signing: 'operator' }
+      }
+
+      const executed: { label: string; func: string; txHash: string }[] = []
+      let lastHash = ''
+      for (const step of steps) {
+        const tx = await operatorBroadcastCall({
+          pkgpath: realmPath(step.pkg), func: step.func, args: step.args,
+          memo: `proofloom:${step.label}:${protocolId}`.slice(0, 100),
+        })
+        lastHash = tx.txHash
+        executed.push({ label: step.label, func: step.func, txHash: tx.txHash })
+      }
       const record = await db.chainTransaction.create({
         data: {
-          kind: 'PUBLISH_RELEASE', releaseId, status: 'BROADCAST',
-          chainId: activeChain().chainId, txHash: tx.txHash,
+          kind: 'PUBLISH_RELEASE', releaseId: release.id, status: 'BROADCAST',
+          chainId: activeChain().chainId, txHash: lastHash,
           idempotencyKey: `publish:${protocolId}:${Date.now()}`,
           createdBy: user.id,
         },
@@ -150,20 +192,24 @@ export async function POST(req: NextRequest) {
       await audit({
         organizationId: release.project.organizationId, projectId: release.projectId,
         actorUserId: user.id, action: 'chain.publish_release', targetType: 'CHAIN_TRANSACTION',
-        targetId: record.id, metadata: { protocolId, txHash: tx.txHash, signing: 'operator' }, ip: clientIp(req), traceId,
+        targetId: record.id, metadata: { protocolId, txHash: lastHash, steps: executed, signing: 'operator' }, ip: clientIp(req), traceId,
       })
-      return { txId: record.id, txHash: tx.txHash, explorerUrl: txExplorerUrl(tx.txHash), protocolId, signing: 'operator' }
+      return { txId: record.id, txHash: lastHash, explorerUrl: txExplorerUrl(lastHash), protocolId, steps: executed, signing: 'operator' }
     }
 
     if (body.op === 'attest-on-chain') {
       // Platform-operated REAL broadcast of an attestation commitment.
       if (!body.attestationId) throw err('VALIDATION_FAILED', { missing: ['attestationId'] })
-      const att = await db.attestation.findUnique({ where: { id: body.attestationId }, include: { release: { include: { project: true } } } })
+      const att = await db.attestation.findUnique({ where: { id: body.attestationId } })
       if (!att) throw err('NOT_FOUND')
       if (att.organizationId) await requireMembership(user.id, att.organizationId, 'attestation.issue')
-      const subjectLabel = att.subjectType === 'RELEASE' && att.release
-        ? `${att.release.project.slug}-${att.release.version.toLowerCase()}`
-        : att.subjectId
+      // Attestation -> Release is polymorphic (subjectType/subjectId); resolve
+      // the human-readable subject label via a separate lookup.
+      let subjectLabel = att.subjectId
+      if (att.subjectType === 'RELEASE') {
+        const rel = await db.release.findUnique({ where: { id: att.subjectId }, include: { project: true } })
+        if (rel) subjectLabel = `${rel.project.slug}-${rel.version.toLowerCase()}`
+      }
       const func = 'Issue'
       const args = ['RELEASE', subjectLabel, att.category, att.digest, '0']
       const tx = await operatorBroadcastCall({
@@ -209,10 +255,13 @@ export async function POST(req: NextRequest) {
       const outcome = await reconcileTransaction(tx.txHash ?? '', confirmExpr)
       await db.chainTransaction.update({
         where: { id: txId },
-        data: { status: outcome, confirmedAt: outcome === 'CONFIRMED' ? new Date() : null, attempts: tx.attempts + 1 },
+        data: { status: outcome as (typeof TX_STATES)[number], confirmedAt: outcome === 'CONFIRMED' ? new Date() : null, attempts: tx.attempts + 1 },
       })
       if (outcome === 'CONFIRMED' && tx.releaseId) {
-        await db.release.update({ where: { id: tx.releaseId }, data: { gnoRegistered: true, onChainRef: tx.txHash } }).catch(() => {})
+        const rel = await db.release.findUnique({ where: { id: tx.releaseId }, select: { projectId: true } })
+        if (rel) {
+          await db.project.update({ where: { id: rel.projectId }, data: { gnoRegistered: true, onChainRef: tx.txHash } }).catch(() => {})
+        }
       }
       return { txId, outcome }
     }

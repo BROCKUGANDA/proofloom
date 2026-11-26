@@ -23,7 +23,8 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ releaseId:
       category?: string; digest?: string; evidenceId?: string
       issuerAddress?: string; expiresAt?: string; onChain?: boolean; chainTxHash?: string
     }>(req)
-    if (!body.category || !CATEGORIES.includes(body.category)) throw err('VALIDATION_FAILED', { field: 'category', allowed: CATEGORIES })
+    const category = body.category ?? ''
+    if (!CATEGORIES.includes(category as (typeof CATEGORIES)[number])) throw err('VALIDATION_FAILED', { field: 'category', allowed: CATEGORIES })
     const digest = body.evidenceId
       ? (await db.evidence.findUnique({ where: { id: body.evidenceId } }))?.contentHash
       : body.digest
@@ -34,7 +35,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ releaseId:
       throw err('INVALID_ADDRESS', { reason: 'link a Gno wallet or pass issuerAddress; attestations carry an issuer proof' })
     }
 
-    const protocolId = `${release.project.slug}-${release.version.toLowerCase()}-${body.category.toLowerCase()}-${issuerAddress}`
+    const protocolId = `${release.project.slug}-${release.version.toLowerCase()}-${category.toLowerCase()}-${issuerAddress}`
     const existing = await db.attestation.findUnique({ where: { protocolId } })
     if (existing && existing.status === 'ACTIVE') {
       throw err('DUPLICATE', { reason: 'an active attestation from this issuer for this subject and category already exists', protocolId })
@@ -49,7 +50,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ releaseId:
         protocolId,
         subjectType: 'RELEASE',
         subjectId: releaseId,
-        category: body.category,
+        category,
         issuerId: user.id,
         issuerAddress,
         digest,

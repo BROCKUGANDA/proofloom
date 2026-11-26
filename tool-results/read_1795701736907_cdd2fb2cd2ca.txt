@@ -1,0 +1,2002 @@
+     1→# PROOFLOOM
+     2→# MASTER FLAGSHIP PRODUCT CREATION DIRECTIVE
+     3→## Product Architecture · Protocol Engineering · Design System · Full-Stack Implementation · Security · Deployment · Commercialization
+     4→
+     5→**Project codename:** PROOFLOOM  
+     6→**Design system:** THE ATELIER  
+     7→**Product category:** Software provenance, verifiable engineering, AI-agent accountability and cryptographic evidence infrastructure  
+     8→**Blockchain foundation:** Gno.land  
+     9→**Initial network:** Onyx Testnet  
+    10→**Product ambition:** Flagship-grade, production-oriented platform with a complete architecture and a credible path to mainnet and enterprise commercialization  
+    11→**Execution standard:** Staff Engineer + Principal Product Designer + Protocol Engineer + Security Architect + SRE + Product Strategist
+    12→
+    13→---
+    14→
+    15→# PART I. THE MANDATE
+    16→
+    17→## 1. Your assignment
+    18→
+    19→You are the autonomous founding engineering and product team responsible for designing, building, integrating, testing, documenting and deploying PROOFLOOM.
+    20→
+    21→You are not being asked to create:
+    22→
+    23→- A hackathon prototype.
+    24→- A landing page with a few dashboard screens.
+    25→- A minimally viable product.
+    26→- A static Figma-style representation.
+    27→- A mock blockchain explorer.
+    28→- A superficial AI-agent dashboard.
+    29→- A collection of disconnected CRUD pages.
+    30→- A simulated demonstration that cannot survive real users.
+    31→- A generic SaaS template with a new logo.
+    32→
+    33→You are being instructed to build a complete, coherent, extensible software product with the engineering depth, interaction quality, visual identity, security controls and operational architecture expected of a serious technology company.
+    34→
+    35→Treat this as a flagship product that must be capable of evolving into a commercially viable infrastructure platform.
+    36→
+    37→**The hackathon is the initial proving ground, not the product's architectural ceiling.**
+    38→
+    39→Build the complete intended product architecture. Where external credentials, third-party approvals, mainnet availability or other external dependencies prevent a particular integration from being activated, implement the real integration boundary, document the exact activation requirements, and provide a truthful operational status. Never replace missing integration capability with fabricated functionality.
+    40→
+    41→## 2. Non-negotiable operating principles
+    42→
+    43→1. Inspect the existing repository before making architectural decisions.
+    44→2. Preserve useful existing functionality and data.
+    45→3. Do not destroy working functionality through unnecessary rewrites.
+    46→4. Establish a written implementation plan before major changes.
+    47→5. Build actual backend functionality behind every functional interface.
+    48→6. Use real persistence, real APIs, real authentication and real cryptographic verification.
+    49→7. Use genuine Gno transactions when interacting with the network.
+    50→8. Do not fabricate transaction hashes, verification results, attestations, identities, statistics or evidence.
+    51→9. Do not use hardcoded demo data as a substitute for production functionality.
+    52→10. Make every important action auditable.
+    53→11. Implement complete loading, empty, error, retry, permission and recovery states.
+    54→12. Test the complete user journey, not just isolated components.
+    55→13. Document every important architectural decision.
+    56→14. Maintain a clear distinction between implemented, tested, deployed, externally blocked and planned functionality.
+    57→15. Do not stop after generating code. Run it, test it, fix it, verify it and document it.
+    58→
+    59→When requirements conflict, prioritize security, data integrity, protocol correctness and user trust.
+    60→
+    61→---
+    62→
+    63→# PART II. PRODUCT VISION
+    64→
+    65→## 3. What PROOFLOOM is
+    66→
+    67→PROOFLOOM is a verifiable engineering and software provenance platform.
+    68→
+    69→It creates an evidence-backed record of how software is developed, modified, tested, released, verified and maintained, including work performed by autonomous AI agents.
+    70→
+    71→The platform connects:
+    72→
+    73→- Software repositories.
+    74→- Engineering teams.
+    75→- Organizations.
+    76→- Software components and dependencies.
+    77→- CI/CD systems.
+    78→- Build and release pipelines.
+    79→- Human contributors.
+    80→- AI agents.
+    81→- Tasks and engineering activities.
+    82→- Security policies.
+    83→- Evidence artifacts.
+    84→- Cryptographic attestations.
+    85→- Public verification.
+    86→- Blockchain commitments.
+    87→- External developer tools.
+    88→
+    89→Its purpose is to make engineering activity independently inspectable and verifiable.
+    90→
+    91→A company should be able to establish:
+    92→
+    93→- What software was released.
+    94→- Which source revision produced it.
+    95→- Which dependencies were involved.
+    96→- Which tests and security checks were performed.
+    97→- Which people and agents contributed.
+    98→- What evidence supports each claim.
+    99→- Whether the evidence has changed.
+   100→- Whether an attestation remains valid.
+   101→- Whether a release has been revoked or superseded.
+   102→- Whether another organization can independently verify the result.
+   103→
+   104→PROOFLOOM should become an infrastructure layer for trustworthy software production.
+   105→
+   106→## 4. Product philosophy
+   107→
+   108→**The architecture of trust, made visible.**
+   109→
+   110→The product should make complex engineering evidence understandable without diluting its technical rigor.
+   111→
+   112→The platform must serve several distinct audiences:
+   113→
+   114→- Founders and executives evaluating software trust.
+   115→- Engineering leaders overseeing releases.
+   116→- Security and compliance teams examining evidence.
+   117→- Developers integrating repositories and pipelines.
+   118→- AI-agent operators supervising autonomous work.
+   119→- Independent auditors verifying claims.
+   120→- External developers building on PROOFLOOM's protocol.
+   121→
+   122→Do not create one generic dashboard for all these users. Design purposeful workspaces and information hierarchies around their actual jobs.
+   123→
+   124→---
+   125→
+   126→# PART III. PRODUCT DOMAINS AND FUNCTIONAL REQUIREMENTS
+   127→
+   128→Build the following product domains as integrated, operational modules.
+   129→
+   130→## 5. Identity, organizations and access management
+   131→
+   132→Implement:
+   133→
+   134→- User registration and authentication.
+   135→- Email verification.
+   136→- Secure session management.
+   137→- Password reset and recovery.
+   138→- MFA support.
+   139→- Organization creation.
+   140→- Organization invitations.
+   141→- Membership management.
+   142→- Role-based access control.
+   143→- Fine-grained permissions.
+   144→- Organization switching.
+   145→- Project-level access.
+   146→- Team management.
+   147→- Service accounts.
+   148→- API credentials.
+   149→- Personal access tokens.
+   150→- Session revocation.
+   151→- Security event history.
+   152→- Organization audit history.
+   153→- Account deletion and export workflows.
+   154→
+   155→Define roles such as:
+   156→
+   157→- Organization Owner.
+   158→- Organization Administrator.
+   159→- Security Administrator.
+   160→- Engineering Lead.
+   161→- Developer.
+   162→- Auditor.
+   163→- Read-only Viewer.
+   164→- Service Account.
+   165→- Agent Operator.
+   166→
+   167→Never trust client-side role declarations. Enforce permissions at the server and API layers.
+   168→
+   169→Provide clear authorization failures and prevent cross-tenant data exposure.
+   170→
+   171→## 6. Project registry
+   172→
+   173→Users must be able to create and manage software projects.
+   174→
+   175→Implement:
+   176→
+   177→- Project creation and configuration.
+   178→- Repository linking.
+   179→- GitHub integration architecture.
+   180→- Repository ownership verification.
+   181→- Branch and commit tracking.
+   182→- Project environment configuration.
+   183→- Team assignment.
+   184→- Project status.
+   185→- Release history.
+   186→- Project evidence history.
+   187→- Project security policies.
+   188→- Project integrations.
+   189→- Project-level access controls.
+   190→- Project activity feeds.
+   191→- Project health summaries.
+   192→- Project archival and restoration.
+   193→
+   194→Each project should have a persistent identity and an independently verifiable history.
+   195→
+   196→Support multiple repositories per project and multiple projects per organization.
+   197→
+   198→## 7. Software component registry
+   199→
+   200→Create a registry for software components and dependencies.
+   201→
+   202→Implement:
+   203→
+   204→- Component registration.
+   205→- Package metadata.
+   206→- Component versions.
+   207→- Dependency relationships.
+   208→- Dependency trees.
+   209→- Direct and transitive dependency tracking.
+   210→- Version pinning.
+   211→- License metadata.
+   212→- Vulnerability references.
+   213→- Component ownership.
+   214→- Provenance records.
+   215→- Component attestations.
+   216→- Component verification.
+   217→- Component replacement and deprecation.
+   218→- Component risk classification.
+   219→- Component history.
+   220→
+   221→Support common software ecosystem formats where practical, including:
+   222→
+   223→- npm.
+   224→- PyPI.
+   225→- Maven.
+   226→- Go modules.
+   227→- Cargo.
+   228→- Container images.
+   229→- SBOM formats.
+   230→
+   231→Use established standards such as SPDX and CycloneDX where appropriate.
+   232→
+   233→Do not invent proprietary replacements for mature standards without a documented reason.
+   234→
+   235→## 8. Release provenance engine
+   236→
+   237→This is one of the platform's central capabilities.
+   238→
+   239→Implement an evidence-backed release lifecycle.
+   240→
+   241→A release should connect:
+   242→
+   243→1. Project identity.
+   244→2. Repository identity.
+   245→3. Source commit.
+   246→4. Build configuration.
+   247→5. Build environment metadata.
+   248→6. Dependencies.
+   249→7. Build execution.
+   250→8. Test execution.
+   251→9. Security scan results.
+   252→10. Artifact identity.
+   253→11. Release version.
+   254→12. Release evidence.
+   255→13. Signatures and attestations.
+   256→14. Cryptographic commitments.
+   257→15. Verification status.
+   258→16. Supersession or revocation history.
+   259→
+   260→Implement:
+   261→
+   262→- Release creation.
+   263→- Release ingestion from CI/CD.
+   264→- Build metadata collection.
+   265→- Artifact digest calculation.
+   266→- Provenance statement generation.
+   267→- Evidence attachment.
+   268→- Release signing.
+   269→- Release verification.
+   270→- Release comparison.
+   271→- Release revocation.
+   272→- Release supersession.
+   273→- Release timeline.
+   274→- Release export.
+   275→- Public verification references.
+   276→
+   277→Support integration patterns for GitHub Actions and other CI/CD platforms through documented adapters.
+   278→
+   279→Use established provenance standards such as SLSA and in-toto where appropriate.
+   280→
+   281→A release must never be marked verified merely because a record exists.
+   282→
+   283→Verification must evaluate the actual evidence, signatures, policy requirements and cryptographic integrity.
+   284→
+   285→## 9. Evidence and attestation protocol
+   286→
+   287→Create a first-class evidence system.
+   288→
+   289→Evidence may include:
+   290→
+   291→- Build logs.
+   292→- Test reports.
+   293→- Security scan reports.
+   294→- SBOM documents.
+   295→- Signed release statements.
+   296→- Repository metadata.
+   297→- Commit references.
+   298→- Agent execution records.
+   299→- Human approvals.
+   300→- Deployment records.
+   301→- Policy decisions.
+   302→- Cryptographic proofs.
+   303→
+   304→Implement:
+   305→
+   306→- Evidence ingestion.
+   307→- Evidence classification.
+   308→- Evidence metadata.
+   309→- Evidence storage.
+   310→- Content hashing.
+   311→- Integrity verification.
+   312→- Evidence access permissions.
+   313→- Evidence retention policies.
+   314→- Evidence versioning.
+   315→- Evidence expiration.
+   316→- Evidence redaction.
+   317→- Evidence revocation.
+   318→- Evidence provenance.
+   319→- Evidence export.
+   320→- Evidence chain visualization.
+   321→
+   322→Support cryptographic signatures and verification using appropriate established algorithms and formats.
+   323→
+   324→Design a versioned attestation schema.
+   325→
+   326→Each attestation should contain sufficient information to establish:
+   327→
+   328→- Issuer.
+   329→- Subject.
+   330→- Claim.
+   331→- Evidence references.
+   332→- Creation timestamp.
+   333→- Schema version.
+   334→- Signature metadata.
+   335→- Verification requirements.
+   336→- Revocation or supersession status.
+   337→
+   338→Do not place confidential evidence or sensitive personal information directly on a public blockchain.
+   339→
+   340→Use off-chain storage for sensitive or large evidence artifacts and commit appropriate cryptographic digests or commitments on-chain.
+   341→
+   342→Implement a clear distinction between:
+   343→
+   344→- Evidence exists.
+   345→- Evidence is accessible.
+   346→- Evidence integrity is valid.
+   347→- Signature is valid.
+   348→- Attestation is authentic.
+   349→- Policy requirements are satisfied.
+   350→- Overall verification is complete.
+   351→
+   352→These states must never be conflated.
+   353→
+   354→## 10. AI-agent registry and accountability
+   355→
+   356→AI-agent accountability is a defining PROOFLOOM capability.
+   357→
+   358→Create a registry of AI agents operating within engineering environments.
+   359→
+   360→Implement:
+   361→
+   362→- Agent registration.
+   363→- Agent identity.
+   364→- Agent owner.
+   365→- Organization association.
+   366→- Agent type.
+   367→- Model and provider metadata.
+   368→- Tool permissions.
+   369→- Environment permissions.
+   370→- Task assignments.
+   371→- Agent version history.
+   372→- Agent execution history.
+   373→- Agent action records.
+   374→- Agent evidence.
+   375→- Agent policy compliance.
+   376→- Agent performance summaries.
+   377→- Agent trust history.
+   378→- Agent suspension.
+   379→- Agent revocation.
+   380→
+   381→Create a structured agent activity record.
+   382→
+   383→For each material agent action, record:
+   384→
+   385→- Agent identifier.
+   386→- Task identifier.
+   387→- Initiating organization.
+   388→- Execution timestamp.
+   389→- Action category.
+   390→- Tool or integration used.
+   391→- Input reference or protected input digest.
+   392→- Output reference or protected output digest.
+   393→- Authorization context.
+   394→- Policy evaluation.
+   395→- Result.
+   396→- Error state.
+   397→- Evidence references.
+   398→- Human approval status, where applicable.
+   399→
+   400→Do not log secrets, credentials, private prompts or sensitive payloads in plain text.
+   401→
+   402→Implement policy enforcement for agent permissions.
+   403→
+   404→Agents must not receive implicit access to every project, repository or organization resource.
+   405→
+   406→Implement:
+   407→
+   408→- Least-privilege authorization.
+   409→- Tool allowlists.
+   410→- Scoped credentials.
+   411→- Approval-required actions.
+   412→- Sensitive-operation restrictions.
+   413→- Agent suspension.
+   414→- Agent revocation.
+   415→- Execution budgets.
+   416→- Rate limits.
+   417→- Audit trails.
+   418→- Human override.
+   419→- Policy violation alerts.
+   420→
+   421→A trust score, if implemented, must be explainable and derived from disclosed evidence. Never represent an arbitrary score as an objective measure of intelligence or safety.
+   422→
+   423→## 11. Tasks and contribution coordination
+   424→
+   425→Build a system connecting engineering tasks to verified outcomes.
+   426→
+   427→Implement:
+   428→
+   429→- Task creation.
+   430→- Assignment to humans or agents.
+   431→- Task dependencies.
+   432→- Task status transitions.
+   433→- Acceptance criteria.
+   434→- Evidence requirements.
+   435→- Execution records.
+   436→- Review workflows.
+   437→- Human approvals.
+   438→- Rejection and revision.
+   439→- Contribution attribution.
+   440→- Completion attestations.
+   441→- Task history.
+   442→
+   443→A completed task must have an inspectable relationship to its evidence.
+   444→
+   445→Support collaborative work without confusing an agent's contribution with a human contributor's approval.
+   446→
+   447→## 12. Security and policy centre
+   448→
+   449→Create a centralized policy and security workspace.
+   450→
+   451→Implement:
+   452→
+   453→- Organization security settings.
+   454→- Project security settings.
+   455→- Agent policy configuration.
+   456→- Release policy configuration.
+   457→- Evidence requirements.
+   458→- Approval rules.
+   459→- Credential management.
+   460→- Webhook security.
+   461→- API security.
+   462→- Audit event review.
+   463→- Security alerts.
+   464→- Policy versioning.
+   465→- Policy testing.
+   466→- Policy simulation.
+   467→- Policy enforcement.
+   468→- Policy exceptions.
+   469→- Policy revocation.
+   470→
+   471→Provide clear explanations of why an operation passed or failed a policy.
+   472→
+   473→Policy exceptions must be time-bounded, permission-controlled and auditable.
+   474→
+   475→## 13. Public verification portal
+   476→
+   477→Create a public-facing verification experience.
+   478→
+   479→External users must be able to inspect a public release or attestation without requiring an account, subject to the publisher's visibility settings.
+   480→
+   481→Implement:
+   482→
+   483→- Public project verification pages.
+   484→- Release verification pages.
+   485→- Attestation verification.
+   486→- Evidence integrity checks.
+   487→- Signature validation.
+   488→- Verification history.
+   489→- Revocation status.
+   490→- Supersession history.
+   491→- Public API access.
+   492→- Shareable verification references.
+   493→- Downloadable verification reports.
+   494→- Machine-readable results.
+   495→
+   496→Clearly communicate the limits of verification.
+   497→
+   498→A valid cryptographic signature does not automatically prove that a software artifact is safe or correct.
+   499→
+   500→The portal must explain exactly what was verified and what remains unverified.
+   501→
+   502→## 14. Analytics and intelligence
+   503→
+   504→Build a meaningful analytical workspace.
+   505→
+   506→Include:
+   507→
+   508→- Release activity.
+   509→- Verification coverage.
+   510→- Evidence completeness.
+   511→- Project provenance health.
+   512→- Dependency risk.
+   513→- Vulnerability trends.
+   514→- Agent activity.
+   515→- Agent policy compliance.
+   516→- Task completion.
+   517→- Attestation status.
+   518→- Revocation history.
+   519→- Organization-level activity.
+   520→- Integration health.
+   521→
+   522→All charts must be based on real persisted data.
+   523→
+   524→Provide useful date filters, organization filters, project filters, export functionality and drill-down paths.
+   525→
+   526→Never use fabricated metrics to make the dashboard look populated.
+   527→
+   528→Provide carefully designed empty states when data does not exist.
+   529→
+   530→---
+   531→
+   532→# PART IV. GNOLAND PROTOCOL ENGINEERING
+   533→
+   534→## 15. Blockchain architecture
+   535→
+   536→Gno.land is the protocol foundation for PROOFLOOM's verifiable public commitments.
+   537→
+   538→The initial integration target is Onyx Testnet.
+   539→
+   540→Initial network configuration:
+   541→
+   542→- Network: Onyx Testnet.
+   543→- Chain ID: `onyx-1`.
+   544→- RPC: `https://rpc.onyx.testnets.gno.land:443`.
+   545→- Tooling: `gno`, `gnokey`, `gnodev`, subject to current compatibility and official documentation.
+   546→- Realm architecture: `gno.land/r/<publisher>/proofloom/` as a proposed namespace.
+   547→
+   548→Verify all network configuration, tooling versions, deployment procedures and current Gno APIs against official documentation before implementation.
+   549→
+   550→Do not assume that a previously documented command, package or network endpoint remains valid.
+   551→
+   552→## 16. Realm architecture
+   553→
+   554→Design a modular realm structure.
+   555→
+   556→Suggested organization:
+   557→
+   558→```text
+   559→gno.land/r/<publisher>/proofloom/
+   560→    core/
+   561→    identity/
+   562→    registry/
+   563→    releases/
+   564→    attestations/
+   565→    agents/
+   566→    policies/
+   567→    verify/
+   568→    reputation/
+   569→```
+   570→
+   571→The final realm boundaries must be justified by:
+   572→
+   573→- Security.
+   574→- State ownership.
+   575→- Upgrade strategy.
+   576→- Interrealm calls.
+   577→- Gas considerations.
+   578→- Public versus private data.
+   579→- Long-term maintainability.
+   580→
+   581→Implement clear ownership of state and authority.
+   582→
+   583→Do not expose mutable internal state through unsafe references.
+   584→
+   585→Validate caller identity and authorization at every relevant boundary.
+   586→
+   587→Follow Gno's actual execution and security model, including appropriate use of `cur.Previous().Address()` and interrealm authority validation where required.
+   588→
+   589→Do not assume that familiar Solidity or EVM patterns translate directly to Gno.
+   590→
+   591→Respect Gno realm constraints. Do not introduce unsupported operating-system access, networking, goroutines or other prohibited runtime behavior inside realms.
+   592→
+   593→## 17. On-chain responsibilities
+   594→
+   595→Use the chain for compact, verifiable commitments and public protocol state.
+   596→
+   597→Potential on-chain records include:
+   598→
+   599→- Organization or publisher references.
+   600→- Project identifiers.
+   601→- Release identifiers.
+   602→- Artifact digests.
+   603→- Attestation commitments.
+   604→- Issuer references.
+   605→- Verification references.
+   606→- Revocation status.
+   607→- Supersession relationships.
+   608→- Protocol version information.
+   609→- Registry events.
+   610→
+   611→Keep large artifacts and confidential evidence off-chain.
+   612→
+   613→Avoid unnecessary state growth.
+   614→
+   615→Design for deterministic identifiers, replay protection, authorization and predictable transaction costs.
+   616→
+   617→## 18. Wallet and transaction experience
+   618→
+   619→Implement a real wallet connection and transaction lifecycle.
+   620→
+   621→Investigate and integrate suitable Gno-compatible wallet infrastructure, including GnoConnect and Adena where supported.
+   622→
+   623→Implement:
+   624→
+   625→- Wallet discovery.
+   626→- Wallet connection.
+   627→- Wallet disconnection.
+   628→- Address display.
+   629→- Network detection.
+   630→- Network mismatch handling.
+   631→- Transaction construction.
+   632→- Transaction preview.
+   633→- User approval.
+   634→- Transaction submission.
+   635→- Confirmation tracking.
+   636→- Transaction failure handling.
+   637→- Retry and recovery.
+   638→- Transaction history.
+   639→- Explorer links when supported.
+   640→
+   641→The interface must clearly distinguish:
+   642→
+   643→- A transaction prepared.
+   644→- A transaction awaiting signature.
+   645→- A transaction submitted.
+   646→- A transaction included.
+   647→- A transaction confirmed.
+   648→- A transaction failed.
+   649→- A transaction whose status is unknown.
+   650→
+   651→Never mark a transaction successful before receiving authoritative confirmation.
+   652→
+   653→Implement idempotency and reconciliation for transactions that are submitted but whose response is interrupted.
+   654→
+   655→## 19. Protocol development and testing
+   656→
+   657→Create:
+   658→
+   659→- Realm unit tests.
+   660→- Authorization tests.
+   661→- Interrealm interaction tests.
+   662→- State transition tests.
+   663→- Replay and duplicate submission tests.
+   664→- Revocation tests.
+   665→- Malformed input tests.
+   666→- Boundary tests.
+   667→- Gas and execution-cost analysis where supported.
+   668→- Deployment tests.
+   669→- Integration tests.
+   670→- Testnet transaction verification.
+   671→
+   672→Include documented deployment scripts and repeatable release procedures.
+   673→
+   674→Never deploy unreviewed protocol changes to mainnet.
+   675→
+   676→Create a mainnet readiness checklist and explicit approval gate.
+   677→
+   678→## 20. External Gno integration
+   679→
+   680→Investigate Gno ecosystem tooling and integrations.
+   681→
+   682→Evaluate GnoConnect, Adena, gnomcp and relevant developer tooling against current documentation and maturity.
+   683→
+   684→Do not make an experimental dependency a critical production dependency without a fallback.
+   685→
+   686→Provide integration adapters and capability detection.
+   687→
+   688→---
+   689→
+   690→# PART V. APPLICATION ARCHITECTURE
+   691→
+   692→## 21. Technology stack
+   693→
+   694→Use a modern, maintainable architecture.
+   695→
+   696→Recommended baseline:
+   697→
+   698→**Frontend**
+   699→- Next.js.
+   700→- React.
+   701→- TypeScript.
+   702→- Server-side rendering for public, indexable and data-sensitive initial views.
+   703→- Client-side rendering for interactive workspaces.
+   704→- A well-structured component system.
+   705→- Accessible interaction primitives.
+   706→
+   707→**Backend**
+   708→- TypeScript services or another justified production-grade backend.
+   709→- Versioned REST APIs or carefully scoped RPC interfaces.
+   710→- Background workers.
+   711→- Webhook processing.
+   712→- Integration adapters.
+   713→- Authentication and authorization services.
+   714→
+   715→**Data**
+   716→- PostgreSQL as the primary relational database.
+   717→- Redis for caching, rate limiting and queues where appropriate.
+   718→- Object storage for evidence and large artifacts.
+   719→- Durable event and audit records.
+   720→
+   721→**Infrastructure**
+   722→- Docker.
+   723→- Environment-specific configuration.
+   724→- CI/CD.
+   725→- Database migrations.
+   726→- Centralized observability.
+   727→- Backup and recovery.
+   728→- Infrastructure-as-code where practical.
+   729→
+   730→**Developer tooling**
+   731→- SDK.
+   732→- CLI.
+   733→- API documentation.
+   734→- Integration examples.
+   735→- CI/CD adapters.
+   736→- Webhook testing tools.
+   737→
+   738→The exact stack may be adjusted after repository inspection, but every change must be justified in an architecture decision record.
+   739→
+   740→Do not introduce unnecessary technologies for novelty.
+   741→
+   742→## 22. Core architecture principles
+   743→
+   744→Design the system around clearly separated domains:
+   745→
+   746→1. Identity and access.
+   747→2. Organizations.
+   748→3. Projects.
+   749→4. Components.
+   750→5. Releases.
+   751→6. Evidence.
+   752→7. Attestations.
+   753→8. Agents.
+   754→9. Tasks.
+   755→10. Policies.
+   756→11. Blockchain integration.
+   757→12. Verification.
+   758→13. Analytics.
+   759→14. Notifications.
+   760→15. Billing and entitlements, where applicable.
+   761→16. Administrative operations.
+   762→
+   763→Use explicit contracts between domains.
+   764→
+   765→Implement:
+   766→
+   767→- Schema validation.
+   768→- Versioned API contracts.
+   769→- Structured errors.
+   770→- Request correlation IDs.
+   771→- Idempotency keys.
+   772→- Audit event generation.
+   773→- Transactional database operations.
+   774→- Retry policies.
+   775→- Dead-letter handling.
+   776→- Outbox or equivalent reliable event publication where needed.
+   777→- Background job observability.
+   778→- Integration health monitoring.
+   779→
+   780→Do not let frontend components directly become the source of truth for business rules.
+   781→
+   782→## 23. Data model
+   783→
+   784→Design a coherent relational model.
+   785→
+   786→At minimum, evaluate entities for:
+   787→
+   788→- Users.
+   789→- Sessions.
+   790→- Organizations.
+   791→- Memberships.
+   792→- Roles.
+   793→- Permissions.
+   794→- Invitations.
+   795→- Projects.
+   796→- Repositories.
+   797→- Components.
+   798→- Dependencies.
+   799→- Releases.
+   800→- Build records.
+   801→- Artifacts.
+   802→- Evidence.
+   803→- Attestations.
+   804→- Signatures.
+   805→- Verification records.
+   806→- Agents.
+   807→- Agent versions.
+   808→- Agent executions.
+   809→- Tasks.
+   810→- Approvals.
+   811→- Policies.
+   812→- Policy evaluations.
+   813→- Integrations.
+   814→- Webhooks.
+   815→- API credentials.
+   816→- Blockchain transactions.
+   817→- Chain events.
+   818→- Notifications.
+   819→- Audit events.
+   820→- Usage records.
+   821→
+   822→Define:
+   823→
+   824→- Primary keys.
+   825→- Foreign keys.
+   826→- Tenant boundaries.
+   827→- Uniqueness constraints.
+   828→- Indexes.
+   829→- Retention policies.
+   830→- Soft deletion rules.
+   831→- Data ownership.
+   832→- Versioning.
+   833→- Migration strategy.
+   834→
+   835→Use database constraints to enforce important integrity rules.
+   836→
+   837→Do not rely solely on application-level validation.
+   838→
+   839→---
+   840→
+   841→# PART VI. THE ATELIER DESIGN SYSTEM
+   842→
+   843→# 24. Design mandate
+   844→
+   845→Create an original, recognizable product design language called:
+   846→
+   847→# THE ATELIER
+   848→
+   849→**Design principle:** The architecture of trust, made visible.
+   850→
+   851→The design must be bespoke to PROOFLOOM.
+   852→
+   853→Do not deliver a generic AI dashboard, a default shadcn interface, a generic enterprise template or a lightly recolored component library.
+   854→
+   855→The product should feel like a sophisticated engineering instrument: part editorial publication, part technical observatory, part precision control environment.
+   856→
+   857→Its visual identity must be recognizable even when the PROOFLOOM logo is removed.
+   858→
+   859→Build the design system as actual reusable code, tokens, components, interaction rules and documentation.
+   860→
+   861→## 25. Three visual environments
+   862→
+   863→The product has three coordinated environments.
+   864→
+   865→### A. ATELIER: Editorial
+   866→
+   867→Purpose:
+   868→- Marketing.
+   869→- Product storytelling.
+   870→- Documentation.
+   871→- Public project pages.
+   872→- Educational experiences.
+   873→
+   874→Characteristics:
+   875→- Spacious composition.
+   876→- Warm parchment surfaces.
+   877→- Elegant typography.
+   878→- Technical illustrations.
+   879→- Editorial grids.
+   880→- Carefully controlled negative space.
+   881→- Large, distinctive headings.
+   882→- Detailed evidence storytelling.
+   883→
+   884→### B. OBSERVATORY: Analytical
+   885→
+   886→Purpose:
+   887→- Project intelligence.
+   888→- Release analysis.
+   889→- Verification.
+   890→- Provenance graphs.
+   891→- Dependency relationships.
+   892→- Agent performance.
+   893→
+   894→Characteristics:
+   895→- Dark analytical surfaces.
+   896→- Precision grids.
+   897→- Structured information.
+   898→- Technical typography.
+   899→- Dense but readable data.
+   900→- Graph-based visualization.
+   901→- Clear evidence hierarchy.
+   902→- Restrained use of color.
+   903→
+   904→### C. CONTROL ROOM: Operational
+   905→
+   906→Purpose:
+   907→- Security operations.
+   908→- Policy management.
+   909→- Agent supervision.
+   910→- Release approvals.
+   911→- Integration health.
+   912→- Administrative workflows.
+   913→
+   914→Characteristics:
+   915→- High information density.
+   916→- Strong status hierarchy.
+   917→- Clear operational controls.
+   918→- Explicit destructive-action boundaries.
+   919→- Persistent system status.
+   920→- High-contrast actionable elements.
+   921→- Precise feedback and recovery states.
+   922→
+   923→These environments must share one design language while retaining distinct information architecture.
+   924→
+   925→## 26. Brand identity and emblem
+   926→
+   927→Create an original PROOFLOOM emblem.
+   928→
+   929→Concept:
+   930→
+   931→Three interlocking paths converge into a central verification point.
+   932→
+   933→The paths represent:
+   934→
+   935→- Source.
+   936→- Execution.
+   937→- Evidence.
+   938→
+   939→The convergence represents independently verifiable trust.
+   940→
+   941→Open endpoints represent extensibility and external verification.
+   942→
+   943→Develop:
+   944→
+   945→- Primary logo.
+   946→- Horizontal logo.
+   947→- Compact mark.
+   948→- Emblem-only variant.
+   949→- Monochrome variant.
+   950→- Light-background variant.
+   951→- Dark-background variant.
+   952→- Favicon.
+   953→- App icon.
+   954→- Social avatar.
+   955→- Product loading mark.
+   956→- Animated emblem.
+   957→
+   958→Produce vector assets, preferably SVG, and document their correct usage.
+   959→
+   960→The emblem must remain legible at small sizes.
+   961→
+   962→Do not use a generic shield, checkmark, padlock or circuit-brain icon as the main brand mark.
+   963→
+   964→## 27. Colour system
+   965→
+   966→Use the following foundation palette.
+   967→
+   968→| Token | Colour | Hex |
+   969→|---|---|---|
+   970→| Obsidian | Deep background | #090D11 |
+   971→| Carbon | Primary dark surface | #151D24 |
+   972→| Iron | Elevated dark surface | #25333B |
+   973→| Parchment | Warm light surface | #F2EFE7 |
+   974→| Mist | Secondary light text | #B7C1C2 |
+   975→| Verdigris | Primary accent | #55D8C2 |
+   976→| Copper | Secondary accent | #D6A36C |
+   977→| Cobalt | Informational accent | #7599D9 |
+   978→
+   979→Create semantic tokens for:
+   980→
+   981→- Primary.
+   982→- Secondary.
+   983→- Accent.
+   984→- Background.
+   985→- Surface.
+   986→- Elevated surface.
+   987→- Border.
+   988→- Divider.
+   989→- Text primary.
+   990→- Text secondary.
+   991→- Muted text.
+   992→- Focus.
+   993→- Selection.
+   994→- Hover.
+   995→- Active.
+   996→- Disabled.
+   997→- Verified.
+   998→- Pending.
+   999→- Informational.
+  1000→- Rejected.
+  1001→- Revoked.
+  1002→- Unknown.
+  1003→- Warning.
+  1004→- Critical.
+  1005→
+  1006→Semantic status colors must be distinguishable without relying on color alone.
+  1007→
+  1008→Do not use verdigris to imply successful verification unless verification has genuinely completed.
+  1009→
+  1010→Create light and dark themes, with deliberate contrast and surface adjustments.
+  1011→
+  1012→## 28. Typography
+  1013→
+  1014→Use a distinctive typographic system.
+  1015→
+  1016→Preferred roles:
+  1017→
+  1018→- Instrument Serif: editorial display and selected storytelling moments.
+  1019→- Geist Sans or Manrope: interface typography.
+  1020→- IBM Plex Mono: technical identifiers, hashes, timestamps, code and metadata.
+  1021→
+  1022→Define:
+  1023→
+  1024→- Display sizes.
+  1025→- Heading hierarchy.
+  1026→- Body sizes.
+  1027→- Caption sizes.
+  1028→- Labels.
+  1029→- Monospace sizes.
+  1030→- Line heights.
+  1031→- Letter spacing.
+  1032→- Font weights.
+  1033→- Responsive scaling.
+  1034→- Text wrapping rules.
+  1035→- Long identifier handling.
+  1036→
+  1037→Do not use decorative serif typography for dense operational interfaces.
+  1038→
+  1039→Do not sacrifice readability to achieve an aesthetic effect.
+  1040→
+  1041→## 29. Layout and spatial system
+  1042→
+  1043→Create a documented layout system.
+  1044→
+  1045→Include:
+  1046→
+  1047→- 4-point spacing foundation.
+  1048→- Responsive grid.
+  1049→- Content width constraints.
+  1050→- Sidebar dimensions.
+  1051→- Header dimensions.
+  1052→- Table density options.
+  1053→- Card and panel spacing.
+  1054→- Mobile gutters.
+  1055→- Modal widths.
+  1056→- Drawer widths.
+  1057→- Dashboard layout rules.
+  1058→- Responsive breakpoints.
+  1059→
+  1060→The design should have a strong visual rhythm.
+  1061→
+  1062→Use asymmetry where it improves storytelling, not randomly.
+  1063→
+  1064→Avoid excessive rounded cards and endless nested containers.
+  1065→
+  1066→## 30. Signature component vocabulary
+  1067→
+  1068→Develop original, reusable components.
+  1069→
+  1070→At minimum:
+  1071→
+  1072→**LoomPanel**  
+  1073→A structured information surface with a clear hierarchy and carefully controlled density.
+  1074→
+  1075→**EvidenceThread**  
+  1076→A visual connection between a claim and its supporting evidence.
+  1077→
+  1078→**LoomNode**  
+  1079→A graph node representing a project, artifact, release, agent or attestation.
+  1080→
+  1081→**ProofSeal**  
+  1082→A visual representation of an actual verification state.
+  1083→
+  1084→**TraceLine**  
+  1085→A visual timeline or connection showing provenance.
+  1086→
+  1087→**ArtifactTile**  
+  1088→A compact representation of a software artifact.
+  1089→
+  1090→**AgentSigil**  
+  1091→A distinct identity representation for an AI agent.
+  1092→
+  1093→**ChainReceipt**  
+  1094→A blockchain transaction and confirmation component.
+  1095→
+  1096→**TrustMeter**  
+  1097→An explainable evidence completeness or policy compliance indicator.
+  1098→
+  1099→**ProvenanceRail**  
+  1100→A sequential release and evidence history.
+  1101→
+  1102→**EvidenceDrawer**  
+  1103→A detailed evidence inspection surface.
+  1104→
+  1105→**AttestationStamp**  
+  1106→A signed claim with issuer, status and verification metadata.
+  1107→
+  1108→**PolicyVerdict**  
+  1109→A transparent explanation of policy evaluation.
+  1110→
+  1111→**ReleaseCard**  
+  1112→A structured release summary with source, version and verification state.
+  1113→
+  1114→**DependencyConstellation**  
+  1115→A visualization of dependency relationships.
+  1116→
+  1117→**ActivityTrace**  
+  1118→A chronological record of meaningful activity.
+  1119→
+  1120→**IntegrationPulse**  
+  1121→An integration status indicator showing connection and health.
+  1122→
+  1123→**CommandSurface**  
+  1124→A consistent operational command and action area.
+  1125→
+  1126→Each component must have:
+  1127→
+  1128→- Defined props.
+  1129→- Accessibility behavior.
+  1130→- Keyboard support.
+  1131→- Responsive behavior.
+  1132→- Loading state.
+  1133→- Empty state, where relevant.
+  1134→- Error state.
+  1135→- Disabled state.
+  1136→- Hover and focus behavior.
+  1137→- Documentation.
+  1138→- Tests.
+  1139→
+  1140→Avoid components that only look functional.
+  1141→
+  1142→## 31. Signature experience: PROOF ATLAS
+  1143→
+  1144→Build PROOF ATLAS as the product's defining visual experience.
+  1145→
+  1146→It is a data-driven visualization of software provenance.
+  1147→
+  1148→It should show the relationship between:
+  1149→
+  1150→- Projects.
+  1151→- Repositories.
+  1152→- Commits.
+  1153→- Components.
+  1154→- Builds.
+  1155→- Artifacts.
+  1156→- Releases.
+  1157→- Attestations.
+  1158→- Evidence.
+  1159→- Agents.
+  1160→- Verification events.
+  1161→
+  1162→A user should be able to move through the evidence graph and inspect relationships.
+  1163→
+  1164→Implement:
+  1165→
+  1166→- Node selection.
+  1167→- Node details.
+  1168→- Relationship inspection.
+  1169→- Filtering.
+  1170→- Search.
+  1171→- Zoom.
+  1172→- Pan.
+  1173→- Focus mode.
+  1174→- Time navigation.
+  1175→- Evidence highlighting.
+  1176→- Verification-state highlighting.
+  1177→- Dependency exploration.
+  1178→- Release comparison.
+  1179→- Accessible list and table alternative.
+  1180→
+  1181→Use real data.
+  1182→
+  1183→Use a suitable 3D or graph rendering library only after evaluating performance, accessibility and maintenance.
+  1184→
+  1185→Provide a high-quality 2D fallback.
+  1186→
+  1187→The graph must remain usable on mobile devices and lower-powered hardware.
+  1188→
+  1189→Do not create decorative 3D that has no relationship to actual product data.
+  1190→
+  1191→## 32. Motion and interaction language
+  1192→
+  1193→Create a coherent motion system.
+  1194→
+  1195→Motion should communicate:
+  1196→
+  1197→- State change.
+  1198→- Progress.
+  1199→- Relationships.
+  1200→- Focus.
+  1201→- Completion.
+  1202→- Error.
+  1203→- Navigation.
+  1204→- System activity.
+  1205→
+  1206→Define motion tokens for:
+  1207→
+  1208→- Micro-interactions.
+  1209→- Hover transitions.
+  1210→- Press feedback.
+  1211→- Drawer transitions.
+  1212→- Modal transitions.
+  1213→- Page transitions.
+  1214→- Graph transitions.
+  1215→- Loading animations.
+  1216→- Status changes.
+  1217→- Major visual sequences.
+  1218→
+  1219→Use restrained durations and appropriate easing.
+  1220→
+  1221→Respect `prefers-reduced-motion`.
+  1222→
+  1223→Avoid continuous animation that distracts from operational tasks.
+  1224→
+  1225→Create signature interactions for:
+  1226→
+  1227→- ProofSeal verification completion.
+  1228→- EvidenceThread expansion.
+  1229→- LoomNode selection.
+  1230→- ProvenanceRail traversal.
+  1231→- AgentSigil activity.
+  1232→- ChainReceipt confirmation.
+  1233→- Proof Atlas navigation.
+  1234→
+  1235→All animations must degrade gracefully.
+  1236→
+  1237→## 33. Micro and macro interactions
+  1238→
+  1239→Implement meaningful interaction feedback.
+  1240→
+  1241→Examples:
+  1242→
+  1243→- Buttons acknowledge press and loading states.
+  1244→- Copy controls confirm successful copying.
+  1245→- Tables provide sorting and filtering feedback.
+  1246→- Forms explain validation errors.
+  1247→- Uploads show progress and retry capability.
+  1248→- Wallet actions communicate signing and confirmation stages.
+  1249→- Graph selection reveals relevant evidence.
+  1250→- Navigation maintains user context.
+  1251→- Dangerous actions require explicit confirmation.
+  1252→- Permission failures explain the missing permission.
+  1253→- Background operations expose their current state.
+  1254→
+  1255→Do not use decorative animation to hide slow or broken functionality.
+  1256→
+  1257→## 34. Complete screen design
+  1258→
+  1259→Design and implement every relevant state for the following surfaces.
+  1260→
+  1261→### Public experience
+  1262→- Homepage.
+  1263→- Product overview.
+  1264→- Platform capabilities.
+  1265→- Architecture.
+  1266→- Protocol overview.
+  1267→- Documentation.
+  1268→- Developer portal.
+  1269→- Public project pages.
+  1270→- Public release pages.
+  1271→- Verification laboratory.
+  1272→- Pricing and plans.
+  1273→- Security overview.
+  1274→- About.
+  1275→- Contact.
+  1276→- Legal pages.
+  1277→
+  1278→### Authenticated experience
+  1279→- Onboarding.
+  1280→- Workspace overview.
+  1281→- Organization settings.
+  1282→- Project workspace.
+  1283→- Project registry.
+  1284→- Component registry.
+  1285→- Release Foundry.
+  1286→- Evidence Library.
+  1287→- Attestation management.
+  1288→- Agent Command.
+  1289→- Task coordination.
+  1290→- Security and policy centre.
+  1291→- Verification Laboratory.
+  1292→- Proof Atlas.
+  1293→- Analytics.
+  1294→- Integrations.
+  1295→- API keys.
+  1296→- Notifications.
+  1297→- Billing and entitlements, if activated.
+  1298→- User settings.
+  1299→
+  1300→### Administrative experience
+  1301→- Platform overview.
+  1302→- Organization administration.
+  1303→- User administration.
+  1304→- Integration health.
+  1305→- Queue monitoring.
+  1306→- System events.
+  1307→- Audit history.
+  1308→- Abuse and security review.
+  1309→- Operational controls.
+  1310→
+  1311→## 35. Design states and boundaries
+  1312→
+  1313→Every screen must account for:
+  1314→
+  1315→- Initial loading.
+  1316→- Background refresh.
+  1317→- Empty data.
+  1318→- Partial data.
+  1319→- Successful completion.
+  1320→- Validation failure.
+  1321→- Network failure.
+  1322→- Server failure.
+  1323→- Permission denial.
+  1324→- Expired session.
+  1325→- Rate limiting.
+  1326→- External service failure.
+  1327→- Transaction pending.
+  1328→- Transaction rejected.
+  1329→- Transaction confirmation timeout.
+  1330→- Missing evidence.
+  1331→- Invalid evidence.
+  1332→- Revoked attestation.
+  1333→- Unavailable resource.
+  1334→- Unexpected application error.
+  1335→
+  1336→Implement:
+  1337→
+  1338→- Page-level error boundaries.
+  1339→- Component-level error boundaries where appropriate.
+  1340→- Route-level loading states.
+  1341→- Skeletons.
+  1342→- Empty-state illustrations or visual treatments.
+  1343→- Retry controls.
+  1344→- Recovery instructions.
+  1345→- Error codes.
+  1346→- User-readable messages.
+  1347→- Diagnostic identifiers.
+  1348→
+  1349→Never expose stack traces, secrets or internal implementation details to end users.
+  1350→
+  1351→## 36. Accessibility
+  1352→
+  1353→Target WCAG 2.2 AA where practical.
+  1354→
+  1355→Implement:
+  1356→
+  1357→- Semantic HTML.
+  1358→- Keyboard navigation.
+  1359→- Visible focus states.
+  1360→- Accessible forms.
+  1361→- Screen-reader labels.
+  1362→- Proper heading hierarchy.
+  1363→- Contrast checks.
+  1364→- Accessible tables.
+  1365→- Reduced motion.
+  1366→- Accessible dialogs.
+  1367→- Accessible status announcements.
+  1368→- Alternative representations of complex visualizations.
+  1369→
+  1370→Do not make essential information available only through color, hover or 3D interaction.
+  1371→
+  1372→## 37. Responsive design
+  1373→
+  1374→Create deliberate desktop, tablet and mobile experiences.
+  1375→
+  1376→Do not merely shrink the desktop interface.
+  1377→
+  1378→Desktop should support complex analysis and multi-panel work.
+  1379→
+  1380→Tablet should retain meaningful analytical capability.
+  1381→
+  1382→Mobile should prioritize:
+  1383→
+  1384→- Essential status.
+  1385→- Evidence inspection.
+  1386→- Release summaries.
+  1387→- Notifications.
+  1388→- Approval workflows.
+  1389→- Wallet interactions.
+  1390→- Security alerts.
+  1391→
+  1392→The application must remain usable on narrow screens.
+  1393→
+  1394→---
+  1395→
+  1396→# PART VII. SSR, CSR AND APPLICATION PERFORMANCE
+  1397→
+  1398→## 38. Rendering architecture
+  1399→
+  1400→Use server-side rendering for:
+  1401→
+  1402→- Public product pages.
+  1403→- Documentation.
+  1404→- Public project pages.
+  1405→- Public verification pages where appropriate.
+  1406→- Initial authenticated page data when it improves performance and security.
+  1407→
+  1408→Use client-side rendering for:
+  1409→
+  1410→- Interactive graphs.
+  1411→- Filters.
+  1412→- Dynamic tables.
+  1413→- Live activity.
+  1414→- Wallet interactions.
+  1415→- Complex workspace tools.
+  1416→- Interactive configuration.
+  1417→
+  1418→Use streaming and progressive loading where appropriate.
+  1419→
+  1420→Do not expose server-only secrets or sensitive tenant data through serialized client props.
+  1421→
+  1422→Define a clear server/client boundary.
+  1423→
+  1424→## 39. Performance requirements
+  1425→
+  1426→Implement:
+  1427→
+  1428→- Route-level code splitting.
+  1429→- Lazy loading.
+  1430→- Image optimization.
+  1431→- Font optimization.
+  1432→- Query optimization.
+  1433→- Pagination.
+  1434→- Virtualized large tables where needed.
+  1435→- Graph rendering performance controls.
+  1436→- Caching.
+  1437→- Background processing.
+  1438→- API response limits.
+  1439→- Database indexing.
+  1440→- Bundle analysis.
+  1441→
+  1442→Measure real performance.
+  1443→
+  1444→Establish performance budgets and document exceptions.
+  1445→
+  1446→Do not optimize by removing useful functionality.
+  1447→
+  1448→---
+  1449→
+  1450→# PART VIII. SECURITY, PRIVACY AND TRUST
+  1451→
+  1452→## 40. Security architecture
+  1453→
+  1454→Implement a security-first design.
+  1455→
+  1456→Include:
+  1457→
+  1458→- Secure authentication.
+  1459→- Strong authorization.
+  1460→- Tenant isolation.
+  1461→- Input validation.
+  1462→- Output encoding.
+  1463→- CSRF protection where applicable.
+  1464→- XSS protection.
+  1465→- SQL injection prevention.
+  1466→- SSRF protection.
+  1467→- Secure file handling.
+  1468→- Upload size restrictions.
+  1469→- File type validation.
+  1470→- Malware scanning integration boundary.
+  1471→- Secret management.
+  1472→- Rate limiting.
+  1473→- Abuse prevention.
+  1474→- Webhook signature verification.
+  1475→- API credential rotation.
+  1476→- Secure cookie settings.
+  1477→- Dependency scanning.
+  1478→- Audit logging.
+  1479→- Encryption in transit.
+  1480→- Encryption at rest where supported.
+  1481→
+  1482→Protect against:
+  1483→
+  1484→- Cross-tenant data exposure.
+  1485→- Privilege escalation.
+  1486→- Agent permission abuse.
+  1487→- Replay attacks.
+  1488→- Forged attestations.
+  1489→- Malicious evidence uploads.
+  1490→- Duplicate transactions.
+  1491→- Webhook replay.
+  1492→- Dependency confusion.
+  1493→- Compromised CI/CD credentials.
+  1494→- Malicious integration callbacks.
+  1495→- Unauthorized release revocation.
+  1496→
+  1497→## 41. Privacy and data governance
+  1498→
+  1499→Create explicit data classification.
+  1500→
+  1501→Separate:
+  1502→
+  1503→- Public protocol data.
+  1504→- Organization-confidential data.
+  1505→- User personal data.
+  1506→- Credentials and secrets.
+  1507→- Private evidence.
+  1508→- Operational telemetry.
+  1509→
+  1510→Implement retention, deletion, export and access controls.
+  1511→
+  1512→Public blockchain commitments must not reveal confidential content.
+  1513→
+  1514→Document the privacy implications of immutable public records.
+  1515→
+  1516→---
+  1517→
+  1518→# PART IX. INTEGRATIONS AND DEVELOPER ECOSYSTEM
+  1519→
+  1520→## 42. Integration framework
+  1521→
+  1522→Create a reusable integration architecture.
+  1523→
+  1524→Each integration should support:
+  1525→
+  1526→- Connection setup.
+  1527→- Authentication.
+  1528→- Permission scopes.
+  1529→- Connection validation.
+  1530→- Health checks.
+  1531→- Event ingestion.
+  1532→- Webhook validation.
+  1533→- Retry.
+  1534→- Failure handling.
+  1535→- Disconnection.
+  1536→- Credential revocation.
+  1537→- Audit history.
+  1538→
+  1539→Prioritize:
+  1540→
+  1541→- GitHub.
+  1542→- GitHub Actions.
+  1543→- CI/CD pipelines.
+  1544→- Container registries.
+  1545→- SBOM tools.
+  1546→- Security scanners.
+  1547→- Developer APIs.
+  1548→- Gno wallet infrastructure.
+  1549→
+  1550→Build adapters so additional integrations can be added without rewriting the core platform.
+  1551→
+  1552→## 43. API and SDK
+  1553→
+  1554→Build a versioned public API.
+  1555→
+  1556→Include endpoints for:
+  1557→
+  1558→- Organizations.
+  1559→- Projects.
+  1560→- Components.
+  1561→- Releases.
+  1562→- Evidence.
+  1563→- Attestations.
+  1564→- Agents.
+  1565→- Tasks.
+  1566→- Policies.
+  1567→- Verification.
+  1568→- Public records.
+  1569→
+  1570→Provide:
+  1571→
+  1572→- OpenAPI documentation.
+  1573→- Authentication examples.
+  1574→- Pagination.
+  1575→- Filtering.
+  1576→- Structured errors.
+  1577→- Rate limits.
+  1578→- Idempotency.
+  1579→- Webhooks.
+  1580→- API versioning.
+  1581→- SDK architecture.
+  1582→
+  1583→Build a developer-friendly SDK and CLI.
+  1584→
+  1585→A developer should be able to:
+  1586→
+  1587→1. Authenticate.
+  1588→2. Register a project.
+  1589→3. Connect a repository.
+  1590→4. Submit build evidence.
+  1591→5. Create a release.
+  1592→6. Generate an attestation.
+  1593→7. Publish an on-chain commitment.
+  1594→8. Verify the release.
+  1595→9. Retrieve the verification report.
+  1596→
+  1597→Provide complete examples and executable integration tests.
+  1598→
+  1599→---
+  1600→
+  1601→# PART X. RELIABILITY AND OPERATIONS
+  1602→
+  1603→## 44. Background jobs and event processing
+  1604→
+  1605→Implement reliable processing for:
+  1606→
+  1607→- Repository synchronization.
+  1608→- Webhook ingestion.
+  1609→- Evidence processing.
+  1610→- Artifact hashing.
+  1611→- Attestation generation.
+  1612→- Verification.
+  1613→- Blockchain transaction submission.
+  1614→- Transaction reconciliation.
+  1615→- Notifications.
+  1616→- Analytics aggregation.
+  1617→- Scheduled retention operations.
+  1618→
+  1619→Every job must have:
+  1620→
+  1621→- A unique identity.
+  1622→- Status.
+  1623→- Retry policy.
+  1624→- Failure reason.
+  1625→- Execution history.
+  1626→- Idempotency behavior.
+  1627→- Dead-letter or manual recovery path where appropriate.
+  1628→
+  1629→Do not silently discard failed jobs.
+  1630→
+  1631→## 45. Observability
+  1632→
+  1633→Implement:
+  1634→
+  1635→- Structured logs.
+  1636→- Metrics.
+  1637→- Distributed tracing where practical.
+  1638→- Error monitoring.
+  1639→- Queue health.
+  1640→- API latency.
+  1641→- Database performance.
+  1642→- Integration status.
+  1643→- Blockchain submission status.
+  1644→- Transaction reconciliation status.
+  1645→- Security events.
+  1646→
+  1647→Use correlation IDs to connect frontend actions, API requests, jobs and blockchain transactions.
+  1648→
+  1649→Create an operational dashboard that reflects real system state.
+  1650→
+  1651→## 46. Backup and disaster recovery
+  1652→
+  1653→Document and implement:
+  1654→
+  1655→- Database backups.
+  1656→- Object storage recovery.
+  1657→- Backup verification.
+  1658→- Recovery procedures.
+  1659→- Migration rollback strategy.
+  1660→- Service restoration.
+  1661→- Incident escalation.
+  1662→- Data integrity checks.
+  1663→
+  1664→A backup that has never been tested is not a proven recovery mechanism.
+  1665→
+  1666→---
+  1667→
+  1668→# PART XI. TESTING AND QUALITY ASSURANCE
+  1669→
+  1670→## 47. Testing strategy
+  1671→
+  1672→Build a layered testing system.
+  1673→
+  1674→**Unit tests**
+  1675→- Business logic.
+  1676→- Validation.
+  1677→- Authorization.
+  1678→- State transitions.
+  1679→- Cryptographic helpers.
+  1680→- Domain rules.
+  1681→
+  1682→**Integration tests**
+  1683→- Database.
+  1684→- APIs.
+  1685→- Queues.
+  1686→- Storage.
+  1687→- Webhooks.
+  1688→- Wallet adapters.
+  1689→- Blockchain adapters.
+  1690→
+  1691→**End-to-end tests**
+  1692→- Registration.
+  1693→- Organization creation.
+  1694→- Project creation.
+  1695→- Repository connection.
+  1696→- Evidence submission.
+  1697→- Release publication.
+  1698→- Attestation creation.
+  1699→- Verification.
+  1700→- Agent registration.
+  1701→- Agent execution record.
+  1702→- Policy enforcement.
+  1703→- Revocation.
+  1704→- Public verification.
+  1705→
+  1706→**Security tests**
+  1707→- Authentication bypass.
+  1708→- Authorization bypass.
+  1709→- Tenant isolation.
+  1710→- Injection.
+  1711→- Replay.
+  1712→- Malicious uploads.
+  1713→- Webhook forgery.
+  1714→- Credential leakage.
+  1715→- Transaction duplication.
+  1716→
+  1717→**Visual tests**
+  1718→- Responsive layouts.
+  1719→- Component states.
+  1720→- Theme variants.
+  1721→- Accessibility.
+  1722→- Visual regressions.
+  1723→
+  1724→## 48. Edge-case programme
+  1725→
+  1726→Create a minimum of 250 documented edge cases and mitigations.
+  1727→
+  1728→Do not satisfy the requirement with superficial one-line entries.
+  1729→
+  1730→Cover at least these areas:
+  1731→
+  1732→1. Identity and account recovery.
+  1733→2. Organization membership.
+  1734→3. Permissions and authorization.
+  1735→4. Tenant isolation.
+  1736→5. Repository connection.
+  1737→6. Repository synchronization.
+  1738→7. Commit ingestion.
+  1739→8. Dependency metadata.
+  1740→9. Release creation.
+  1741→10. Build failures.
+  1742→11. Artifact corruption.
+  1743→12. Evidence ingestion.
+  1744→13. Evidence expiration.
+  1745→14. Evidence redaction.
+  1746→15. Attestation signing.
+  1747→16. Signature verification.
+  1748→17. Revocation.
+  1749→18. Supersession.
+  1750→19. Agent identity.
+  1751→20. Agent permissions.
+  1752→21. Agent execution failures.
+  1753→22. Agent policy violations.
+  1754→23. Task assignment.
+  1755→24. Approval workflows.
+  1756→25. Blockchain transaction submission.
+  1757→26. Wallet disconnection.
+  1758→27. Network mismatch.
+  1759→28. Transaction timeout.
+  1760→29. Duplicate transaction submission.
+  1761→30. Chain reorganization or unexpected chain-state behavior where applicable.
+  1762→31. API rate limiting.
+  1763→32. Webhook replay.
+  1764→33. Queue failure.
+  1765→34. Database failure.
+  1766→35. Object storage failure.
+  1767→36. Integration outages.
+  1768→37. Privacy and data retention.
+  1769→38. Public verification.
+  1770→39. Analytics integrity.
+  1771→40. Deployment and recovery.
+  1772→
+  1773→For every edge case document:
+  1774→
+  1775→- Trigger.
+  1776→- Preconditions.
+  1777→- Expected behavior.
+  1778→- Failure behavior.
+  1779→- Security implications.
+  1780→- User-facing response.
+  1781→- Recovery procedure.
+  1782→- Tests required.
+  1783→
+  1784→Add further cases based on the actual implementation.
+  1785→
+  1786→---
+  1787→
+  1788→# PART XII. IMPLEMENTATION EXECUTION PLAN
+  1789→
+  1790→## 49. Phase 0: Repository and environment reconnaissance
+  1791→
+  1792→Before writing significant code:
+  1793→
+  1794→1. Inspect the entire repository.
+  1795→2. Identify the framework and package manager.
+  1796→3. Inspect existing routes and components.
+  1797→4. Inspect backend services.
+  1798→5. Inspect the database schema.
+  1799→6. Inspect authentication.
+  1800→7. Inspect existing integrations.
+  1801→8. Inspect existing deployment configuration.
+  1802→9. Inspect current tests.
+  1803→10. Identify unfinished features.
+  1804→11. Identify security issues.
+  1805→12. Identify duplicated or obsolete code.
+  1806→13. Identify infrastructure gaps.
+  1807→
+  1808→Produce:
+  1809→
+  1810→- Repository architecture report.
+  1811→- Existing functionality inventory.
+  1812→- Dependency inventory.
+  1813→- Security audit.
+  1814→- Data model assessment.
+  1815→- Technical debt report.
+  1816→- Build and deployment assessment.
+  1817→- Prioritized implementation plan.
+  1818→
+  1819→Do not discard useful work.
+  1820→
+  1821→## 50. Phase 1: Architecture and design foundations
+  1822→
+  1823→Create:
+  1824→
+  1825→- Product requirements specification.
+  1826→- System architecture.
+  1827→- Domain model.
+  1828→- Data model.
+  1829→- API contract.
+  1830→- Threat model.
+  1831→- Gno realm architecture.
+  1832→- Design system specification.
+  1833→- Design tokens.
+  1834→- Component inventory.
+  1835→- Implementation dependency graph.
+  1836→
+  1837→Create an explicit definition of done for every major domain.
+  1838→
+  1839→## 51. Phase 2: Design-system implementation
+  1840→
+  1841→Before building all screens, implement the actual Atelier foundation.
+  1842→
+  1843→Build:
+  1844→
+  1845→- Typography.
+  1846→- Colors.
+  1847→- Theme system.
+  1848→- Layout primitives.
+  1849→- Navigation.
+  1850→- Buttons.
+  1851→- Forms.
+  1852→- Inputs.
+  1853→- Tables.
+  1854→- Drawers.
+  1855→- Dialogs.
+  1856→- Notifications.
+  1857→- Status indicators.
+  1858→- Signature components.
+  1859→- Motion system.
+  1860→- Responsive behavior.
+  1861→- Accessibility foundations.
+  1862→
+  1863→Create a design-system gallery showing every component and state.
+  1864→
+  1865→Do not build the entire product with arbitrary one-off styling.
+  1866→
+  1867→## 52. Phase 3: Core platform implementation
+  1868→
+  1869→Implement:
+  1870→
+  1871→1. Identity.
+  1872→2. Organizations.
+  1873→3. Permissions.
+  1874→4. Project registry.
+  1875→5. Component registry.
+  1876→6. Evidence management.
+  1877→7. Release provenance.
+  1878→8. Attestation management.
+  1879→9. Verification.
+  1880→10. Audit history.
+  1881→
+  1882→Connect frontend, backend and database functionality end-to-end.
+  1883→
+  1884→## 53. Phase 4: Agent accountability and policies
+  1885→
+  1886→Implement:
+  1887→
+  1888→- Agent registry.
+  1889→- Agent identities.
+  1890→- Agent permissions.
+  1891→- Agent execution records.
+  1892→- Task coordination.
+  1893→- Approval workflows.
+  1894→- Policy centre.
+  1895→- Agent audit history.
+  1896→- Agent verification references.
+  1897→
+  1898→Test all permission boundaries.
+  1899→
+  1900→## 54. Phase 5: Gno protocol implementation
+  1901→
+  1902→Implement the realm architecture, test suite, wallet integration and testnet deployment.
+  1903→
+  1904→Prove the following workflow:
+  1905→
+  1906→1. Register or identify a project.
+  1907→2. Produce a release.
+  1908→3. Generate evidence.
+  1909→4. Generate an attestation.
+  1910→5. Create the appropriate cryptographic commitment.
+  1911→6. Obtain the user's authorized transaction signature.
+  1912→7. Submit the transaction.
+  1913→8. Confirm the chain result.
+  1914→9. Persist the transaction reference.
+  1915→10. Verify the published commitment.
+  1916→11. Display the result in the public verification portal.
+  1917→
+  1918→The workflow must be real and repeatable.
+  1919→
+  1920→## 55. Phase 6: Integrations and developer tools
+  1921→
+  1922→Implement:
+  1923→
+  1924→- Repository integration.
+  1925→- CI/CD ingestion.
+  1926→- Webhooks.
+  1927→- Public APIs.
+  1928→- SDK.
+  1929→- CLI.
+  1930→- Documentation.
+  1931→- Integration health monitoring.
+  1932→
+  1933→Provide executable examples.
+  1934→
+  1935→## 56. Phase 7: Complete user experience
+  1936→
+  1937→Finish:
+  1938→
+  1939→- Public experience.
+  1940→- Authenticated workspaces.
+  1941→- Administrative experience.
+  1942→- Proof Atlas.
+  1943→- Release Foundry.
+  1944→- Agent Command.
+  1945→- Verification Laboratory.
+  1946→- Analytics.
+  1947→- Mobile experience.
+  1948→- All loading and error states.
+  1949→- All permission and recovery states.
+  1950→
+  1951→No dead buttons or placeholder navigation.
+  1952→
+  1953→## 57. Phase 8: Hardening and verification
+  1954→
+  1955→Run:
+  1956→
+  1957→- Full test suite.
+  1958→- Security testing.
+  1959→- Dependency scanning.
+  1960→- Performance testing.
+  1961→- Database integrity checks.
+  1962→- Accessibility checks.
+  1963→- Responsive testing.
+  1964→- Blockchain integration tests.
+  1965→- Backup and recovery verification.
+  1966→- Deployment verification.
+  1967→
+  1968→Resolve critical and high-severity issues before declaring production readiness.
+  1969→
+  1970→## 58. Phase 9: Deployment and operational handover
+  1971→
+  1972→Deploy to the available authorized environment.
+  1973→
+  1974→Do not invent credentials or deployment targets.
+  1975→
+  1976→If access to a VPS, cloud environment, domain, wallet or third-party account is unavailable, produce the exact deployment procedure and clearly identify the required owner action.
+  1977→
+  1978→Verify:
+  1979→
+  1980→- Application startup.
+  1981→- Database connectivity.
+  1982→- Migrations.
+  1983→- Authentication.
+  1984→- API health.
+  1985→- Background workers.
+  1986→- Storage.
+  1987→- Integrations.
+  1988→- Blockchain connection.
+  1989→- Testnet transactions.
+  1990→- Public verification.
+  1991→- Logs.
+  1992→- Monitoring.
+  1993→- Backup configuration.
+  1994→
+  1995→Provide a complete handover.
+  1996→
+  1997→---
+  1998→
+  1999→# PART XIII. REQUIRED REPOSITORY DELIVERABLES
+  2000→
+
+[showing lines 1-2000 of 2469; use offset=2001 with limit to continue reading]

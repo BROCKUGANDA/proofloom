@@ -18,10 +18,10 @@ const TRANSITIONS: Record<string, { next: string[]; capability: string; requireD
   APPROVED: { next: ['PUBLISHED', 'REJECTED'], capability: 'release.publish', requireDigest: true },
   PUBLISHED: { next: ['VERIFIED', 'REVOKED', 'SUPERSEDED', 'DISPUTED'], capability: 'release.revoke' },
   VERIFIED: { next: ['REVOKED', 'SUPERSEDED', 'DISPUTED'], capability: 'release.revoke' },
-  REJECTED: { next: [] },
-  REVOKED: { next: [] },
-  SUPERSEDED: { next: [] },
-  DISPUTED: { next: [] },
+  REJECTED: { next: [], capability: 'terminal' },
+  REVOKED: { next: [], capability: 'terminal' },
+  SUPERSEDED: { next: [], capability: 'terminal' },
+  DISPUTED: { next: [], capability: 'terminal' },
 }
 
 // GET /api/releases/[releaseId]

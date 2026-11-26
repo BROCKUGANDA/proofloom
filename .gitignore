@@ -52,3 +52,14 @@ prompt
 server.log
 # Skills directory
 /skills/
+# secrets — never commit
+.env
+.env.*
+.keys/
+*.pw
+
+# local data
+db/custom.db
+dev.log
+server.log
+node_modules/.prisma

@@ -35,6 +35,8 @@ model User {
   attestations   Attestation[]  @relation("AttestIssuer")
   apiCredentials ApiCredential[]
   notifications  Notification[]
+  givenReviews   Review[]       @relation("ReviewReviewer")
+  assignedTasks  Task[]         @relation("TaskAssignee")
 
   @@index([status])
 }
@@ -371,9 +373,10 @@ model Task {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  project    Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  agent      Agent?           @relation(fields: [assigneeAgentId], references: [id])
-  reviews    Review[]
+  project        Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  agent          Agent?           @relation(fields: [assigneeAgentId], references: [id])
+  assignee       User?            @relation("TaskAssignee", fields: [assigneeUserId], references: [id])
+  reviews        Review[]
 
   @@index([projectId])
   @@index([state])
@@ -389,8 +392,9 @@ model Review {
   decidedAt  DateTime?
   createdAt  DateTime @default(now())
 
-  release Release? @relation(fields: [releaseId], references: [id])
-  task    Task?    @relation(fields: [taskId], references: [id])
+  release  Release? @relation(fields: [releaseId], references: [id])
+  task     Task?    @relation(fields: [taskId], references: [id])
+  reviewer User     @relation("ReviewReviewer", fields: [reviewerId], references: [id])
 
   @@index([decision])
 }

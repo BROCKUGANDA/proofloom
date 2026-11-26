@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
     const id = url.searchParams.get('id')
 
     if (want === 'summary') {
-      const [projects, releases, attestations, agents] = await Promise.all([
+      const [projects, releases, attRows, agents] = await Promise.all([
         db.project.findMany({
           where: { visibility: 'public', status: 'ACTIVE' },
           select: { id: true, slug: true, name: true, description: true, category: true, repoUrl: true, techStack: true, gnoRegistered: true, createdAt: true, _count: { select: { releases: true } } },
@@ -28,18 +28,25 @@ export async function GET(req: NextRequest) {
           orderBy: { createdAt: 'desc' },
           take: 50,
         }),
+        // Attestation → Release is polymorphic (subjectType/subjectId), so join manually.
         db.attestation.findMany({
           where: { status: 'ACTIVE', subjectType: 'RELEASE' },
-          include: { release: { select: { version: true, project: { select: { visibility: true, slug: true } } } } },
           orderBy: { issuedAt: 'desc' },
           take: 50,
         }),
         db.agent.count({ where: { status: 'ACTIVE' } }),
       ])
+      const attReleaseIds = [...new Set(attRows.map(a => a.subjectId))]
+      const attReleases = await db.release.findMany({
+        where: { id: { in: attReleaseIds }, project: { visibility: 'public' } },
+        select: { id: true, version: true, project: { select: { visibility: true, slug: true } } },
+      })
+      const attReleaseById = new Map(attReleases.map(r => [r.id, r]))
+      const attestations = attRows.filter(a => attReleaseById.get(a.subjectId)?.project?.visibility === 'public')
       const attCountByRelease = new Map(
         (await db.attestation.groupBy({ by: ['subjectId'], where: { subjectType: 'RELEASE', status: 'ACTIVE' }, _count: { subjectId: true } }))
           .map(g => [g.subjectId, g._count.subjectId]))
-      let chainStats = null
+      let chainStats: Awaited<ReturnType<typeof fetchRegistryStats>> = null
       try {
         chainStats = await fetchRegistryStats()
       } catch { /* on-chain stats optional */ }
@@ -53,11 +60,10 @@ export async function GET(req: NextRequest) {
           activeAttestations: attCountByRelease.get(r.id) ?? 0,
         })),
         attestations: attestations
-          .filter(a => a.release?.project?.visibility === 'public')
           .map(a => ({
             id: a.id, protocolId: a.protocolId, category: a.category, issuerAddress: a.issuerAddress,
             digest: a.digest, issuedAt: a.issuedAt, onChain: a.onChain,
-            subjectType: a.subjectType, subjectVersion: a.release?.version,
+            subjectType: a.subjectType, subjectVersion: attReleaseById.get(a.subjectId)?.version,
           })),
         agents,
         chain: { chainId: activeChain().chainId, label: activeChain().label, realmPrefix: activeChain().realmPrefix, rpc: activeChain().rpc },
@@ -79,7 +85,7 @@ export async function GET(req: NextRequest) {
         (await db.attestation.findMany({
           where: { subjectType: 'RELEASE', status: 'ACTIVE', subjectId: { in: project.releases.map(r => r.id) } },
         })).map(a => [a.subjectId, [a]]))
-      let onChain = null
+      let onChain: Awaited<ReturnType<typeof fetchOnChainProject>> = null
       try {
         onChain = await fetchOnChainProject(project.slug)
       } catch { /* optional */ }
