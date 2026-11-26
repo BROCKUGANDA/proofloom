@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const eslintConfig = [{
-  ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts", "examples/**", "skills/**", ".gnosrc/**", "bin/**", "chain/**", ".keys/**", "db/**", "tool-results/**", "download/**", "upload/**", "mini-services/**", "public/**"],
+  ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts", "examples/**", "skills/**", ".gnosrc/**", "bin/**", "chain/**", ".keys/**", "db/**", "tool-results/**", "download/**", "upload/**", "mini-services/**", "public/**", "scripts/**", "docs/**", "tests/**"],
 }, ...nextCoreWebVitals, ...nextTypescript, {
   rules: {
     // TypeScript rules

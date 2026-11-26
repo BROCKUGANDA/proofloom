@@ -4,6 +4,7 @@ import { withApi, readJson, clientIp } from '@/lib/api'
 import { requireAuth, requireMembership, ROLE_RANK, capabilitiesForRole } from '@/lib/auth'
 import { err } from '@/lib/errors'
 import { audit } from '@/lib/audit'
+import { assertCap } from '@/lib/entitlements'
 import { randomToken, sha256Token } from '@/lib/crypto'
 
 export const dynamic = 'force-dynamic'
@@ -39,6 +40,9 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ orgId: str
     const { user } = await requireAuth()
     const { orgId } = await ctx.params
     await requireMembership(user.id, orgId, 'org.invite')
+    // Entitlement: seat cap for the org's plan (counting members + pending invites).
+    const seatCount = await db.membership.count({ where: { organizationId: orgId } }) + await db.invitation.count({ where: { organizationId: orgId, status: 'PENDING' } })
+    await assertCap(orgId, 'orgMembers', seatCount)
     const body = await readJson<{ email?: string; role?: string }>(req)
     if (!body.email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(body.email)) throw err('VALIDATION_FAILED', { field: 'email' })
     const role = body.role ?? 'DEVELOPER'

@@ -50,6 +50,11 @@ const defs: Record<string, Omit<ProofloomError, 'details'>> = {
   RATE_LIMITED: { status: 429, message: 'Too many requests.', recovery: 'Wait for the retry window indicated in the response headers.', retryable: true },
   // platform
   INTERNAL: { status: 500, message: 'An unexpected error occurred.', recovery: 'Retry; if it persists, include the trace id in a bug report.', retryable: true },
+
+  // billing & entitlements (HTTP 402 Payment Required)
+  ENTITLEMENT_REQUIRED: { status: 402, message: 'This feature requires a paid plan.', recovery: 'Upgrade the organization plan from Plan & Billing, then retry.', retryable: false },
+  ENTITLEMENT_LIMIT: { status: 402, message: 'Plan allowance reached for this billing period.', recovery: 'Upgrade the organization plan for a higher allowance, or wait for the next period.', retryable: false },
+  BILLING_INVALID_TRANSITION: { status: 409, message: 'That plan change is not valid for the current subscription state.', recovery: 'Refresh the billing page and choose an allowed action.', retryable: false },
 }
 
 export function err(code: keyof typeof defs | string, details?: Record<string, unknown>): ProofloomError {

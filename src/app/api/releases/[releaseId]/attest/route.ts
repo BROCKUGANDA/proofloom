@@ -4,6 +4,7 @@ import { withApi, readJson, clientIp } from '@/lib/api'
 import { requireAuth, requireProjectAccess } from '@/lib/auth'
 import { err } from '@/lib/errors'
 import { audit } from '@/lib/audit'
+import { assertMetered, recordUsage } from '@/lib/entitlements'
 import { isValidDigest, isValidGnoAddress } from '@/lib/crypto'
 import { CATEGORIES } from '@/lib/categories'
 
@@ -18,6 +19,8 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ releaseId:
     if (!release) throw err('NOT_FOUND')
     // AUDITORs and up may issue attestations
     await requireProjectAccess(user.id, release.projectId, 'attestation.issue')
+    // Entitlement: monthly attestation allowance for the owning org's plan.
+    await assertMetered(release.project.organizationId, 'attestations')
 
     const body = await readJson<{
       category?: string; digest?: string; evidenceId?: string
@@ -75,6 +78,8 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ releaseId:
       metadata: { category: body.category, subjectId: releaseId, protocolId, onChain: !!body.onChain, chainTxHash: body.chainTxHash },
       ip: clientIp(req), traceId,
     })
+    // Entitlement metering: record the consumption after the successful issue.
+    await recordUsage(release.project.organizationId, 'attestations')
     return { id: attestation.id, protocolId, status: attestation.status, digest }
   })
 }

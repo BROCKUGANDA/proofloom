@@ -1,6 +1,7 @@
 export const CATEGORIES = [
   'BUILD_PROVENANCE',
   'SOURCE_PROVENANCE',
+  'SBOM_COMPLETE',
   'TEST_EXECUTION',
   'SECURITY_ASSESSMENT',
   'CODE_REVIEW',
@@ -19,6 +20,7 @@ export const CATEGORY_META: Record<string, { label: string; glyph: string; descr
   SOURCE_PROVENANCE: { label: 'Source provenance', glyph: 'source', description: 'Binds the release to a verified source revision and repository.' },
   TEST_EXECUTION: { label: 'Test execution', glyph: 'test', description: 'Test suite ran against this exact artifact.' },
   SECURITY_ASSESSMENT: { label: 'Security assessment', glyph: 'security', description: 'Security scan or review verdict for the artifact.' },
+  SBOM_COMPLETE: { label: 'SBOM complete', glyph: 'source', description: 'A software bill of materials covering every dependency ships with the artifact.' },
   CODE_REVIEW: { label: 'Code review', glyph: 'review', description: 'Human or agent review of the changeset.' },
   RELEASE_APPROVAL: { label: 'Release approval', glyph: 'approve', description: 'Authorized approval for publication.' },
   AGENT_TASK_COMPLETION: { label: 'Agent task completion', glyph: 'agent', description: 'Autonomous agent completed its assigned task.' },

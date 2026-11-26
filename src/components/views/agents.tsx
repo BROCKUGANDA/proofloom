@@ -3,7 +3,7 @@
 // Agent Command: registry, scoped grants, execution console with approvals.
 
 import { useCallback, useEffect, useState } from 'react'
-import { api, ClientError } from '@/lib/client'
+import { api, ClientError, isEntitlementError, entitlementHint } from '@/lib/client'
 import { useApp, navigate, type Route } from '@/components/proofloom-app'
 import { ProofSeal, EmptyState, PanelSkeleton, HashChip, AgentSigil, TrustMeter, Spinner } from '@/components/atelier/kit'
 import { Button } from '@/components/ui/button'
@@ -25,7 +25,7 @@ interface AgentsPayload {
   providers: { provider: string; available: boolean; model: string }[]
   agents: AgentRow[]
 }
-interface OrgProjects { id: string; name: string; slug: string }[]
+type OrgProjects = { id: string; name: string; slug: string }[]
 
 const SCOPES = ['READ', 'EVIDENCE', 'VERIFY_REQUEST', 'TASK_UPDATE', 'REVIEW_PROPOSE', 'PUBLISH_REQUEST']
 
@@ -244,7 +244,12 @@ function GrantForm({ agentId, scopes, setScopes, projectId, setProjectId, onDone
         toast('success', 'Grant issued', `${scopes.join(', ')} on project`)
         await onDone()
       } catch (e2) {
-        toast('error', e2 instanceof ClientError ? e2.apiError.message : 'Failed')
+        if (isEntitlementError(e2)) {
+          toast('error', 'Upgrade required', entitlementHint(e2) ?? 'Agents are a Pro feature — open Plan & Billing to upgrade.')
+          navigate({ view: 'billing' })
+        } else {
+          toast('error', e2 instanceof ClientError ? e2.apiError.message : 'Failed')
+        }
       } finally { setBusy(false) }
     }} className="space-y-4">
       <div>
@@ -364,7 +369,17 @@ function ExecutionRowCard({ execution, onReload }: { execution: ExecutionRow; on
   }, [execution.id])
   useEffect(() => { if (expanded) void loadDetail() }, [expanded, loadDetail])
 
-  const report = detail?.report ? (typeof detail.report === 'string' ? JSON.parse(detail.report) : detail.report) : null
+  // Reports are free-text by default; some agents emit JSON. Parse defensively —
+  // a malformed report must degrade to plain text, never crash the console.
+  const report = (() => {
+    if (!detail?.report) return null
+    if (typeof detail.report !== 'string') return detail.report
+    try {
+      return JSON.parse(detail.report) as Record<string, unknown>
+    } catch {
+      return { summary: detail.report }
+    }
+  })()
 
   return (
     <div className="loom-panel p-4">

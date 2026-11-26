@@ -23,11 +23,12 @@ import { AuditView } from '@/components/views/audit'
 import { SettingsView } from '@/components/views/settings'
 import { StatusView } from '@/components/views/status'
 import { DocsView } from '@/components/views/docs'
+import { BillingView } from '@/components/views/billing'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Sun, Moon, ChevronDown, LayoutDashboard, Boxes, Radar, Landmark, ScrollText, Settings, Activity, BookOpen, ShieldCheck, FileSearch, Network, LogIn, Bell } from 'lucide-react'
+import { Sun, Moon, ChevronDown, LayoutDashboard, Boxes, Radar, Landmark, ScrollText, Settings, Activity, BookOpen, ShieldCheck, FileSearch, Network, LogIn, Bell, Menu, CreditCard, Zap } from 'lucide-react'
 
 // ─── Router ──────────────────────────────────────────────────────────────────
 
@@ -40,6 +41,7 @@ export type Route =
   | { view: 'analytics' } | { view: 'audit' }
   | { view: 'settings'; tab?: string }
   | { view: 'status' } | { view: 'docs'; section?: string }
+  | { view: 'billing' }
 
 function parseHash(hash: string): Route {
   const h = hash.replace(/^#\/?/, '')
@@ -57,6 +59,7 @@ function parseHash(hash: string): Route {
     case 'audit': return { view: 'audit' }
     case 'settings': return { view: 'settings', tab: a }
     case 'status': return { view: 'status' }
+    case 'billing': return { view: 'billing' }
     case 'docs': return { view: 'docs', section: a }
     default: return { view: 'landing' }
   }
@@ -77,6 +80,7 @@ export function navigate(route: Route) {
     case 'audit': parts.push('audit'); break
     case 'settings': parts.push('settings', route.tab ?? 'organization'); break
     case 'status': parts.push('status'); break
+    case 'billing': parts.push('billing'); break
     case 'docs': parts.push('docs', route.section ?? ''); break
     default: break
   }
@@ -89,9 +93,17 @@ export interface SessionUser {
   id: string; email: string; displayName: string
   gnoAddress?: string | null; mfaEnabled: boolean; avatarSeed: string
 }
+export interface SessionOrgBilling {
+  planId: string
+  status: string
+  trialEndsAt?: string
+  daysLeftInTrial?: number
+  trialExpired?: boolean
+}
 export interface SessionOrg {
   id: string; slug: string; name: string; role: string
   capabilities: string[]; projects: number; members: number
+  billing?: SessionOrgBilling
 }
 export interface Session {
   authenticated: boolean
@@ -147,6 +159,7 @@ const NAV = [
   { view: 'agents', label: 'Agent Command', icon: Boxes, auth: true },
   { view: 'analytics', label: 'Analytics', icon: Activity, auth: true },
   { view: 'audit', label: 'Audit Explorer', icon: ScrollText, auth: true },
+  { view: 'billing', label: 'Plan & Billing', icon: CreditCard, auth: true },
   { view: 'atlas', label: 'Proof Atlas', icon: Network, auth: false },
   { view: 'explore', label: 'Explorers', icon: Radar, auth: false },
   { view: 'verify', label: 'Verification Portal', icon: FileSearch, auth: false },
@@ -231,12 +244,13 @@ export function ProofloomApp() {
             <div className="min-h-[60vh] flex items-center justify-center"><ProofSeal status="PENDING" label="connecting" pulse /></div>
           ) : (
             <>
-              {(route.view === 'workspace' || route.view === 'analytics' || route.view === 'audit' || route.view === 'settings') && authed && activeOrg ? (
+              {(route.view === 'workspace' || route.view === 'analytics' || route.view === 'audit' || route.view === 'settings' || route.view === 'billing') && authed && activeOrg ? (
                 <ShellLayout nav={NAV} route={route} go={go} authed={authed} org={activeOrg}>
                   {route.view === 'workspace' && <WorkspaceView {...viewProps} />}
                   {route.view === 'analytics' && <AnalyticsView {...viewProps} />}
                   {route.view === 'audit' && <AuditView {...viewProps} />}
                   {route.view === 'settings' && <SettingsView {...viewProps} />}
+                  {route.view === 'billing' && <BillingView />}
                 </ShellLayout>
               ) : (
                 <>
@@ -250,7 +264,7 @@ export function ProofloomApp() {
                   {route.view === 'atlas' && <AtlasView {...viewProps} />}
                   {route.view === 'status' && <StatusView {...viewProps} />}
                   {route.view === 'docs' && <DocsView {...viewProps} />}
-                  {(route.view === 'workspace' || route.view === 'analytics' || route.view === 'audit' || route.view === 'settings') && !authed && <AuthView {...viewProps} />}
+                  {(route.view === 'workspace' || route.view === 'analytics' || route.view === 'audit' || route.view === 'settings' || route.view === 'billing') && !authed && <AuthView {...viewProps} />}
                 </>
               )}
             </>
@@ -275,8 +289,8 @@ function Header({ route, go, session, authed, theme, toggleTheme, activeOrg, org
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[color-mix(in_oklab,var(--background)_86%,transparent)] backdrop-blur-md">
       <div className="mx-auto max-w-[1400px] px-4 lg:px-6 h-[var(--header-h)] flex items-center gap-4">
-        <button className="lg:hidden" onClick={() => setSidebarOpen(!sidebarOpen)} aria-label="Toggle navigation">
-          <Emblem size={26} />
+        <button className="lg:hidden p-1 -ml-1 text-muted-foreground hover:text-foreground" onClick={() => setSidebarOpen(!sidebarOpen)} aria-label="Toggle navigation" aria-expanded={sidebarOpen}>
+          <Menu size={22} />
         </button>
         <button onClick={() => go({ view: 'landing' })} className="flex items-center" aria-label="PROOFLOOM home">
           <Wordmark size={13} />
@@ -369,7 +383,48 @@ function Header({ route, go, session, authed, theme, toggleTheme, activeOrg, org
           </div>
         )}
       </div>
+      <TrialBanner billing={activeOrg?.billing} go={go} />
     </header>
+  )
+}
+
+// ─── Trial / plan banner ─────────────────────────────────────────────────────
+
+function TrialBanner({ billing, go }: { billing?: SessionOrgBilling; go: (r: Route) => void }) {
+  if (!billing) return null
+  const trialing = billing.status === 'TRIALING' && billing.daysLeftInTrial !== undefined
+  const expired = billing.trialExpired || billing.status === 'EXPIRED'
+  if (!trialing && !expired) return null
+  return (
+    <div
+      className="border-t border-[var(--border)] bg-[color-mix(in_oklab,var(--accent-warm)_10%,var(--background))] text-xs"
+      role="status"
+    >
+      <div className="mx-auto max-w-[1400px] px-4 lg:px-6 h-9 flex items-center gap-2">
+        {trialing ? (
+          <>
+            <Zap size={13} className="text-[var(--accent-warm)] shrink-0" />
+            <span className="truncate">
+              <strong>Pro trial:</strong> {billing.daysLeftInTrial} day{billing.daysLeftInTrial === 1 ? '' : 's'} remaining.
+              Advanced features stay unlocked until {billing.trialEndsAt ? new Date(billing.trialEndsAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'the trial end'} — then the workspace downgrades to Free automatically.
+            </span>
+            <Button size="sm" variant="outline" className="ml-auto h-6 px-2 text-xs shrink-0 btn-press" onClick={() => go({ view: 'billing' })}>
+              Upgrade
+            </Button>
+          </>
+        ) : (
+          <>
+            <span className="status-dot shrink-0" style={{ background: 'var(--critical)' }} />
+            <span className="truncate">
+              <strong>Trial ended.</strong> Agents, policies and API keys are locked; monthly allowances are reduced. Upgrade to restore Pro — your history is intact.
+            </span>
+            <Button size="sm" variant="outline" className="ml-auto h-6 px-2 text-xs shrink-0 btn-press" onClick={() => go({ view: 'billing' })}>
+              See plans
+            </Button>
+          </>
+        )}
+      </div>
+    </div>
   )
 }
 

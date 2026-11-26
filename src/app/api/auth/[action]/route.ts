@@ -24,6 +24,49 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ action: st
     const ip = clientIp(req)
     const ua = req.headers.get('user-agent') ?? undefined
 
+    if (action === 'demo') {
+      // One-click demo: provisions a throwaway account + organization on a
+      // 14-day TRIAL, atomically. Advanced features are gated by entitlements
+      // and the workspace downgrades to FREE automatically when the trial
+      // lapses (evaluated lazily on every request — see entitlements.ts).
+      const rl = await limits.registration(ip)
+      if (!rl.allowed) throw err('RATE_LIMITED')
+      const stamp = Date.now().toString(36)
+      const rand = Math.random().toString(36).slice(2, 8)
+      const email = `trial-${stamp}-${rand}@demo.proofloom.io`
+      const displayName = `Trial Explorer ${rand.toUpperCase()}`
+      const created = await db.$transaction(async (tx) => {
+        const user = await tx.user.create({
+          data: {
+            email,
+            passwordHash: hashPassword(`trial:${stamp}:${rand}:${Math.random()}`),
+            displayName,
+            avatarSeed: rand,
+            emailVerified: false,
+          },
+        })
+        const org = await tx.organization.create({
+          data: {
+            slug: `trial-${stamp}-${rand}`,
+            name: `${displayName}'s Workspace`,
+            ownerId: user.id,
+          },
+        })
+        await tx.membership.create({ data: { userId: user.id, organizationId: org.id, role: 'OWNER' } })
+        const trialEndsAt = new Date(Date.now() + 14 * 86400e3)
+        const sub = await tx.subscription.create({
+          data: { organizationId: org.id, planId: 'TRIAL', status: 'TRIALING', trialEndsAt, currentPeriodEnd: trialEndsAt },
+        })
+        await tx.billingEvent.create({
+          data: { subscriptionId: sub.id, kind: 'TRIAL_STARTED', fromPlan: 'FREE', toPlan: 'TRIAL', metadata: JSON.stringify({ days: 14, source: 'one_click_demo' }) },
+        })
+        return { user, org }
+      })
+      await createSession(created.user.id, { ip, userAgent: ua })
+      await audit({ organizationId: created.org.id, actorUserId: created.user.id, action: 'auth.demo_started', targetType: 'USER', targetId: created.user.id, metadata: { trial: true }, ip, traceId })
+      return { userId: created.user.id, email: created.user.email, organizationId: created.org.id, trial: true }
+    }
+
     if (action === 'register') {
       const rl = await limits.registration(ip)
       if (!rl.allowed) throw err('RATE_LIMITED')
@@ -34,23 +77,32 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ action: st
       if (!strength.ok) throw err('AUTH_WEAK_PASSWORD', { problems: strength.problems })
       const existing = await db.user.findUnique({ where: { email: body.email.toLowerCase() } })
       if (existing) throw err('DUPLICATE', { field: 'email' })
-      const user = await db.user.create({
-        data: {
-          email: body.email.toLowerCase(),
-          passwordHash: hashPassword(body.password),
-          displayName: body.displayName.slice(0, 80),
-          avatarSeed: Math.random().toString(36).slice(2, 8),
-        },
+      // Atomic provisioning: account, workspace and trial subscription commit
+      // together or not at all.
+      const created = await db.$transaction(async (tx) => {
+        const user = await tx.user.create({
+          data: {
+            email: body.email!.toLowerCase(),
+            passwordHash: hashPassword(body.password!),
+            displayName: body.displayName!.slice(0, 80),
+            avatarSeed: Math.random().toString(36).slice(2, 8),
+          },
+        })
+        const org = await tx.organization.create({
+          data: {
+            slug: `${body.displayName!.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 24)}-${Math.random().toString(36).slice(2, 6)}`,
+            name: `${body.displayName}'s Workspace`,
+            ownerId: user.id,
+          },
+        })
+        await tx.membership.create({ data: { userId: user.id, organizationId: org.id, role: 'OWNER' } })
+        // Every new organization starts on FREE with a startable 14-day trial.
+        const sub = await tx.subscription.create({
+          data: { organizationId: org.id, planId: 'FREE', status: 'ACTIVE' },
+        })
+        return { user, org, sub }
       })
-      // default organization for the new user
-      const org = await db.organization.create({
-        data: {
-          slug: `${body.displayName.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 24)}-${Math.random().toString(36).slice(2, 6)}`,
-          name: `${body.displayName}'s Workspace`,
-          ownerId: user.id,
-        },
-      })
-      await db.membership.create({ data: { userId: user.id, organizationId: org.id, role: 'OWNER' } })
+      const { user, org } = created
       await createSession(user.id, { ip, userAgent: ua })
       await audit({ organizationId: org.id, actorUserId: user.id, action: 'auth.register', targetType: 'USER', targetId: user.id, ip, traceId })
       return { userId: user.id, email: user.email, organizationId: org.id }

@@ -15,6 +15,20 @@ export class ClientError extends Error {
   }
 }
 
+// Entitlement helpers: 402-class errors carry an upgrade path in details.
+// Views use isEntitlementError to swap the failure toast for an upgrade CTA
+// that routes to Plan & Billing with the exact blocked feature named.
+export function isEntitlementError(e: unknown): boolean {
+  return e instanceof ClientError && ['ENTITLEMENT_REQUIRED', 'ENTITLEMENT_LIMIT', 'BILLING_INVALID_TRANSITION'].includes(e.apiError.code)
+}
+
+export function entitlementHint(e: unknown): string | undefined {
+  if (e instanceof ClientError && typeof e.apiError.details?.upgradeHint === 'string') {
+    return e.apiError.details.upgradeHint as string
+  }
+  return undefined
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(path, {
     ...init,

@@ -93,6 +93,7 @@ model Organization {
   auditEvents AuditEvent[]
   integrations Integration[]
   invitations Invitation[]
+  subscription Subscription?
 
   @@index([ownerId])
 }
@@ -564,4 +565,51 @@ model VerificationResult {
 
   @@index([targetType, targetId])
   @@index([createdAt])
+}
+
+// ─── Billing & entitlements ──────────────────────────────────────────────────
+
+model Subscription {
+  id                String    @id @default(cuid())
+  organizationId    String    @unique
+  planId            String    @default("FREE") // FREE | TRIAL | PRO | ENTERPRISE
+  // TRIALING | ACTIVE | PAST_DUE | CANCELED | EXPIRED
+  status            String    @default("ACTIVE")
+  trialEndsAt       DateTime?
+  currentPeriodEnd  DateTime?
+  cancelAtPeriodEnd Boolean   @default(false)
+  provider          String    @default("internal") // internal | stripe | paddle
+  providerRef       String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  events       BillingEvent[]
+
+  @@index([status])
+}
+
+model BillingEvent {
+  id             String   @id @default(cuid())
+  subscriptionId String
+  kind           String   // TRIAL_STARTED | PLAN_CHANGED | DOWNGRADED | PAYMENT_SUCCEEDED | PAYMENT_FAILED | CANCELED | REACTIVATED | TRIAL_ENDED
+  fromPlan       String?
+  toPlan         String
+  metadata       String   @default("{}")
+  createdAt      DateTime @default(now())
+
+  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@index([subscriptionId, createdAt])
+}
+
+model EntitlementUsage {
+  id             String   @id @default(cuid())
+  organizationId String
+  key            String   // releases | attestations
+  period         DateTime // month window start (UTC, first day)
+  count          Int      @default(0)
+
+  @@unique([organizationId, key, period])
+  @@index([organizationId, period])
 }

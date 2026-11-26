@@ -46,10 +46,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
-      <body
-        className={`${manrope.variable} ${plexMono.variable} ${instrumentSerif.variable} antialiased bg-background text-foreground`}
-      >
+    <html lang="en" suppressHydrationWarning className={`dark ${manrope.variable} ${plexMono.variable} ${instrumentSerif.variable}`}>
+      <body className="antialiased bg-background text-foreground">
         {children}
         <Toaster />
       </body>

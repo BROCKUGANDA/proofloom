@@ -230,7 +230,7 @@ export function LandingView({ go }: { route: Route; go: (r: Route) => void; sess
         {[
           { icon: Fingerprint, title: 'Verification is public', body: 'The public portal, JSON API, and embeddable widget let anyone verify a record without registering.', cta: 'Verification portal', r: { view: 'verify' } as Route },
           { icon: KeyRound, title: 'Keys stay yours', body: 'Signing happens in your wallet (Adena / GnoConnect). The platform never sees a private key, and secrets never enter protocol state.', cta: 'Security centre', r: { view: 'docs', section: 'security' } as Route },
-          { icon: Network, title: 'Commercial from day one', body: 'Free for public projects and verification. Team plans add private registries, policy enforcement, and audit exports.', cta: 'Pricing', r: { view: 'docs', section: 'pricing' } as Route },
+          { icon: Network, title: 'Commercial from day one', body: 'Free for public projects and verification. Team plans add private registries, policy enforcement, and audit exports.', cta: 'Pricing', r: { view: 'billing' } as Route },
         ].map(card => (
           <div key={card.title} className="loom-panel p-6">
             <card.icon size={20} className="text-[var(--accent)] mb-3" />
@@ -241,6 +241,92 @@ export function LandingView({ go }: { route: Route; go: (r: Route) => void; sess
             </button>
           </div>
         ))}
+      </section>
+
+      {/* Pricing */}
+      <section id="pricing" className="border-y border-[var(--border)] obs-grid">
+        <div className="mx-auto max-w-[1400px] px-4 lg:px-6 py-16">
+          <p className="eyebrow">Pricing</p>
+          <h2 className="atelier-display mt-2" style={{ fontSize: 'var(--text-2xl)' }}>
+            Verification is free. Scale is priced like infrastructure.
+          </h2>
+          <p className="text-sm text-muted-foreground mt-2 max-w-2xl">
+            Public records stay public on every plan. Plans govern what your team can publish —
+            and every workspace starts with a 14-day Pro trial, no card required.
+          </p>
+          <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-8">
+            {[
+              { name: 'Free', price: '$0', tag: 'Public verification, forever.', points: ['2 projects', '3 releases / month', '10 attestations / month', 'Public explorers + verify API'], current: false, highlight: false },
+              { name: 'Pro', price: '$49', tag: 'For shipping teams that prove their work.', points: ['25 projects, 100 releases / month', 'Agent Command + policy engine', 'API keys & evidence exports', '90-day audit retention'], current: false, highlight: true },
+              { name: 'Enterprise', price: '$499', tag: 'Governance, retention, priority lane.', points: ['Unlimited projects & members', '50 agents, priority on-chain lane', '365-day audit retention', 'Governance reviews & SLA'], current: false, highlight: false },
+            ].map(p => (
+              <div key={p.name} className={`loom-panel p-5 relative ${p.highlight ? 'border-[var(--accent)]' : ''}`}>
+                {p.highlight && <span className="absolute -top-2.5 left-4 proof-seal seal-verified bg-[var(--surface)]">Most popular</span>}
+                <div className="flex items-baseline justify-between">
+                  <h3 className="font-semibold">{p.name}</h3>
+                  <p className="text-xl atelier-display">{p.price}<span className="text-xs text-muted-foreground font-sans">/mo</span></p>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">{p.tag}</p>
+                <ul className="mt-3 space-y-1.5 text-xs">
+                  {p.points.map(pt => (
+                    <li key={pt} className="flex items-start gap-2">
+                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="var(--verified)" strokeWidth="2" className="mt-0.5 shrink-0"><path d="M3 8.5l3 3L13 5" /></svg>
+                      {pt}
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  onClick={() => go(authed ? { view: 'billing' } : { view: 'auth' })}
+                  className={`mt-4 w-full py-2 rounded-md text-sm btn-press border ${p.highlight ? 'font-semibold' : ''}`}
+                  style={p.highlight
+                    ? { background: 'var(--accent)', color: 'var(--accent-ink)', borderColor: 'var(--accent)' }
+                    : { borderColor: 'var(--border-strong)', color: 'var(--text-primary)' }}
+                >
+                  {authed ? 'See plans' : p.name === 'Free' ? 'Start free' : 'Start 14-day trial'}
+                </button>
+              </div>
+            ))}
+            <div className="loom-panel p-5 flex flex-col justify-center">
+              <p className="eyebrow mb-2">No card required</p>
+              <p className="text-sm text-muted-foreground mb-4">
+                One click provisions a trial workspace with the full product unlocked. At day 14 it
+                downgrades to Free automatically — nothing is deleted, upgrade any time.
+              </p>
+              <button
+                onClick={() => go({ view: 'auth' })}
+                className="inline-flex items-center gap-1.5 text-sm text-[var(--accent)] hover:underline"
+              >
+                Try the one-click demo <ArrowRight size={14} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="mx-auto max-w-[1400px] px-4 lg:px-6 py-16">
+        <p className="eyebrow">Questions</p>
+        <h2 className="atelier-display mt-2 mb-8" style={{ fontSize: 'var(--text-2xl)' }}>
+          What reviewers, auditors and engineers ask us
+        </h2>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            { q: 'Does verifying a release require an account?', a: 'No. The verification portal, the JSON API, and every public explorer are open. Verification is the product\'s free core — you paste a release id, attestation id, or digest and receive the full verdict with every check that ran.' },
+            { q: 'What happens when the AI agent makes a mistake?', a: 'Nothing reaches the chain without a human approval gate. Agents hold least-privilege, expiring grants; their executions are recorded with input and output digests; every publication requires an explicit approval — and every approval, revocation and grant change lands in the append-only audit trail.' },
+            { q: 'Where do the attestations live?', a: 'Digests and lifecycle state are committed to PROOFLOOM realms on the Gno.land Onyx testnet. Evidence bytes live with the release record; the chain holds the tamper-evident commitments. Other realms can import the public verify facade to answer "is this release verified?" without holding authority.' },
+            { q: 'Who signs on-chain operations?', a: 'You do, for anything owned by you — wallet linking uses a signature challenge, and user-owned operations are signed client-side in Adena or GnoConnect. Platform-operated transactions run through a separate deployment account whose credential is runtime-only and never committed.' },
+            { q: 'What happens to my workspace at the end of a trial?', a: 'It downgrades to Free automatically: agents, the policy engine and API keys lock, monthly allowances drop — but projects, releases, attestations and the audit trail are kept. Upgrade restores everything; there is no export hostage-taking.' },
+            { q: 'Can we self-host the protocol realms?', a: 'Yes. The realm suite in chain/realms deploys with gnodev to any Gno.land node — local, testnet, or main. The product speaks to it through the same public API, so a self-hosted registry and the hosted explorer can coexist over identical commitments.' },
+          ].map(f => (
+            <details key={f.q} className="loom-panel p-5 group">
+              <summary className="flex items-center justify-between cursor-pointer list-none font-medium text-sm">
+                {f.q}
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" className="shrink-0 transition-transform group-open:rotate-45 text-muted-foreground"><path d="M8 3v10M3 8h10" /></svg>
+              </summary>
+              <p className="text-sm text-muted-foreground mt-3 leading-relaxed">{f.a}</p>
+            </details>
+          ))}
+        </div>
       </section>
 
       {/* Closing CTA */}

@@ -9,7 +9,7 @@ import { Wordmark } from '@/components/atelier/emblem'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Zap, Check } from 'lucide-react'
 
 export function AuthView(_props: unknown) {
   const { refreshSession, session, toast } = useApp()
@@ -20,6 +20,7 @@ export function AuthView(_props: unknown) {
   const [totp, setTotp] = useState('')
   const [needsTotp, setNeedsTotp] = useState(false)
   const [busy, setBusy] = useState(false)
+  const [demoBusy, setDemoBusy] = useState(false)
   const [error, setError] = useState<{ message: string; recovery: string } | null>(null)
 
   useEffect(() => {
@@ -50,6 +51,25 @@ export function AuthView(_props: unknown) {
       })
     } finally {
       setBusy(false)
+    }
+  }
+
+  const startDemo = async () => {
+    setDemoBusy(true)
+    setError(null)
+    try {
+      await api.post('/api/auth/demo', {})
+      await refreshSession()
+      navigate({ view: 'workspace' })
+      toast('success', 'Trial workspace ready', '14-day Pro trial started — explore everything; upgrade any time.')
+    } catch (err) {
+      const ce = err instanceof ClientError ? err.apiError : null
+      setError({
+        message: ce?.message ?? 'Could not start the demo.',
+        recovery: ce?.recovery ?? 'Please try again in a minute.',
+      })
+    } finally {
+      setDemoBusy(false)
     }
   }
 
@@ -110,6 +130,28 @@ export function AuthView(_props: unknown) {
               {busy ? <Loader2 className="animate-spin" size={15} /> : mode === 'register' ? 'Create workspace' : 'Sign in'}
             </Button>
           </form>
+
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center" aria-hidden="true"><span className="w-full border-t border-[var(--border)]" /></div>
+            <div className="relative flex justify-center"><span className="bg-[var(--surface-raised)] px-3 text-xs text-muted-foreground uppercase tracking-wider">or</span></div>
+          </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            disabled={demoBusy || busy}
+            onClick={() => void startDemo()}
+            className="w-full btn-press h-11"
+          >
+            {demoBusy
+              ? <Loader2 className="animate-spin" size={15} />
+              : <><Zap size={15} className="mr-2 text-[var(--accent-warm)]" /> One-click demo — try the full product</>}
+          </Button>
+          <ul className="text-xs text-muted-foreground mt-3 space-y-1" aria-label="What the demo includes">
+            <li className="flex items-center gap-1.5"><Check size={11} className="text-[var(--verified)]" /> Instant workspace on a 14-day Pro trial — no card, no email</li>
+            <li className="flex items-center gap-1.5"><Check size={11} className="text-[var(--verified)]" /> Publish releases, issue attestations, run the agent console</li>
+            <li className="flex items-center gap-1.5"><Check size={11} className="text-[var(--verified)]" /> Downgrades to Free automatically at trial end — data is kept</li>
+          </ul>
 
           <p className="text-xs text-muted-foreground mt-6 text-center">
             Sessions are httpOnly, rotated, and revocable. Wallet linking happens after sign-in —

@@ -4,6 +4,7 @@ import { withApi, readJson, clientIp } from '@/lib/api'
 import { requireAuth, requireMembership } from '@/lib/auth'
 import { err } from '@/lib/errors'
 import { audit } from '@/lib/audit'
+import { requireFeature } from '@/lib/entitlements'
 import { randomToken, sha256Token } from '@/lib/crypto'
 
 export const dynamic = 'force-dynamic'
@@ -31,6 +32,8 @@ export async function POST(req: NextRequest) {
     const body = await readJson<{ orgId?: string; name?: string; scopes?: string[] }>(req)
     if (!body.orgId || !body.name) throw err('VALIDATION_FAILED', { missing: ['orgId', 'name'] })
     await requireMembership(user.id, body.orgId, 'apikeys.manage')
+    // Entitlement: API keys are a Pro feature.
+    await requireFeature(body.orgId, 'apiKeys')
     const scopes = (body.scopes ?? ['read']).join(',')
     const raw = `plk_${randomToken(24)}`
     const credential = await db.apiCredential.create({

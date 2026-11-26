@@ -4,6 +4,7 @@ import { withApi, readJson, clientIp } from '@/lib/api'
 import { requireAuth, requireProjectAccess } from '@/lib/auth'
 import { err } from '@/lib/errors'
 import { audit } from '@/lib/audit'
+import { requireFeature, assertCap } from '@/lib/entitlements'
 import { sha256Hex } from '@/lib/crypto'
 import { llm, validateAgentReport } from '@/lib/llm'
 import { startExecution, approveExecution, attestExecution } from '@/lib/agent-runtime'
@@ -59,6 +60,9 @@ export async function POST(req: NextRequest) {
       await requireMembershipShim(user.id, orgId)
       const caps = await import('@/lib/auth').then(m => m.requireMembership(user.id, orgId, 'agent.register'))
       void caps
+      // Entitlement: Agent Command is a Pro feature; agents also have a plan cap.
+      await requireFeature(orgId, 'agentCommand')
+      await assertCap(orgId, 'agents', await db.agent.count({ where: { organizationId: orgId, status: 'ACTIVE' } }))
       const name = (body.name as string) ?? ''
       if (!name || name.length < 2) throw err('VALIDATION_FAILED', { field: 'name' })
       const slug = `${name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40)}-${Math.random().toString(36).slice(2, 6)}`

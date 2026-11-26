@@ -4,6 +4,7 @@ import { withApi, readJson, clientIp } from '@/lib/api'
 import { requireAuth, requireProjectAccess, requireMembership } from '@/lib/auth'
 import { err } from '@/lib/errors'
 import { audit } from '@/lib/audit'
+import { requireFeature } from '@/lib/entitlements'
 import { evaluateReleasePolicy, policyFromRow, simulatePolicy, isValidCategory } from '@/lib/policy-engine'
 import { isValidGnoAddress } from '@/lib/crypto'
 
@@ -40,6 +41,9 @@ export async function POST(req: NextRequest) {
 
     if (op === 'set') {
       const projectId = body.projectId as string
+      // Entitlement: the policy engine is a Pro feature.
+      const project = await db.project.findUnique({ where: { id: projectId }, select: { organizationId: true } })
+      if (project) await requireFeature(project.organizationId, 'policyEngine')
       const project = await requireProjectAccess(user.id, projectId, 'policy.write')
       const categories = ((body.requireCategories as string[]) ?? []).map(c => c.toUpperCase())
       for (const c of categories) if (!isValidCategory(c)) throw err('VALIDATION_FAILED', { field: 'requireCategories', invalid: c })

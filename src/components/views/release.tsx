@@ -14,6 +14,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { CATEGORIES } from '@/lib/categories'
 import { ArrowLeft, Plus, Upload, Link2, ShieldCheck, RefreshCw } from 'lucide-react'
 
 interface ReleaseDetail {
@@ -42,7 +43,19 @@ export function ReleaseView({ route }: { route: Route; go: (r: Route) => void; s
   const load = useCallback(async () => {
     if (!releaseId) return
     try {
-      setData(await api.get<ReleaseDetail>(`/api/releases/${releaseId}`))
+      // The API nests collections under `release`; normalize to the view shape
+      // so missing collections never crash the render.
+      const res = await api.get<{
+        release: ReleaseDetail['release'] & { evidence?: unknown[]; attestations?: ReleaseDetail['attestations']; transactions?: ReleaseDetail['transactions'] }
+        policyVerdict: ReleaseDetail['policyVerdict']
+      }>(`/api/releases/${releaseId}`)
+      setData({
+        release: res.release,
+        policyVerdict: res.policyVerdict,
+        evidence: (res.release.evidence ?? []) as ReleaseDetail['evidence'],
+        attestations: res.release.attestations ?? [],
+        transactions: res.release.transactions ?? [],
+      })
     } catch (e) {
       if (e instanceof ClientError) {
         toast('error', e.apiError.message, e.apiError.recovery)
@@ -371,8 +384,8 @@ function AddAttestationDialog({ release, onIssued }: {
             <Select value={category} onValueChange={setCategory}>
               <SelectTrigger id="at-cat"><SelectValue /></SelectTrigger>
               <SelectContent>
-                {['BUILD_PROVENANCE', 'SOURCE_PROVENANCE', 'TEST_EXECUTION', 'SECURITY_ASSESSMENT', 'CODE_REVIEW', 'RELEASE_APPROVAL', 'BENCHMARK_RESULT', 'DEPENDENCY_VERIFICATION', 'COMPLIANCE_EVIDENCE'].map(c =>
-                  <SelectItem key={c} value={c}>{c.replaceAll('_', ' ')}</SelectItem>)}
+                {CATEGORIES.map(c =>
+                  <SelectItem key={c} value={c}>{(c as string).replaceAll('_', ' ')}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>

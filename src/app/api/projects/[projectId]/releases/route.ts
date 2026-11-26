@@ -4,6 +4,7 @@ import { withApi, readJson, clientIp } from '@/lib/api'
 import { requireAuth, requireProjectAccess } from '@/lib/auth'
 import { err } from '@/lib/errors'
 import { audit } from '@/lib/audit'
+import { assertMetered, recordUsage, refundUsage } from '@/lib/entitlements'
 import { isValidDigest } from '@/lib/crypto'
 
 export const dynamic = 'force-dynamic'
@@ -68,6 +69,9 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
     const dup = await db.release.findUnique({ where: { projectId_version: { projectId, version: body.version } } })
     if (dup) throw err('DUPLICATE', { reason: `version ${body.version} already exists` })
 
+    // Entitlement: monthly release allowance for the org's plan.
+    await assertMetered(project.organizationId, 'releases')
+
     const release = await db.release.create({
       data: {
         projectId,
@@ -90,6 +94,8 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
       metadata: { version: release.version, commit: release.commitHash },
       ip: clientIp(req), traceId,
     })
+    // Entitlement metering: record the consumption after the successful create.
+    await recordUsage(project.organizationId, 'releases')
     return { id: release.id, version: release.version, status: release.status }
   })
 }

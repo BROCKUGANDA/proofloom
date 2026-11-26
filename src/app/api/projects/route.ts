@@ -4,6 +4,7 @@ import { withApi, readJson, clientIp, requireAuthShim } from '@/lib/api'
 import { requireAuth, requireMembership } from '@/lib/auth'
 import { err } from '@/lib/errors'
 import { audit } from '@/lib/audit'
+import { assertCap } from '@/lib/entitlements'
 
 export const dynamic = 'force-dynamic'
 
@@ -50,6 +51,9 @@ export async function POST(req: NextRequest) {
     if (!body.orgId) throw err('VALIDATION_FAILED', { missing: ['orgId'] })
     if (!body.name || body.name.length < 2 || body.name.length > 120) throw err('VALIDATION_FAILED', { field: 'name' })
     await requireMembership(user.id, body.orgId, 'project.create')
+    // Entitlement: hard cap on active projects for the org's plan.
+    const activeProjects = await db.project.count({ where: { organizationId: body.orgId, status: 'ACTIVE' } })
+    await assertCap(body.orgId, 'projects', activeProjects)
 
     const slug = `${body.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48)}-${Math.random().toString(36).slice(2, 6)}`
     if (body.visibility && !['public', 'private'].includes(body.visibility)) throw err('VALIDATION_FAILED', { field: 'visibility' })
