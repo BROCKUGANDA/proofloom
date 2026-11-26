@@ -1,0 +1,1191 @@
+{
+ "meta": {
+  "product": "PROOFLOOM",
+  "deadline_utc": "2026-12-18T01:00:00Z",
+  "deadline_nairobi": "2026-12-18 04:00 (UTC+3)",
+  "deadline_beijing": "2026-12-18 09:00 (UTC+8)",
+  "start_date": "2026-11-27",
+  "generated": "2026-11-26",
+  "task_count": 119,
+  "phase_count": 13
+ },
+ "phases": [
+  {
+   "num": 0,
+   "code": "P0",
+   "title": "侦察与环境准备",
+   "window": "11/27 - 11/28",
+   "goal": "在动手写任何代码之前，必须先完成对现有仓库与外部环境的彻底侦察。本阶段回答三个问题：仓库里已经有什么、Gno.land 工具链与测试网当前的真实状态是什么、黑客松的提交通道是否已经打通。directives 明确禁止在不了解现状的情况下覆盖已有功能，也禁止假设文档中记载的命令与端点仍然有效，因此一切以实际核验为准。本阶段结束时，后续所有工作流所依赖的基础设施（工具链、密钥、CI、活文档体系）必须全部就位。",
+   "dod": "仓库审计报告与风险登记表完成；gno/gnokey/gnodev 可用且版本已记录；DoraHacks 注册并加入黑客松；部署密钥安全就位；活文档体系建立；命名合规确认（PROOFLOOM 无 Gno 前缀）。"
+  },
+  {
+   "num": 1,
+   "code": "P1",
+   "title": "架构与设计基础",
+   "window": "11/28 - 11/30",
+   "goal": "本阶段把两份 directives 中的产品蓝图固化为可执行的工程规格。需要产出产品需求、系统架构、数据模型、API 契约、威胁模型、Realm 规格与 ATELIER 设计规范七份核心文档，并建立架构决策记录（ADR）机制。directives 要求每个重大决策都有书面依据，且每个产品域都要有明确的完成定义（DoD），这些都必须在本阶段落实，避免后续十几个并行工作流各自为政。",
+   "dod": "七份核心规格文档齐备并相互一致；30+ 实体的数据模型定稿；29 类攻击面的威胁模型成文；Realm 九模块边界与升级策略确定；ATELIER 色板差异（Forge Black/Obsidian 两套令牌）已调和并写入 DESIGN_TOKENS.md；实施依赖图与关键路径排期完成。"
+  },
+  {
+   "num": 2,
+   "code": "P2",
+   "title": "Gno 协议工程",
+   "window": "11/30 - 12/05",
+   "goal": "这是产品的协议核心阶段。按照已定稿的 Realm 规格实现 core/identity/registry/releases/attestations/agents/policies/verify/reputation 九个模块，严格遵循 Gno 的运行时约束（禁 goroutine、禁网络与文件系统访问、禁非确定性逻辑）与官方安全规则（cur realm、cur.Previous().Address()、不持久化临时值、不暴露可变指针、不调用不可信回调）。所有公共记录以 Gno realm 为权威来源，大对象与敏感证据一律离链，链上只存紧凑承诺与摘要。",
+   "dod": "九个 realm 模块实现并通过 gno fmt/lint/test；对抗性测试（未授权跨 realm 调用、调用者伪造、可变指针暴露、越权管理操作）全绿；gnodev 本地端到端演练（注册-发布-证明-验证）可重复执行；组合性公共接口就绪供外部消费者使用。"
+  },
+  {
+   "num": 3,
+   "code": "P3",
+   "title": "链上网关与钱包",
+   "window": "12/02 - 12/06",
+   "goal": "让前端与后端真正跑在 Gno.land 状态之上，而不是显示一个余额装饰。本阶段实现可配置的链档案与链身份校验、完整的链网关（查询、事务准备、签名请求、广播、确认跟踪、状态对账）以及十态事务生命周期与幂等控制。钱包侧接入 GnoConnect 与 Adena，用户必须显式批准每一笔签名，系统绝不请求或传输助记词与私钥。阶段收尾动作是把全部 realm 真实部署到 Onyx 测试网并记录包路径与交易哈希。",
+   "dod": "Onyx（onyx-1）网络档案与启动时链身份校验生效；事务生命周期十态完整实现，无静默重试导致的重复状态变更；Adena 钱包连接、签名、确认、失败与网络不匹配处理全部可用；realm 部署记录（包路径+tx 哈希）写入 DEPLOYMENT.md 并经 gnoweb 公开可读。"
+  },
+  {
+   "num": 4,
+   "code": "P4",
+   "title": "核心产品域",
+   "window": "12/01 - 12/09",
+   "goal": "本阶段把产品十大域中的七个核心域端到端实现：身份与组织、项目注册表、组件注册表与依赖图、发布溯源引擎、证据与证明协议、公共验证门户、分析与智能。每个域都要求前端、后端、数据库、授权、审计贯通，并遵守 directives 的特征级 DoD 十二条判据（界面、后端、数据、校验、授权、加载/错误/空态、审计、测试、文档、人工验证）。验证引擎必须把签名有效性、摘要完整性、发行者授权、过期、撤销、链上发布等十项判定分开呈现，绝不因为记录存在就显示绿色已验证。",
+   "dod": "七大域全部端到端贯通；发布状态机（DRAFT 至 VERIFIED 及 REJECTED/EXPIRED/REVOKED/SUPERSEDED/DISPUTED）服务端与链上双重校验；公共验证门户免登录可用并输出机器可读 JSON；分析模块全部指标真实可溯源，零伪造数据；每域人工验证记录写入 VERIFICATION_LOG.md。"
+  },
+  {
+   "num": 5,
+   "code": "P5",
+   "title": "Agent 问责与策略中心",
+   "window": "12/05 - 12/10",
+   "goal": "AI agent 问责是 PROOFLOOM 的定义性能力。本阶段实现 Agent 注册表、最小权限许可体系（工具白名单、作用域、过期、审批阈值、紧急撤销、执行预算、速率限制）、结构化执行记录与执行控制台、任务协调十态状态机，以及确定性的策略中心（策略版本化、模拟、限时例外、可解释的 PolicyVerdict）。LLM 供应商全部抽象在适配器之后，密钥永不进入浏览器或合约，供应商不可用时核心协议功能不受影响；LLM 永远不是安全策略的最终权威。",
+   "dod": "Agent 注册与撤销全流程可用；权限越界与提升在测试中被全部拦截；每次实质 Agent 动作都有结构化审计记录；策略引擎评估结果可精确解释通过或失败原因；任务完成的证据关联可检查；gnomcp 以只读适配器形式接入且成熟度如实文档化。"
+  },
+  {
+   "num": 6,
+   "code": "P6",
+   "title": "集成与开发者生态",
+   "window": "12/07 - 12/12",
+   "goal": "PROOFLOOM 的价值必须能被第三方直接消费。本阶段实现 GitHub 集成（OAuth、webhook 签名校验、提交与 PR 关联、CI 状态摄取，最小权限）、CI/CD 摄取契约与可直接使用的 GitHub Action 示例、版本化公共 REST API 与 OpenAPI 文档、TypeScript SDK 与 CLI、可替换的存储适配器框架。收尾交付两个真实可运行的示例：一个独立消费者项目直接读取 PROOFLOOM realm 公共接口完成验证，一个可嵌入第三方网站的验证小部件。",
+   "dod": "GitHub webhook 签名校验与重放防护通过测试；GitHub Action 示例可在真实流水线发布证据记录；SDK+CLI 走通九步开发者旅程（认证到取回验证报告）；消费者示例项目在仓库中真实可运行并出现在演示视频中；公开验证 JSON API 免鉴权可读。"
+  },
+  {
+   "num": 7,
+   "code": "P7",
+   "title": "ATELIER 设计系统与全量界面",
+   "window": "12/01 - 12/13",
+   "goal": "设计系统不是事后装饰。本阶段先把调和后的设计令牌、排版系统与基础组件落地为真实代码，再实现 Editorial/Observatory/Control Room 三个信息环境共享一套设计语言的全部界面：公开体验、认证工作区与管理后台。签名组件（LoomPanel、EvidenceThread、ProofSeal、ChainReceipt、PolicyVerdict 等）必须带全部交互状态、文档与测试；Proof Atlas 用真实数据驱动并提供 2D 回退与移动可用性。directives 明令禁止死按钮、占位工作流与任意一次性样式。",
+   "dod": "全部公开/认证/管理页面实现且每个页面具备加载、空态、错误、权限、重试状态；签名组件覆盖主要界面并通过组件测试；Atlas 在移动端可用且有表格替代视图；WCAG 2.2 AA 关键项达标；设计系统画廊页展示全部组件状态。"
+  },
+  {
+   "num": 8,
+   "code": "P8",
+   "title": "安全、测试与加固",
+   "window": "12/08 - 12/14",
+   "goal": "前端构建通过不等于产品可用。本阶段执行 directives 的完整分层测试程序：后端单元/集成/契约测试、前端组件与交互测试、16 条端到端用户旅程、9 类安全测试（认证绕过、租户隔离、注入、重放、webhook 伪造等），以及不少于 250 条、每条 8 字段的边界条件矩阵。同时完成依赖与密钥扫描、可观测性与可靠性机制（退避、熔断、幂等、死信队列、优雅停机）与一次真实的备份恢复演练。任何严重及以上问题必须在进入部署阶段前解决。",
+   "dod": "全测试套件绿；EDGE_CASES.md 达到 250+ 条且逐条含触发、预期、预防、检测、恢复、测试与严重级；威胁模型中 29 类攻击面逐项有对应测试或控制；备份恢复演练记录在案；无未解决的高危阻塞。"
+  },
+  {
+   "num": 9,
+   "code": "P9",
+   "title": "部署与端到端验收",
+   "window": "12/13 - 12/15",
+   "goal": "把真实系统部署到真实环境并从全新会话验收。前端、后端、worker、PostgreSQL、Redis 与对象存储按生产级环境管理部署；如某个外部凭证或环境不可用，则产出精确到命令的部署手册并明确列出所需的所有者动作，绝不伪造部署能力。Onyx 部署全量复核后，执行新浏览器会话的端到端验收，确认健康检查、日志、监控与备份配置全部生效，最后产出 directives 要求的 15 项事实实施报告。",
+   "dod": "生产环境全部服务健康；演示路径从全新会话完整走通；实施报告按 15 项事实清单成文并如实分级（已实现并验证/已部署运行/外部受阻/计划中）；KNOWN_LIMITATIONS、PRODUCTION_READINESS 与 MAINNET_READINESS 文档就绪，主网保持独立审批门状态。"
+  },
+  {
+   "num": 10,
+   "code": "P10",
+   "title": "演示与提交材料",
+   "window": "12/14 - 12/16",
+   "goal": "评委只能通过提交材料认识产品，本阶段把真实运行的产品翻译成高分材料。README 必须讲清产品是什么、如何使用、Gno 组件为何不可或缺；演示视频目标 2 分 45 秒，严格按 directives 分镜（问题、建项目、发证据、上链、公共验证、Agent 问责、组合性）用真实部署数据录制，严禁伪造交易哈希或把预录内容冒充实时操作；提交描述、功能清单、技术限制与赛后路线图全部如实成文。",
+   "dod": "README 经外部视角读者测试可独立上手；视频时长不超过 3 分钟且完整覆盖七段分镜；全部截图与链接有效；仓库公开、License 与 SECURITY.md 就位、无任何密钥或敏感信息残留。"
+  },
+  {
+   "num": 11,
+   "code": "P11",
+   "title": "DoraHacks 提交与合规终检",
+   "window": "12/16 - 12/18",
+   "goal": "提交环节零容错。本阶段在 DoraHacks 的 Submit Build 中逐字段填写并执行双重终检：先对照黑客松六项硬性提交要求（测试网部署链接、公开仓库、真实 Gno 组件、README、演示视频、项目描述）逐项核验，再对照不合格情形清单（纯设计稿、未部署代码、无真实 Gno 组件、重复或批量生成条目）逐项排除。内部冻结线为 12/17，目标 12/17 18:00（东三区）前完成提交，为硬截止 12/18 01:00 UTC 留足缓冲。",
+   "dod": "提交完成后从匿名浏览器复核 DoraHacks 展示页全部字段与链接可访问；部署在提交时刻在线；获奖后 KYC 所需材料（12/22 截止）与 GNOT 收款钱包地址已预备。"
+  },
+  {
+   "num": 12,
+   "code": "P12",
+   "title": "赛后运营与 Builder Retention 路线图",
+   "window": "12/21 起",
+   "goal": "directives 要求这不是一次性参赛作品，而是一个六个月运营战略的起点。获奖公示（12/21）后立即启动 KYC（12/22 截止）；随后按月推进：第一个月稳定公共测试网版本与首个外部集成，第二个月扩展集成与社区，第三个月对齐 Retention 检查点（不少于 50 个真实独立地址、另一项目导入协议、提交检查点表单），第四至六个月保持月度发布并向 100 个独立地址与 500 社区成员推进。商业化同步推进订阅档位与 entitlement 架构，但不接真实支付、不发行代币、不夸大任何审计或认证。",
+   "dod": "M1/M2 里程碑按计划交付且每月至少两次公开项目更新；M3 检查点表单（部署链接+demo+真实用量）按期提交；所有对外声明符合合规纪律：不虚构用户数、不把团队出资钱包计入用量、不把 Retention 奖金表述为既得权益。"
+  }
+ ],
+ "tasks": [
+  {
+   "id": "T-001",
+   "phase": 0,
+   "title": "全面侦察现有仓库",
+   "priority": "P0",
+   "due": "11/27",
+   "deps": "",
+   "detail": "按 directives Stage 0 十项清单检查：框架与包管理器、路由、组件、后端服务、数据库 schema、认证、既有集成、部署配置、测试与未完成功能。产出仓库审计报告、现状架构图、功能清单、缺陷清单、风险登记与依赖清单。"
+  },
+  {
+   "id": "T-002",
+   "phase": 0,
+   "title": "建立活文档与实施计划体系",
+   "priority": "P0",
+   "due": "11/27",
+   "deps": "T-001",
+   "detail": "创建 docs/implementation/ 下 MASTER_EXECUTION_PLAN.md、PROGRESS.md、BLOCKERS.md、DECISIONS.md、VERIFICATION_LOG.md，以及 IMPLEMENTATION_STATUS.md、ARCHITECTURE.md、SECURITY_AUDIT.md、EDGE_CASES.md、DEPLOYMENT.md、SUBMISSION_READINESS.md、CHANGELOG.md。每个已完成事项必须附证据。"
+  },
+  {
+   "id": "T-003",
+   "phase": 0,
+   "title": "核验 Gno 官方文档与网络配置现状",
+   "priority": "P0",
+   "due": "11/27",
+   "deps": "",
+   "detail": "通读 docs.gno.land 当前版本：getting started、networks（确认 onyx-1 链 ID、RPC https://rpc.onyx.testnets.gno.land、faucet、gnodev 用法）、安全文档。把确认后的端点与工具版本写入 DEPLOYMENT.md，禁止假设旧端点仍有效。"
+  },
+  {
+   "id": "T-004",
+   "phase": 0,
+   "title": "安装并验证 Gno 工具链",
+   "priority": "P0",
+   "due": "11/27",
+   "deps": "T-003",
+   "detail": "安装 gno、gnokey、gnodev 并验证 gno fmt / gno lint / gno test 三件套可运行；记录版本号；确认与 Onyx 测试网的兼容性。工具链问题是最高风险依赖，必须在第一天排除。"
+  },
+  {
+   "id": "T-005",
+   "phase": 0,
+   "title": "注册 DoraHacks 并加入黑客松",
+   "priority": "P0",
+   "due": "11/27",
+   "deps": "",
+   "detail": "在 DoraHacks 完成 Gnome Tavern 页面的 Register/Join，确认 Submit Build 入口与所需字段；记录提交页面全部字段清单供 Phase 11 使用；核对本页面公示的规则为最新版本。"
+  },
+  {
+   "id": "T-006",
+   "phase": 0,
+   "title": "加入 Gno.land Discord 黑客松频道",
+   "priority": "P1",
+   "due": "11/27",
+   "deps": "",
+   "detail": "加入 discord.gg/gnoland 的 #gnome-tavern-hackathon 频道，关注规则更新与评委答疑；将关键澄清（如有）回写进本清单与 DECISIONS.md。"
+  },
+  {
+   "id": "T-007",
+   "phase": 0,
+   "title": "创建部署密钥并领取测试币",
+   "priority": "P0",
+   "due": "11/28",
+   "deps": "T-004",
+   "detail": "用 gnokey 创建部署与演示用账户，经 faucet.gno.land 领取测试 GNOT；私钥与助记词绝不进入仓库或 CI 环境变量明文；演示账户余额与地址记录在运维文档（不含敏感信息）。"
+  },
+  {
+   "id": "T-008",
+   "title": "搭建 monorepo 骨架与本地开发环境",
+   "phase": 0,
+   "priority": "P0",
+   "due": "11/28",
+   "deps": "T-001",
+   "detail": "按 directives 建议结构建立 apps/packages/chain/services/integrations/examples/infrastructure/tests/docs 目录；docker-compose 提供本地 PostgreSQL/Redis/对象存储；数据库迁移框架就位。若仓库已有等价结构则保留并记录理由。"
+  },
+  {
+   "id": "T-009",
+   "phase": 0,
+   "title": "建立 CI 流水线",
+   "priority": "P1",
+   "due": "11/28",
+   "deps": "T-008",
+   "detail": "CI 覆盖：类型检查、lint、单元测试、gno fmt/lint/test 三件套、依赖与密钥扫描；PR 必须过 CI 才能合并；为后续十一个阶段提供回归保护。"
+  },
+  {
+   "id": "T-010",
+   "phase": 0,
+   "title": "项目命名合规确认",
+   "priority": "P0",
+   "due": "11/28",
+   "deps": "T-005",
+   "detail": "确认 PROOFLOOM 不含 Gno 前缀且不暗示与 Gno.land 的官方关联；检查全部品牌文案、README、界面文案；该规则违反将被取消资格，必须在所有材料产出前完成排查。"
+  },
+  {
+   "id": "T-011",
+   "phase": 1,
+   "title": "产品需求规格 PRODUCT_REQUIREMENTS.md",
+   "priority": "P0",
+   "due": "11/28",
+   "deps": "T-002",
+   "detail": "合并两份 directives 的域清单为单一需求基线：十大产品域、角色矩阵（11 角色与权限）、发布状态机、证明类型清单、公共验证要求；标注每项需求的来源 directive 条款，作为后续验收依据。"
+  },
+  {
+   "id": "T-012",
+   "phase": 1,
+   "title": "系统架构文档与 ADR 机制",
+   "priority": "P0",
+   "due": "11/29",
+   "deps": "T-011",
+   "detail": "SYSTEM_ARCHITECTURE.md 定义 12 个架构边界（UI/域服务/身份授权/Agent 编排/证据处理/验证/链网关/索引/持久化/外部集成/通知/管理）；建立 docs/architecture/ADR/ 决策记录制度，任何技术栈偏离（如改用 Go 服务）必须留档。"
+  },
+  {
+   "id": "T-013",
+   "phase": 1,
+   "title": "数据模型设计（30+ 实体）",
+   "priority": "P0",
+   "due": "11/29",
+   "deps": "T-012",
+   "detail": "覆盖 users/wallets/sessions/organizations/memberships/roles/projects/components/dependencies/releases/artifacts/evidence/attestations/issuers/agents/agent_permissions/agent_executions/tasks/reviews/policies/verification_results/revocations/audit_events/chain_transactions 等；定义主外键、唯一约束、索引、租户隔离、软删除、保留策略；数据库约束强制关键完整性规则。"
+  },
+  {
+   "id": "T-014",
+   "phase": 1,
+   "title": "API 契约 v1（OpenAPI）",
+   "priority": "P0",
+   "due": "11/29",
+   "deps": "T-012",
+   "detail": "定义组织、项目、组件、发布、证据、证明、Agent、任务、策略、公共验证端点；统一结构化错误、分页、过滤、限流、幂等键、版本化；公开只读验证 API 免鉴权。"
+  },
+  {
+   "id": "T-015",
+   "phase": 1,
+   "title": "威胁模型 THREAT_MODEL.md",
+   "priority": "P0",
+   "due": "11/29",
+   "deps": "T-012",
+   "detail": "逐项覆盖 directives 29 类攻击面：钱包仿冒、身份伪造、越权发布/撤销、恶意 realm 调用、interrealm 权限错误、重放、prompt 注入、Agent 提权、跨租户访问、链 ID 混淆、事务竞态、DoS 等；每项给出控制措施与检测手段。"
+  },
+  {
+   "id": "T-016",
+   "phase": 1,
+   "title": "Realm 架构规格 REALM_SPECIFICATION.md",
+   "priority": "P0",
+   "due": "11/30",
+   "deps": "T-015",
+   "detail": "定义 gno.land/r/<publisher>/proofloom/ 下 core/identity/registry/releases/attestations/agents/policies/verify/reputation 九模块的职责、所有权、公共接口、升级策略、Gas 预算与跨 realm 调用规则；明确链上仅存承诺与摘要、大对象离链。"
+  },
+  {
+   "id": "T-017",
+   "phase": 1,
+   "title": "ATELIER 设计系统规范与色板调和决策",
+   "priority": "P0",
+   "due": "11/30",
+   "deps": "T-011",
+   "detail": "两份 directives 色板存在差异（Forge Black #0B0F14/Proof Teal #58D7C4 与 Obsidian #090D11/Verdigris #55D8C2），须做出调和决策并记入 ADR；产出 DESIGN_TOKENS.md（语义状态色、明暗主题）、ATELIER_DESIGN_SYSTEM.md（三环境）、COMPONENT_CATALOG.md（签名组件清单）、MOTION_GUIDELINES.md。"
+  },
+  {
+   "id": "T-018",
+   "phase": 1,
+   "title": "品牌资产体系",
+   "priority": "P1",
+   "due": "11/30",
+   "deps": "T-017",
+   "detail": "设计三线交汇于中心验证点的原创徽记（代表 Source/Execution/Evidence），产出主徽标、横向字标、紧凑徽标、favicon、App 图标、单色与明暗变体、社交头像、加载动画，全部 SVG 矢量并记录使用规范；禁止使用盾牌/对勾/挂锁/电路脑等俗套图形。"
+  },
+  {
+   "id": "T-019",
+   "phase": 1,
+   "title": "实施依赖图与关键路径排期",
+   "priority": "P0",
+   "due": "11/30",
+   "deps": "T-011",
+   "detail": "将本清单 122 项任务绘制为依赖图（写入 MASTER_EXECUTION_PLAN.md），标注关键路径：Realm 工程→链上部署→核心域→集成→验收→演示→提交；识别可与 Phase 2 并行的设计与前端工作流。"
+  },
+  {
+   "id": "T-020",
+   "phase": 1,
+   "title": "各产品域完成定义（DoD）",
+   "priority": "P1",
+   "due": "11/30",
+   "deps": "T-011",
+   "detail": "按 directives 特征级 DoD 十二条判据（用户旅程、界面、后端、数据模型、校验、授权、加载/错误/空态、审计、测试、文档、人工验证）为每个域建立验收模板，Phase 4/5 验收时逐项打勾并留证。"
+  },
+  {
+   "id": "T-021",
+   "phase": 2,
+   "title": "realm core：中央协议状态",
+   "priority": "P0",
+   "due": "11/30",
+   "deps": "T-016",
+   "detail": "实现协议版本、共享类型、确定性标识符生成与跨模块公共接口；不暴露可变内部结构，返回安全值或不可变副本。"
+  },
+  {
+   "id": "T-022",
+   "phase": 2,
+   "title": "realm identity：身份关联",
+   "priority": "P0",
+   "due": "12/01",
+   "deps": "T-021",
+   "detail": "项目与参与者的链上身份关联、发行者注册；从 cur.Previous().Address() 派生调用者身份，绝不信任调用参数传入的地址；钱包地址与法律身份严格区分。"
+  },
+  {
+   "id": "T-023",
+   "phase": 2,
+   "title": "realm registry：项目与组件注册",
+   "priority": "P0",
+   "due": "12/01",
+   "deps": "T-021",
+   "detail": "项目/组件注册、命名空间、元数据与工件摘要提交；输入校验完备；注册事件可被索引服务消费。"
+  },
+  {
+   "id": "T-024",
+   "phase": 2,
+   "title": "realm releases：发布与版本历史",
+   "priority": "P0",
+   "due": "12/02",
+   "deps": "T-023",
+   "detail": "发布权威状态与版本历史；已发布记录不可静默变更，修正必须走新版本或显式 superseding 证明；支持撤销与取代关系。"
+  },
+  {
+   "id": "T-025",
+   "phase": 2,
+   "title": "realm attestations：证据承诺",
+   "priority": "P0",
+   "due": "12/02",
+   "deps": "T-024",
+   "detail": "链上仅存证据摘要、发行者引用与状态承诺；支持多发行者对同一发布的独立证明；过期与撤销状态可查询。"
+  },
+  {
+   "id": "T-026",
+   "phase": 2,
+   "title": "realm agents：Agent 注册与授权",
+   "priority": "P0",
+   "due": "12/03",
+   "deps": "T-022",
+   "detail": "Agent 注册、权限范围（允许项目/允许操作/审批阈值/过期时间）、紧急撤销；不给任何 Agent 无限制的签名或发布权限。"
+  },
+  {
+   "id": "T-027",
+   "phase": 2,
+   "title": "realm policies：发布与授权策略",
+   "priority": "P1",
+   "due": "12/03",
+   "deps": "T-025",
+   "detail": "策略的链上权威表达与确定性评估接口：要求的证明类型、发行者白名单、审批阈值；评估结果精确可解释。"
+  },
+  {
+   "id": "T-028",
+   "phase": 2,
+   "title": "realm verify：只读公共验证接口",
+   "priority": "P0",
+   "due": "12/03",
+   "deps": "T-024",
+   "detail": "跨 realm 可组合的只读查询接口：按发布/证明/摘要检索记录与状态；这是第三方组合性的合同面，接口稳定性写入文档。"
+  },
+  {
+   "id": "T-029",
+   "phase": 2,
+   "title": "realm reputation：可靠性记录",
+   "priority": "P2",
+   "due": "12/10",
+   "deps": "T-022",
+   "detail": "贡献与发行者可靠性的透明记录；仅在核心链路稳定后实现，不得挤占关键路径资源。"
+  },
+  {
+   "id": "T-030",
+   "phase": 2,
+   "title": "合约安全规则全量落实",
+   "priority": "P0",
+   "due": "12/03",
+   "deps": "T-021",
+   "detail": "逐条落实 directives 合约安全规则：校验 realm-call 身份、cur.IsCurrent()、不持久化临时 realm 值、不暴露内部指针、不在行使本 realm 权限时调用不可信回调、校验外部传入接口对象、状态变更操作显式所有权与授权。"
+  },
+  {
+   "id": "T-031",
+   "phase": 2,
+   "title": "Gno 测试套件（含对抗性测试）",
+   "priority": "P0",
+   "due": "12/04",
+   "deps": "T-021",
+   "detail": "单元、状态机、授权、跨 realm、调用者身份、无效参数、撤销、过期、重复提交、对抗性交互（未授权跨 realm 调用、调用者伪造、可变指针暴露、越权管理操作）、只读查询与存储增长测试。"
+  },
+  {
+   "id": "T-032",
+   "phase": 2,
+   "title": "gno fmt/lint/test 全绿入 CI",
+   "priority": "P0",
+   "due": "12/04",
+   "deps": "T-031",
+   "detail": "三件套纳入 CI 强制门禁；任何失败阻塞合并；lint 规则与仓库 Go 风格统一。"
+  },
+  {
+   "id": "T-033",
+   "phase": 2,
+   "title": "gnodev 本地端到端演练",
+   "priority": "P0",
+   "due": "12/05",
+   "deps": "T-032",
+   "detail": "在本地 gnodev 环境完整演练注册项目→产生发布→生成证据→提交证明→验证记录的闭环，确保逻辑正确后再上测试网，避免浪费测试网部署与污染公开记录。"
+  },
+  {
+   "id": "T-034",
+   "phase": 2,
+   "title": "链上/链下数据边界决策落地",
+   "priority": "P0",
+   "due": "12/05",
+   "deps": "T-016",
+   "detail": "固化规则：敏感工件与大体量证据永不入链；链上仅存紧凑元数据与密码学承诺；状态增长控制在合理水平；该边界写入 GNO_ARCHITECTURE.md 并在代码评审中强制。"
+  },
+  {
+   "id": "T-035",
+   "phase": 3,
+   "title": "Onyx 网络档案与链身份校验",
+   "priority": "P0",
+   "due": "12/02",
+   "deps": "T-003",
+   "detail": "可配置 chain profile（onyx-1、RPC、WebSocket、faucet）+ 启动时显式链身份校验 + 最新网络回退端点；禁止硬编码过时测试网；网络不匹配时用户端明确提示。"
+  },
+  {
+   "id": "T-036",
+   "phase": 3,
+   "title": "链网关服务",
+   "priority": "P0",
+   "due": "12/03",
+   "deps": "T-035",
+   "detail": "实现网络发现、账户查询、realm 查询、事务准备、签名请求、广播、确认跟踪、回执处理、状态对账、重试策略、失败分类与限流；绝不使用 EVM 工具或 ERC-20 假设。"
+  },
+  {
+   "id": "T-037",
+   "phase": 3,
+   "title": "事务生命周期与幂等控制",
+   "priority": "P0",
+   "due": "12/03",
+   "deps": "T-036",
+   "detail": "实现 CREATED/SIMULATED/AWAITING_SIGNATURE/SIGNED/BROADCAST/PENDING/CONFIRMED/FAILED/EXPIRED/RECONCILIATION_REQUIRED 十态；稳定操作标识符防重复；响应中断的事务走对账而非盲目重发；未获权威确认前绝不标记成功。"
+  },
+  {
+   "id": "T-038",
+   "phase": 3,
+   "title": "GnoConnect/Adena 钱包集成",
+   "priority": "P0",
+   "due": "12/04",
+   "deps": "T-036",
+   "detail": "钱包发现、连接、断开、地址展示、网络检测与不匹配处理、签名请求预览（函数、参数、预期效果）、提交、确认跟踪、失败处理、探索器链接；钱包抽象层为未来钱包预留适配位。"
+  },
+  {
+   "id": "T-039",
+   "phase": 3,
+   "title": "钱包安全红线",
+   "priority": "P0",
+   "due": "12/04",
+   "deps": "T-038",
+   "detail": "绝不请求或传输用户助记词/私钥；所有签名必须用户显式批准；签名请求展示完整预期效果；安全红线写入 SECURITY_CONTROLS.md 并纳入安全测试。"
+  },
+  {
+   "id": "T-040",
+   "phase": 3,
+   "title": "Realm 真实部署到 Onyx",
+   "priority": "P0",
+   "due": "12/05",
+   "deps": "T-033",
+   "detail": "将全部 realm 包部署到 Onyx 测试网；记录真实包路径与交易哈希至 DEPLOYMENT.md；在 gnoweb 上验证公开页面与查询可读；部署脚本可重复执行。"
+  },
+  {
+   "id": "T-041",
+   "phase": 3,
+   "title": "索引服务（链上到库对账）",
+   "priority": "P1",
+   "due": "12/06",
+   "deps": "T-040",
+   "detail": "indexer 消费链上事件写入 PostgreSQL，支撑列表页与检索性能；索引状态与链上状态可对账，差异可修复；链查询失败不阻塞离线缓存读。"
+  },
+  {
+   "id": "T-042",
+   "phase": 4,
+   "title": "身份与组织域端到端",
+   "priority": "P0",
+   "due": "12/03",
+   "deps": "T-013",
+   "detail": "注册/认证/邮箱验证/会话管理与撤销/密码找回/MFA 预留/组织创建/邀请/成员与角色管理/组织切换/审计历史；角色矩阵与权限在服务端与 API 层强制，绝不信任客户端声明；跨租户访问在测试中被拦截。"
+  },
+  {
+   "id": "T-043",
+   "phase": 4,
+   "title": "服务账号、API 凭证与令牌",
+   "priority": "P1",
+   "due": "12/04",
+   "deps": "T-042",
+   "detail": "服务账号、API 凭证、个人访问令牌的创建、作用域、轮换与撤销；凭证泄露路径纳入威胁模型与安全测试。"
+  },
+  {
+   "id": "T-044",
+   "phase": 4,
+   "title": "项目注册表域端到端",
+   "priority": "P0",
+   "due": "12/04",
+   "deps": "T-042",
+   "detail": "项目创建与配置、仓库关联与所有权核验、可见性、分类、技术栈、版本与发布历史、活动流、健康摘要、归档恢复、所有权转移工作流；公开档案与内部工作区分离。"
+  },
+  {
+   "id": "T-045",
+   "phase": 4,
+   "title": "组件注册表域端到端",
+   "priority": "P0",
+   "due": "12/05",
+   "deps": "T-044",
+   "detail": "包注册与元数据、版本、直接与传递依赖、许可证声明、SPDX/CycloneDX SBOM 支持、漏洞引用、弃用与撤销、风险分级与历史；不重造成熟标准，偏离需 ADR。"
+  },
+  {
+   "id": "T-046",
+   "phase": 4,
+   "title": "依赖关系图与发现",
+   "priority": "P1",
+   "due": "12/06",
+   "deps": "T-045",
+   "detail": "组件搜索与包发现；直接/传递依赖可视化（DependencyConstellation 2D 实现，Atlas 复用同源数据）；跨项目组件使用关系统计。"
+  },
+  {
+   "id": "T-047",
+   "phase": 4,
+   "title": "发布溯源引擎端到端",
+   "priority": "P0",
+   "due": "12/06",
+   "deps": "T-045",
+   "detail": "发布创建、CI/CD 摄取、构建元数据与工件摘要计算、溯源声明生成、证据附加、签名、发布状态机（DRAFT→EVIDENCE_PENDING→VALIDATING→REVIEW_REQUIRED→APPROVED→PUBLISHED→VERIFIED 与五个异常终态）服务端校验、发布对比、撤销与取代、时间线与导出。"
+  },
+  {
+   "id": "T-048",
+   "phase": 4,
+   "title": "证据与证明协议端到端",
+   "priority": "P0",
+   "due": "12/07",
+   "deps": "T-047",
+   "detail": "13 类证据摄取与分类、内容寻址存储、完整性校验、访问权限、保留与过期、编辑与撤销、版本化、导出与证据链可视化；证明模式版本化（发行者/主体/声明/证据引用/签名元数据/状态）；敏感证据只离链存储。"
+  },
+  {
+   "id": "T-049",
+   "phase": 4,
+   "title": "证明验证引擎（10 项分立判定）",
+   "priority": "P0",
+   "due": "12/07",
+   "deps": "T-048",
+   "detail": "签名有效性、摘要完整性、发行者身份、发行者授权、过期、撤销、链上发布、证据可及性、证据完整性、验证局限十项独立判定并分开呈现；记录存在不等于验证通过；每项判定结果与理由可解释。"
+  },
+  {
+   "id": "T-050",
+   "phase": 4,
+   "title": "公共验证门户端到端",
+   "priority": "P0",
+   "due": "12/08",
+   "deps": "T-049",
+   "detail": "免登录验证页支持六种输入（项目/组件/发布/证明 ID/内容摘要/交易哈希）；展示网络、realm 地址、交易引用、签名状态、过期与撤销、验证历史与已知局限；永久分享 URL、可嵌入组件、公开 JSON 响应、可下载验证报告；明确说明验证了什么、未验证什么。"
+  },
+  {
+   "id": "T-051",
+   "phase": 4,
+   "title": "分析与智能域",
+   "priority": "P1",
+   "due": "12/09",
+   "deps": "T-049",
+   "detail": "15+ 指标（注册项目、活跃组织、发布数、证明数、验证失败、撤销数、独立地址、月活项目等）逐个带定义与来源；区分链上/链下/估算/不可得；日期、组织、项目过滤与导出；精心设计的空态；零伪造数据。"
+  },
+  {
+   "id": "T-052",
+   "phase": 4,
+   "title": "通知服务与活动流",
+   "priority": "P2",
+   "due": "12/12",
+   "deps": "T-051",
+   "detail": "站内通知中心与活动流；关键状态变更（发布、证明、撤销、审批）可订阅；通知不泄漏租户数据。"
+  },
+  {
+   "id": "T-053",
+   "phase": 4,
+   "title": "核心域人工验证记录",
+   "priority": "P0",
+   "due": "12/09",
+   "deps": "T-051",
+   "detail": "按 T-020 的 DoD 模板逐域验收并将证据（截图、测试输出、事务哈希）写入 VERIFICATION_LOG.md；未通过项进入 BLOCKERS.md 并指定责任人与期限。"
+  },
+  {
+   "id": "T-054",
+   "phase": 5,
+   "title": "Agent 注册表端到端",
+   "priority": "P0",
+   "due": "12/06",
+   "deps": "T-026",
+   "detail": "注册、身份、所有者与组织关联、运行时与能力、版本历史、执行历史、信任历史、暂停与撤销；模型与供应商元数据可配置。"
+  },
+  {
+   "id": "T-055",
+   "phase": 5,
+   "title": "Agent 最小权限许可体系",
+   "priority": "P0",
+   "due": "12/07",
+   "deps": "T-054",
+   "detail": "只读/证据创建/验证请求/任务更新/评审建议/发布申请六类操作权限；工具白名单、项目作用域、审批阈值、过期、执行预算、速率限制、紧急撤销；权限越界测试全拦截。"
+  },
+  {
+   "id": "T-056",
+   "phase": 5,
+   "title": "Agent 执行记录与审计",
+   "priority": "P0",
+   "due": "12/07",
+   "deps": "T-055",
+   "detail": "每次实质动作记录：Agent ID、任务 ID、发起组织、时间戳、动作类别、工具、输入输出摘要（非明文密钥）、授权上下文、策略评估、结果与错误、证据引用、人工审批状态；重复执行防护；审计轨迹不可篡改。"
+  },
+  {
+   "id": "T-057",
+   "phase": 5,
+   "title": "Agent 执行控制台（Agent Command）",
+   "priority": "P1",
+   "due": "12/08",
+   "deps": "T-056",
+   "detail": "执行时间线、实时进度、审批队列、撤销控制；操作员可解释地看到 Agent 行为与策略判定。"
+  },
+  {
+   "id": "T-058",
+   "phase": 5,
+   "title": "任务协调域",
+   "priority": "P1",
+   "due": "12/08",
+   "deps": "T-055",
+   "detail": "OPEN→ASSIGNED→IN_PROGRESS→EVIDENCE_SUBMITTED→REVIEW→APPROVED/REJECTED→COMPLETED 等十态状态机；依赖、多指派、优先级、截止、验收标准与证据要求；人的审批与 Agent 贡献严格区分。"
+  },
+  {
+   "id": "T-059",
+   "phase": 5,
+   "title": "策略中心端到端",
+   "priority": "P0",
+   "due": "12/09",
+   "deps": "T-027",
+   "detail": "组织/项目/Agent/发布策略配置、版本化、模拟测试、限时例外（权限控制+审计）；确定性评估并给出 PolicyVerdict 解释（为何通过/失败）；LLM 不作为安全策略最终权威。"
+  },
+  {
+   "id": "T-060",
+   "phase": 5,
+   "title": "LLM 供应商抽象层",
+   "priority": "P0",
+   "due": "12/09",
+   "deps": "T-054",
+   "detail": "适配器接口、模型选择、超时与重试、用量与成本核算、健康检查、回退与输出校验；供应商 API 密钥仅存服务端环境；供应商不可用不阻塞注册、验证与基础协议功能。"
+  },
+  {
+   "id": "T-061",
+   "phase": 5,
+   "title": "gnomcp 适配器（可选集成）",
+   "priority": "P2",
+   "due": "12/12",
+   "deps": "T-060",
+   "detail": "gnomcp 仍是 WIP/未审计/预发布状态：仅作可选适配器、只读发现与开发工具优先、实验性写路径需人工批准、成熟度如实文档化；主产品在无 gnomcp 时完全可用。"
+  },
+  {
+   "id": "T-062",
+   "phase": 6,
+   "title": "GitHub 集成",
+   "priority": "P0",
+   "due": "12/08",
+   "deps": "T-044",
+   "detail": "OAuth 连接、仓库选择与安装管理、webhook 签名校验、commit/PR 关联、发布检测、CI 状态摄取、贡献者关联；最小权限 scope；webhook 重放与伪造测试通过。"
+  },
+  {
+   "id": "T-063",
+   "phase": 6,
+   "title": "CI/CD 集成契约与 GitHub Action 示例",
+   "priority": "P0",
+   "due": "12/09",
+   "deps": "T-062",
+   "detail": "通用 HTTP webhook、测试结果摄取、工件摘要提交、SBOM 发布的适配器契约；提供可直接使用的 GitHub Action 示例，能在真实流水线发布一条发布证据记录（演示视频素材）。"
+  },
+  {
+   "id": "T-064",
+   "phase": 6,
+   "title": "公共 REST API 与 OpenAPI 文档",
+   "priority": "P0",
+   "due": "12/09",
+   "deps": "T-014",
+   "detail": "按契约实现全部端点：认证示例、分页、过滤、结构化错误、限流、幂等、版本化；公开只读验证 API 免鉴权；OpenAPI 文档随代码发布。"
+  },
+  {
+   "id": "T-065",
+   "phase": 6,
+   "title": "TypeScript SDK 与 CLI",
+   "priority": "P1",
+   "due": "12/11",
+   "deps": "T-064",
+   "detail": "SDK+CLI 覆盖九步开发者旅程：认证、注册项目、连接仓库、提交构建证据、创建发布、生成证明、发布链上承诺、验证发布、取回验证报告；含完整示例与可执行集成测试。"
+  },
+  {
+   "id": "T-066",
+   "phase": 6,
+   "title": "Webhook 订阅系统",
+   "priority": "P2",
+   "due": "12/12",
+   "deps": "T-064",
+   "detail": "订阅管理、签名投递、重试与失败记录、送达审计；不得静默丢弃失败投递。"
+  },
+  {
+   "id": "T-067",
+   "phase": 6,
+   "title": "存储适配器框架",
+   "priority": "P1",
+   "due": "12/10",
+   "deps": "T-048",
+   "detail": "可替换对象存储适配器、内容寻址、完整性校验、敏感证据私有存放；存储不可用时明确报错而非静默降级。"
+  },
+  {
+   "id": "T-068",
+   "phase": 6,
+   "title": "独立消费者示例项目",
+   "priority": "P0",
+   "due": "12/11",
+   "deps": "T-040",
+   "detail": "examples/consumer-project：一个真正独立运行的应用直接调用 PROOFLOOM realm 公共接口完成注册与验证，作为组合性的活证据；出现在 README 与演示视频中。"
+  },
+  {
+   "id": "T-069",
+   "phase": 6,
+   "title": "可嵌入验证小部件",
+   "priority": "P2",
+   "due": "12/12",
+   "deps": "T-050",
+   "detail": "examples/verification-widget：第三方网站可嵌入的验证组件，读取公开 JSON API；与门户状态展示一致。"
+  },
+  {
+   "id": "T-070",
+   "phase": 7,
+   "title": "设计令牌代码化（明暗主题）",
+   "priority": "P0",
+   "due": "12/02",
+   "deps": "T-017",
+   "detail": "按调和决策实现 design-tokens 包：Obsidian/Carbon/Iron 深色面、Parchment 暖光面、Verdigris 主强调、Copper 次强调、Cobalt 信息色；语义状态色（verified/pending/revoked/critical 等）明暗两套并过 WCAG AA 对比校验；状态不得仅靠颜色区分。"
+  },
+  {
+   "id": "T-071",
+   "phase": 7,
+   "title": "排版系统落地",
+   "priority": "P0",
+   "due": "12/02",
+   "deps": "T-070",
+   "detail": "Instrument Serif 编辑展示、Geist Sans 或 Manrope 界面、IBM Plex Mono 哈希/标识/时间戳；定义显示/标题/正文/标注/等宽五级字阶、行高、字距、长标识符截断规则；运营密集界面禁用装饰衬线。"
+  },
+  {
+   "id": "T-072",
+   "phase": 7,
+   "title": "基础组件库",
+   "priority": "P0",
+   "due": "12/03",
+   "deps": "T-071",
+   "detail": "导航、侧栏、面包屑、命令面板、搜索、数据表、过滤栏、抽屉、对话框、通知与 Toast、模态工作流、状态指示器、空态插画、加载骨架、行内错误；每个组件含交互/焦点/禁用/响应式状态与键盘支持。"
+  },
+  {
+   "id": "T-073",
+   "phase": 7,
+   "title": "签名组件（17 个）",
+   "priority": "P1",
+   "due": "12/05",
+   "deps": "T-072",
+   "detail": "LoomPanel、EvidenceThread、LoomNode、ProofSeal、TraceLine、ArtifactTile、AgentSigil、ChainReceipt、TrustMeter、ProvenanceRail、EvidenceDrawer、AttestationStamp、PolicyVerdict、ReleaseCard、DependencyConstellation、ActivityTrace、IntegrationPulse；每个含 props 定义、无障碍行为、文档与测试；杜绝只好看的空壳组件。"
+  },
+  {
+   "id": "T-074",
+   "phase": 7,
+   "title": "Proof Atlas 证据图谱",
+   "priority": "P1",
+   "due": "12/07",
+   "deps": "T-073",
+   "detail": "数据驱动可视化项目-发布-组件-Agent-证明关系：节点选择与详情、关系高亮、过滤搜索缩放、时间导航、证据状态高亮；3D 库选型需评估性能与可维护性并提供高质量 2D 回退；移动端可用；reduced-motion 支持；禁装饰性 3D。"
+  },
+  {
+   "id": "T-075",
+   "phase": 7,
+   "title": "动效系统",
+   "priority": "P1",
+   "due": "12/05",
+   "deps": "T-072",
+   "detail": "微交互（按钮反馈、复制确认、状态转换、事务进度）与宏转场（页面、抽屉、图谱、发布序列、验证揭示）；统一时长与缓动令牌；尊重 prefers-reduced-motion；动画绝不掩盖关键事务信息。"
+  },
+  {
+   "id": "T-076",
+   "phase": 7,
+   "title": "公开页面组实现",
+   "priority": "P0",
+   "due": "12/09",
+   "deps": "T-073",
+   "detail": "落地页、产品概览、工作原理、协议架构、公共项目/发布/证明探索器、验证实验室、开发者文档门户、API 文档、定价、安全与信任中心、关于、状态页、法务页；公开页 SSR + SEO 元数据。"
+  },
+  {
+   "id": "T-077",
+   "phase": 7,
+   "title": "认证工作区组实现",
+   "priority": "P0",
+   "due": "12/11",
+   "deps": "T-076",
+   "detail": "工作台仪表盘、组织切换、项目工作区、组件注册表、Release Foundry、Evidence Library、证明中心、验证中心、Agent Registry、Agent Command、任务协调、策略中心、审批中心、审计探索器、Atlas、依赖图、分析、集成管理、API 凭证、通知、组织设置、成员管理、账户安全；按受众设计差异化信息架构。"
+  },
+  {
+   "id": "T-078",
+   "phase": 7,
+   "title": "管理后台组实现",
+   "priority": "P1",
+   "due": "12/11",
+   "deps": "T-077",
+   "detail": "系统配置、用户与组织管理、集成健康、队列监控、事务监控、审计检查、滥用监控、事件管理；管理权限独立于普通角色并服务端强制。"
+  },
+  {
+   "id": "T-079",
+   "phase": 7,
+   "title": "全页面状态完备性",
+   "priority": "P0",
+   "due": "12/12",
+   "deps": "T-077",
+   "detail": "每个页面覆盖 19 类状态：初始加载、后台刷新、空数据、部分数据、成功、校验失败、网络/服务器失败、权限拒绝、会话过期、限流、外部服务故障、事务 pending/被拒/确认超时、证据缺失/无效、证明已撤销、资源不可用、未知错误；错误带机器码、可读信息与恢复指引，绝不暴露堆栈。"
+  },
+  {
+   "id": "T-080",
+   "phase": 7,
+   "title": "无障碍（WCAG 2.2 AA 关键项）",
+   "priority": "P1",
+   "due": "12/12",
+   "deps": "T-079",
+   "detail": "语义 HTML、键盘导航、可见焦点、表单无障碍、屏幕阅读器标签、标题层级、对比度、表格无障碍、对话框无障碍、状态播报；复杂可视化提供列表/表格替代；关键信息不依赖颜色、悬停或 3D 交互。"
+  },
+  {
+   "id": "T-081",
+   "phase": 7,
+   "title": "响应式三端体验",
+   "priority": "P1",
+   "due": "12/13",
+   "deps": "T-080",
+   "detail": "桌面支持多面板复杂分析；平板保留有意义的分析能力；移动优先保证：状态总览、证据查看、发布摘要、通知、审批、钱包交互、安全告警；不是缩小版桌面。"
+  },
+  {
+   "id": "T-082",
+   "phase": 7,
+   "title": "SSR/CSR 边界与缓存失效",
+   "priority": "P1",
+   "due": "12/10",
+   "deps": "T-077",
+   "detail": "公开页/文档/验证记录 SSR；图谱、动态表、钱包、实时活动 CSR；严格界定水合边界；不通过序列化 client props 泄漏服务端机密或租户数据；链上更新后缓存正确失效。"
+  },
+  {
+   "id": "T-083",
+   "phase": 7,
+   "title": "性能优化与预算",
+   "priority": "P2",
+   "due": "12/13",
+   "deps": "T-081",
+   "detail": "路由代码分割、懒加载、图片与字体优化、大表虚拟化、图谱渲染性能控制、API 响应限制、数据库索引核查、包体分析与预算记录；实测而非估算；不得以删除有用功能换性能。"
+  },
+  {
+   "id": "T-084",
+   "phase": 7,
+   "title": "设计系统画廊页",
+   "priority": "P2",
+   "due": "12/13",
+   "deps": "T-073",
+   "detail": "集中展示全部组件与状态（明暗主题、加载/空/错误/禁用/焦点），作为设计回归与评审工具。"
+  },
+  {
+   "id": "T-085",
+   "phase": 8,
+   "title": "后端测试套件",
+   "priority": "P0",
+   "due": "12/10",
+   "deps": "T-064",
+   "detail": "单元（业务逻辑/校验/授权/状态机/密码学辅助）、集成（DB/队列/存储/webhook/钱包与链适配器）、API 契约、认证与授权、租户隔离、重试与故障恢复测试；接入 CI 门禁。"
+  },
+  {
+   "id": "T-086",
+   "phase": 8,
+   "title": "前端测试套件",
+   "priority": "P1",
+   "due": "12/11",
+   "deps": "T-079",
+   "detail": "组件与交互测试、钱包各状态、响应式、加载与错误态、键盘导航、无障碍、浏览器兼容、主题变体与视觉回归。"
+  },
+  {
+   "id": "T-087",
+   "phase": 8,
+   "title": "端到端旅程测试（16 条）",
+   "priority": "P0",
+   "due": "12/12",
+   "deps": "T-085",
+   "detail": "按 directives 旅程清单：注册→连钱包→建组织→建项目→注册组件→发布证据→创建发布→提交证明→验证发布→注册 Agent→派任务→评审 Agent 执行→批准发布→查询公共记录→撤销证明→确认撤销态可见；全部走真实后端与测试网。"
+  },
+  {
+   "id": "T-088",
+   "phase": 8,
+   "title": "安全测试",
+   "priority": "P0",
+   "due": "12/12",
+   "deps": "T-087",
+   "detail": "认证绕过、授权绕过、租户隔离、注入、重放、恶意上传、webhook 伪造、凭证泄露、事务重复九类；对照威胁模型逐项验证控制有效；发现即修复并回归。"
+  },
+  {
+   "id": "T-089",
+   "phase": 8,
+   "title": "边界条件矩阵（≥250 条）",
+   "priority": "P0",
+   "due": "12/13",
+   "deps": "T-088",
+   "detail": "覆盖 directives 40 类目（身份恢复、租户隔离、构建失败、工件损坏、签名验证、链重组、限流、队列失败、隐私保留等），每条含触发、前置、预期、失败表现、安全影响、用户响应、恢复、所需测试八字段；写入 EDGE_CASES.md，禁止一行一条的敷衍条目。"
+  },
+  {
+   "id": "T-090",
+   "phase": 8,
+   "title": "依赖与密钥扫描",
+   "priority": "P0",
+   "due": "12/12",
+   "deps": "T-009",
+   "detail": "依赖漏洞扫描与升级决策、仓库密钥扫描、.env.example 安全占位核查；确认无真实凭证入库、无内部地址泄漏；结果记入 SECURITY_AUDIT.md。"
+  },
+  {
+   "id": "T-091",
+   "phase": 8,
+   "title": "性能测试",
+   "priority": "P2",
+   "due": "12/14",
+   "deps": "T-083",
+   "detail": "首屏渲染、大证据表、图谱渲染、链查询延迟、仪表盘取数、搜索过滤、移动端实测；对超预算项记录例外与整改计划。"
+  },
+  {
+   "id": "T-092",
+   "phase": 8,
+   "title": "备份与恢复演练",
+   "priority": "P1",
+   "due": "12/14",
+   "deps": "T-008",
+   "detail": "数据库与对象存储备份、备份验证、恢复流程实测、迁移回滚策略、事件升级路径；未经测试的备份不算恢复能力；结果写入 BACKUP_AND_RECOVERY.md。"
+  },
+  {
+   "id": "T-093",
+   "phase": 8,
+   "title": "可观测性完备",
+   "priority": "P1",
+   "due": "12/13",
+   "deps": "T-064",
+   "detail": "结构化日志、trace 与请求关联 ID 贯穿前端动作→API→任务→链上事务；RPC 延迟、事务失败率、队列健康、证据处理健康、验证延迟、错误监控指标上线；运维仪表盘反映真实系统状态。"
+  },
+  {
+   "id": "T-094",
+   "phase": 8,
+   "title": "可靠性机制",
+   "priority": "P1",
+   "due": "12/13",
+   "deps": "T-093",
+   "detail": "指数退避+抖动、熔断、幂等、死信队列、后台任务恢复、优雅停机、RPC 超时处理、安全数据库事务、健康与就绪检查；失败任务绝不静默丢弃。"
+  },
+  {
+   "id": "T-095",
+   "phase": 9,
+   "title": "生产部署",
+   "priority": "P0",
+   "due": "12/14",
+   "deps": "T-094",
+   "detail": "部署 web/api/admin/worker/PostgreSQL/Redis/对象存储；生产级环境管理（环境变量、迁移、健康检查、日志）；若云凭证或域名不可用，则产出精确到命令的部署手册并列出全部所有者动作，绝不伪造部署；实际部署位置写入 DEPLOYMENT.md。"
+  },
+  {
+   "id": "T-096",
+   "phase": 9,
+   "title": "Onyx 部署全量复核",
+   "priority": "P0",
+   "due": "12/14",
+   "deps": "T-040",
+   "detail": "确认全部 realm 最新版本已部署且包路径正确；抽查真实状态变更交易；gnoweb 公开页与查询复核；包路径与 tx 哈希与文档一致。"
+  },
+  {
+   "id": "T-097",
+   "phase": 9,
+   "title": "全新会话端到端验收",
+   "priority": "P0",
+   "due": "12/15",
+   "deps": "T-095",
+   "detail": "从全新浏览器会话完整走通演示路径（连钱包→建项目→发证据→上链→公共验证→Agent 流程）；任何阻塞在该环节修复后重验；验收记录留证。"
+  },
+  {
+   "id": "T-098",
+   "phase": 9,
+   "title": "运维核验清单",
+   "priority": "P0",
+   "due": "12/15",
+   "deps": "T-095",
+   "detail": "启动、数据库连接、迁移、认证、API 健康、后台 worker、存储、集成、链连接、测试网事务、公开验证、日志、监控、备份配置逐项核验打勾。"
+  },
+  {
+   "id": "T-099",
+   "phase": 9,
+   "title": "15 项事实实施报告",
+   "priority": "P0",
+   "due": "12/15",
+   "deps": "T-097",
+   "detail": "按 directives 第 74 节产出事实报告：实现内容、测试与结果、部署位置、真实 tx 与探索器链接、安全发现、剩余阻塞、所需外部凭证、mainnet 就绪度、运行维护指令；每项能力如实分级（已实现并验证/已部署运行/外部受阻/未实现/计划中）。"
+  },
+  {
+   "id": "T-100",
+   "phase": 9,
+   "title": "就绪度与限制文档",
+   "priority": "P1",
+   "due": "12/15",
+   "deps": "T-099",
+   "detail": "KNOWN_LIMITATIONS.md、PRODUCTION_READINESS.md、MAINNET_READINESS.md（主网为独立审批门：评审过的 realm 代码、安全评审、授权评审、升级策略、部署演练、人工批准，缺一不上主网）。"
+  },
+  {
+   "id": "T-101",
+   "phase": 10,
+   "title": "README 与开发者文档终稿",
+   "priority": "P0",
+   "due": "12/15",
+   "deps": "T-099",
+   "detail": "README 讲清：产品是什么、解决什么问题、如何快速上手（本地+测试网）、架构概览与架构图、Gno 组件为何是产品核心价值、部署引用（包路径+tx 哈希）、演示视频与门户链接；docs/ 全树按 directives 文档清单齐备且与实现一致。"
+  },
+  {
+   "id": "T-102",
+   "phase": 10,
+   "title": "架构图与协议图",
+   "priority": "P1",
+   "due": "12/15",
+   "deps": "T-101",
+   "detail": "系统架构图、Realm 模块图、事务生命周期图、验证引擎判定图（SVG，ATELIER 风格）；图与代码一致，出现即被评委核对。"
+  },
+  {
+   "id": "T-103",
+   "phase": 10,
+   "title": "演示视频（≤3 分钟，目标 2:45）",
+   "priority": "P0",
+   "due": "12/16",
+   "deps": "T-097",
+   "detail": "按 directives 分镜录制：0:00-0:20 问题、0:20-0:45 连钱包建项目、0:45-1:15 发布证据与摘要、1:15-1:45 真实上链与确认、1:45-2:10 公共验证页、2:10-2:30 Agent 问责、2:30-2:45 消费者组合性；全部使用真实部署数据与真实交易，测试数据如实标注；配音字幕清晰；输出 mp4 并上传至可直链播放平台。"
+  },
+  {
+   "id": "T-104",
+   "phase": 10,
+   "title": "截图集与视觉素材",
+   "priority": "P1",
+   "due": "12/16",
+   "deps": "T-079",
+   "detail": "关键界面高清截图（工作台、Release Foundry、验证实验室、Atlas、ChainReceipt、PolicyVerdict）；统一主题与分辨率；用于 DoraHacks 描述与 README。"
+  },
+  {
+   "id": "T-105",
+   "phase": 10,
+   "title": "提交描述与功能清单文案",
+   "priority": "P0",
+   "due": "12/16",
+   "deps": "T-101",
+   "detail": "英文提交描述：一句话定位、问题与方案、功能清单、技术亮点、为什么 Gno 是正确选择（互操作、可读性、组合性论证）、技术限制与路线图；如实、具体、无夸张。"
+  },
+  {
+   "id": "T-106",
+   "phase": 10,
+   "title": "仓库终检与 License",
+   "priority": "P0",
+   "due": "12/16",
+   "deps": "T-090",
+   "detail": "仓库转公开；LICENSE 选择并添加（建议 Apache-2.0，记录决策）；SECURITY.md 就位；终检无密钥、无内部链接、无 TODO 残留、第三方组件许可证允许且已署名。"
+  },
+  {
+   "id": "T-107",
+   "phase": 11,
+   "title": "DoraHacks Submit Build 逐字段填写",
+   "priority": "P0",
+   "due": "12/17",
+   "deps": "T-103",
+   "detail": "填写项目名称（PROOFLOOM）、简介、公开仓库、Gno.land 测试网部署链接、演示视频、项目描述；核对每字段与实际材料一致；保存草稿供终检。"
+  },
+  {
+   "id": "T-108",
+   "phase": 11,
+   "title": "六项硬性提交要求逐项核验",
+   "priority": "P0",
+   "due": "12/17",
+   "deps": "T-107",
+   "detail": "对照黑客松页面：①测试网在跑的部署+链接 ②公开代码仓库 ③真实 Gno 组件（realm/package）④README ⑤演示视频 ⑥项目描述；任何一项不达标即整改后再提交。"
+  },
+  {
+   "id": "T-109",
+   "phase": 11,
+   "title": "不合格情形逐项排除",
+   "priority": "P0",
+   "due": "12/17",
+   "deps": "T-108",
+   "detail": "排除四类不合格：纯设计稿/幻灯片/概念、未部署代码、无真实 Gno 组件、重复/复制/批量生成条目；确认原创性与第三方署名；确认命名合规复查（T-010 结论仍有效）。"
+  },
+  {
+   "id": "T-110",
+   "phase": 11,
+   "title": "部署存活与演示环境终测",
+   "priority": "P0",
+   "due": "12/17",
+   "deps": "T-109",
+   "detail": "提交时刻：应用在线、gnoweb 部署页可访问、演示账户与数据就绪、faucet 余额充足、公共验证链接可开；对 testnet 重置风险准备快速重部署预案。"
+  },
+  {
+   "id": "T-111",
+   "phase": 11,
+   "title": "正式提交与提交后复核",
+   "priority": "P0",
+   "due": "12/17",
+   "deps": "T-110",
+   "detail": "目标 12/17 18:00（东三区）/ 12/17 23:00（北京时间）前提交，硬截止 12/18 01:00 UTC；提交后用匿名浏览器复核 DoraHacks 展示页全部字段、链接与视频播放；留存提交记录截图。"
+  },
+  {
+   "id": "T-112",
+   "phase": 11,
+   "title": "获奖准备（KYC 与收款地址）",
+   "priority": "P1",
+   "due": "12/17",
+   "deps": "T-111",
+   "detail": "预备获奖后所需：Gno.land 收款钱包地址（GNOT 派付）、KYC 身份材料（12/22 截止，逾期延迟派奖）、税务表单了解（非美 W-8BEN）；团队成员资格自查（18+、非受制裁地区、非主办方雇员）。"
+  },
+  {
+   "id": "T-113",
+   "phase": 12,
+   "title": "获奖公示跟踪与 KYC 提交",
+   "priority": "P1",
+   "due": "12/22",
+   "deps": "T-112",
+   "detail": "12/21 关注获奖公示并响应主办方联系；12/22 前完成 KYC 与钱包地址提交；如实提供身份信息；未获奖也按 T-114 继续运营计划。"
+  },
+  {
+   "id": "T-114",
+   "phase": 12,
+   "title": "M1 里程碑（稳定版本+文档+首个外部集成）",
+   "priority": "P1",
+   "due": "01/18",
+   "deps": "T-113",
+   "detail": "发布稳定公共测试网版本；开发者文档完善；落地首个外部项目集成（或消费者示例转真实项目）；每月至少两次公开项目更新（X/Discord/博客）。"
+  },
+  {
+   "id": "T-115",
+   "phase": 12,
+   "title": "M2 里程碑（扩展集成+社区+验证基础设施）",
+   "priority": "P1",
+   "due": "02/18",
+   "deps": "T-114",
+   "detail": "新增集成；公共项目注册表开放真实项目注册；社区参与（X/Telegram/Discord 总成员向 200 推进）；验证基础设施改进；保持月度发布节奏。"
+  },
+  {
+   "id": "T-116",
+   "phase": 12,
+   "title": "M3 检查点（Retention 首次评审）",
+   "priority": "P1",
+   "due": "03/21",
+   "deps": "T-115",
+   "detail": "对齐 Retention 检查点：≥50 真实独立地址、≥500 笔调用项目 realm 的交易、≥20 月活地址、另一项目导入或使用协议、提交检查点表单（部署链接+demo+用量）；mainnet 就绪评审完成（独立审批门）；全部数据真实，团队出资钱包不计入。"
+  },
+  {
+   "id": "T-117",
+   "phase": 12,
+   "title": "M4-M6 里程碑",
+   "priority": "P2",
+   "due": "06/21",
+   "deps": "T-116",
+   "detail": "月度发布持续；独立地址向 100 推进、交易 1500、月活 50、社区 500；多项外部集成；主网部署（通过审批门后）与文档化采用。"
+  },
+  {
+   "id": "T-118",
+   "phase": 12,
+   "title": "商业化架构与定价",
+   "priority": "P2",
+   "due": "03/31",
+   "deps": "T-116",
+   "detail": "订阅档位设计（Developer/Team/Business/Enterprise/Protocol API）；entitlement 架构使付费计划可后装不重建平台；不接真实支付（需真实支付服务商+法务准备）；企业特性预留（审计导出、自定义保留、私有集成、用量报告）。"
+  },
+  {
+   "id": "T-119",
+   "phase": 12,
+   "title": "合规声明纪律（持续）",
+   "priority": "P0",
+   "due": "持续",
+   "deps": "T-111",
+   "detail": "对外沟通红线：不虚构审计或独立认证；不把未发生的事情表述为已验证；不把 Retention 奖金表述为保证；不虚构用户/交易/采用数据；测试网重置风险如实提示；每季度复查公开材料。"
+  }
+ ]
+}
