@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+bin
+download
+upload
+tool-results
+*.log
+.env*
+data
+*.db
