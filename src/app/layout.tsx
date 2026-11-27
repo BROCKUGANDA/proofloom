@@ -32,11 +32,20 @@ export const metadata: Metadata = {
     "Decentralized software provenance and AI-agent accountability on Gno.land. Evidence-backed releases, cryptographic attestations, and public verification.",
   keywords: ["software provenance", "SLSA", "attestations", "Gno.land", "verification", "AI agents", "supply chain"],
   authors: [{ name: "PROOFLOOM" }],
+  icons: {
+    icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
   openGraph: {
     title: "PROOFLOOM — Verifiable software provenance",
     description: "Evidence-backed releases and public verification on Gno.land.",
     siteName: "PROOFLOOM",
     type: "website",
+    images: [{ url: "/logo.png", width: 1024, height: 1024, alt: "PROOFLOOM emblem" }],
   },
 };
 
